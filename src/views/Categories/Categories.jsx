@@ -123,7 +123,7 @@ class UserProfile extends React.Component {
               <Card>
                 <CardHeader color="info">
                   <h4 className={classes.cardTitleWhite}>Categorías</h4>
-                  <p className={classes.cardCategoryWhite}>Administración</p>
+                  <p className={classes.cardCategoryWhite}>Administración2</p>
                 </CardHeader>
                 <CardBody>
                   <GridContainer>
