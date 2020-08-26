@@ -25,8 +25,8 @@
     "react-scripts": "2.1.5",
     "react-share": "^2.4.0",
     "react-swipeable-views": "0.13.1",
-    "serve": "11.0.0",
-    "react-text-mask": "5.4.3"
+    "react-text-mask": "5.4.3",
+    "serve": "^11.3.2"
   },
   "scripts": {
     "start": "react-scripts start",
