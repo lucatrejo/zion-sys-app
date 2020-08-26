@@ -24,3 +24,7 @@ yarn-debug.log*
 yarn-error.log*
 yarn.lock
 __MACOSX
+
+.idea
+/idea
+*.iml
