@@ -88,7 +88,7 @@ class UserProfile extends React.Component {
     e.preventDefault();
     this.setState({ errors: {}});
 
-    const fields = ["code", "name", "description", "price", "stock", "category_id"];
+    const fields = ["code", "name", "description", "price", "stock", "critical_stock", "category_id"];
     const formElements = e.target.elements;
     const formValues = fields
       .map(field => ({
@@ -100,7 +100,9 @@ class UserProfile extends React.Component {
     formValues.category = parseInt(formValues.category);
     formValues.price = parseFloat(formValues.price);
     formValues.stock = parseInt(formValues.stock);
+    formValues.critical_stock = parseInt(formValues.critical_stock);
     if(!formValues.stock) {formValues.stock = null;}
+    if(!formValues.critical_stock) {formValues.critical_stock = null;}
 
 
     console.log('values');
@@ -228,6 +230,20 @@ class UserProfile extends React.Component {
                         }}
                       />
                     </GridItem>
+                    <GridItem xs={3} sm={3} md={2}>
+                      <CustomInput
+                        labelText="Stock Crítico"
+                        id="critical_stock"
+                        error={errors.critical_stock}
+                        formControlProps={{
+                          fullWidth: true
+                        }}
+                        inputProps={{
+                          required: false,
+                          name: "critical_stock"
+                        }}
+                      />
+                    </GridItem>
                     <GridItem xs={3} sm={3} md={3}>
                       <CustomSelect
                           labelText="Categoría"
@@ -262,7 +278,7 @@ class UserProfile extends React.Component {
                     <Table className={classes.table}>
                         <TableHead className={classes["primaryTableHeader"]}>
                           <TableRow>
-                            {["ID", "Código", "Nombre", "Descripción", "Precio", "Stock", "Categoría"].map((prop, key) => {
+                            {["ID", "Código", "Nombre", "Descripción", "Precio", "Stock", "Stock Crítico", "Categoría"].map((prop, key) => {
                               return (
                                 <TableCell
                                   className={classes.tableCell + " " + classes.tableHeadCell}
