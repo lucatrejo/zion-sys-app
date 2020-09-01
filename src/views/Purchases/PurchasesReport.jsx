@@ -15,8 +15,9 @@ import formStyle from "assets/jss/material-dashboard-react/components/formStyle.
 
 import generatePDF from "components/Reports/reportGenerator";
 import generatePDFCriticalStock from "components/Reports/reportCriticalStock";
-
-
+import generatePDFProviders from "components/Reports/reportProviders";
+import generatePDFPurchases from "components/Reports/reportPurchases";
+import generatePDFPurchasesEmployee from "components/Reports/reportPurchasesEmployee";
 
 const { REACT_APP_SERVER_URL } = process.env;
 
@@ -26,12 +27,21 @@ class UserProfile extends React.Component {
     this.state = {
       reportData: [],
       reportCriticalStock: [],
+      reportProviders: [],
+      reportPurchases: [],
+      reportPurchasesEmployee: []
     };
 
     this.fillReportData = this.fillReportData.bind(this);
     this.fillReportCriticalStock = this.fillReportCriticalStock.bind(this);
+    this.fillReportProviders = this.fillReportProviders.bind(this);
+    this.fillReportPurchases = this.fillReportPurchases.bind(this);
+    this.fillReportPurchasesEmployee = this.fillReportPurchasesEmployee.bind(this);
     this.fillReportData(this);
     this.fillReportCriticalStock(this);
+    this.fillReportProviders(this);
+    this.fillReportPurchases(this);
+    this.fillReportPurchasesEmployee(this);
   };
 
 fillReportData(e) {
@@ -50,9 +60,33 @@ fillReportData(e) {
       })
   }
 
+    fillReportProviders(e) {
+        axios.get(`http://${REACT_APP_SERVER_URL}/providers`)
+            .then(res => {
+                const items = res.data.providers;
+                this.setState({ reportProviders: items});
+            })
+    }
+
+    fillReportPurchases(e) {
+        axios.get(`http://${REACT_APP_SERVER_URL}/purchases/purchases_month`)
+            .then(res => {
+                const items = res.data.purchases;
+                this.setState({ reportPurchases: items});
+            })
+    }
+
+    fillReportPurchasesEmployee(e) {
+        axios.get(`http://${REACT_APP_SERVER_URL}/purchases/purchases_employee`)
+            .then(res => {
+                const items = res.data.purchases;
+                this.setState({ reportPurchasesEmployee: items});
+            })
+    }
+
   render() {
     const { classes } = this.props;
-    
+
     return (
       <div>
         <GridContainer>
@@ -64,7 +98,7 @@ fillReportData(e) {
                 </CardHeader>
                 <CardBody>
                   <GridContainer>
-                    
+
                     <GridItem xs={3} sm={3} md={3}>
                       <Button type="submit" color="info" size="xs" onClick={() => generatePDF(this.state.reportData)}>
                         Generar Reporte de Artículos mas Comprados
@@ -80,11 +114,35 @@ fillReportData(e) {
                     </GridItem>
                   </GridContainer>
 
+                    <GridContainer>
+                        <GridItem xs={3} sm={3} md={3}>
+                            <Button type="submit" color="info" size="xs" onClick={() => generatePDFProviders(this.state.reportProviders)}>
+                                Generar Listado de Proveedores
+                            </Button>
+                        </GridItem>
+                    </GridContainer>
+
+                    <GridContainer>
+                        <GridItem xs={3} sm={3} md={3}>
+                            <Button type="submit" color="info" size="xs" onClick={() => generatePDFPurchases(this.state.reportPurchases)}>
+                                Generar Reporte de Compras del mes
+                            </Button>
+                        </GridItem>
+                    </GridContainer>
+
+                    <GridContainer>
+                        <GridItem xs={3} sm={3} md={3}>
+                            <Button type="submit" color="info" size="xs" onClick={() => generatePDFPurchasesEmployee(this.state.reportPurchasesEmployee)}>
+                                Generar Reporte de Compras por Empleado
+                            </Button>
+                        </GridItem>
+                    </GridContainer>
+
                 </CardBody>
               </Card>
           </GridItem>
         </GridContainer>
-        
+
       </div>
     );
   }
