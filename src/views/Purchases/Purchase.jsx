@@ -171,43 +171,47 @@ class UserProfile extends React.Component {
         details.push(detail);
     });
 
-    formValues.details = details;
-    console.log('formValues');
-    console.log(formValues);
-
-
-
-    let insertRequest;
-    try {
-      insertRequest = await axios.post(
-        `http://${REACT_APP_SERVER_URL}/purchases`,
-        {
-          ...formValues
-        }
-      );
-    } catch ({ response }) {
-      insertRequest = response;
-    }
-
-    const { data: insertRequestData } = insertRequest;
-
-    console.log(insertRequestData);
-    console.log(insertRequest);
-
-    var msg = '';
-
-    if (!insertRequestData.success) {
-      this.setState({
-        errors:
-        insertRequestData.messages && insertRequestData.messages.errors
-      });
-      if(insertRequestData.messages.errors.databaseError) {
-        msg = insertRequestData.messages.errors.databaseError;
-      }
+    if(details.length == 0) {
+      this.showAlert(this, "Debe agregar artículos a la lista", false);
     } else {
-      msg = insertRequestData.messages.success;
+
+        formValues.details = details;
+        console.log('formValues');
+        console.log(formValues);
+
+
+        let insertRequest;
+        try {
+            insertRequest = await axios.post(
+                `http://${REACT_APP_SERVER_URL}/purchases`,
+                {
+                    ...formValues
+                }
+            );
+        } catch ({response}) {
+            insertRequest = response;
+        }
+
+        const {data: insertRequestData} = insertRequest;
+
+        console.log(insertRequestData);
+        console.log(insertRequest);
+
+        var msg = '';
+
+        if (!insertRequestData.success) {
+            this.setState({
+                errors:
+                    insertRequestData.messages && insertRequestData.messages.errors
+            });
+            if (insertRequestData.messages.errors.databaseError) {
+                msg = insertRequestData.messages.errors.databaseError;
+            }
+        } else {
+            msg = insertRequestData.messages.success;
+        }
+        this.showAlert(this, msg, insertRequestData.success);
     }
-    this.showAlert(this, msg, insertRequestData.success);
   }
 
   render() {
@@ -298,12 +302,12 @@ class UserProfile extends React.Component {
                         labelText="Precio Unitario"
                         id="unit_price"
                         error={errors.username}
+                        value={this.state.unitPrice}
                         onChange={this.updateUnitPrice}
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          required: true,
                           name: "unit_price"
                         }}
                       />
@@ -313,12 +317,12 @@ class UserProfile extends React.Component {
                         labelText="Cantidad"
                         id="quantity"
                         error={errors.username}
+                        value={this.state.quantity}
                         onChange={this.updateQuantity}
                         formControlProps={{
                           fullWidth: true
                         }}
                         inputProps={{
-                          required: true,
                           name: "quantity"
                         }}
                       />
