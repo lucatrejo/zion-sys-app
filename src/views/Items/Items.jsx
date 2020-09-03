@@ -7,6 +7,9 @@ import withStyles from "@material-ui/core/styles/withStyles";
 import GridItem from "components/Grid/GridItem.jsx";
 import GridContainer from "components/Grid/GridContainer.jsx";
 import CustomInput from "components/CustomInput/CustomInput.jsx";
+import CustomInputNumber from "components/CustomInput/CustomInputNumber.jsx";
+
+
 import Button from "components/CustomButtons/Button.jsx";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
@@ -188,7 +191,7 @@ class UserProfile extends React.Component {
                       />
                     </GridItem>
                     <GridItem xs={3} sm={3} md={2}>
-                      <CustomInput
+                      <CustomInputNumber
                         labelText="Precio"
                         id="price"
                         error={errors.price}
@@ -202,7 +205,7 @@ class UserProfile extends React.Component {
                       />
                     </GridItem>
                     <GridItem xs={3} sm={3} md={2}>
-                      <CustomInput
+                      <CustomInputNumber
                         labelText="Stock"
                         id="stock"
                         error={errors.stock}
@@ -216,7 +219,7 @@ class UserProfile extends React.Component {
                       />
                     </GridItem>
                     <GridItem xs={3} sm={3} md={2}>
-                      <CustomInput
+                      <CustomInputNumber
                         labelText="Stock Crítico"
                         id="critical_stock"
                         error={errors.critical_stock}

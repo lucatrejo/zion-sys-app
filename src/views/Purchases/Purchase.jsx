@@ -11,6 +11,8 @@ import Button from "components/CustomButtons/Button.jsx";
 import Card from "components/Card/Card.jsx";
 import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
+import CustomInputNumber from "components/CustomInput/CustomInputNumber.jsx";
+
 import AddAlert from "@material-ui/icons/AddAlert";
 
 import Snackbar from "components/Snackbar/Snackbar.jsx";
@@ -298,7 +300,7 @@ class UserProfile extends React.Component {
                       />
                     </GridItem>
                     <GridItem xs={3} sm={3} md={2}>
-                      <CustomInput
+                      <CustomInputNumber
                         labelText="Precio Unitario"
                         id="unit_price"
                         error={errors.username}
@@ -313,7 +315,7 @@ class UserProfile extends React.Component {
                       />
                     </GridItem>
                     <GridItem xs={3} sm={3} md={2}>
-                      <CustomInput
+                      <CustomInputNumber
                         labelText="Cantidad"
                         id="quantity"
                         error={errors.username}
