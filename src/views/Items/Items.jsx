@@ -99,50 +99,59 @@ class UserProfile extends React.Component {
       }))
       .reduce((current, next) => ({ ...current, ...next }));
 
-    formValues.category = parseInt(formValues.category);
-    formValues.price = parseFloat(formValues.price);
-    formValues.stock = parseInt(formValues.stock);
-    formValues.critical_stock = parseInt(formValues.critical_stock);
-    if(!formValues.stock) {formValues.stock = null;}
-    if(!formValues.critical_stock) {formValues.critical_stock = null;}
-
-
-    console.log('values');
-    console.log(formValues);
-    let insertRequest;
-  
-    try {
-      insertRequest = await axios.post(
-        `http://${REACT_APP_SERVER_URL}/items`,
-        {
-          ...formValues
-        }
-      );
-    } catch ({ response }) {
-      insertRequest = response;
-    }
-
-    const { data: insertRequestData } = insertRequest;
-
-    console.log(insertRequestData);
-    console.log(insertRequest);
-
-    var msg = '';
-
-    if (!insertRequestData.success) {
-      this.setState({
-        errors:
-        insertRequestData.messages && insertRequestData.messages.errors
-      });
-      if(insertRequestData.messages.errors.databaseError) {
-        msg = insertRequestData.messages.errors.databaseError;
-      }
+    if(formValues.category_id === "") {
+        this.showAlert(this, "Debe seleccionar una categoría" , false)
     } else {
-      msg = insertRequestData.messages.success;
-    }
+        formValues.category = parseInt(formValues.category);
+        console.log(formValues.price);
+        formValues.price = parseFloat(formValues.price);
+        formValues.stock = parseInt(formValues.stock);
+        formValues.critical_stock = parseInt(formValues.critical_stock);
+        if (!formValues.stock) {
+            formValues.stock = 0;
+        }
+        if (!formValues.critical_stock) {
+            formValues.critical_stock = null;
+        }
 
-    this.fillTable(this);
-    this.showAlert(this, msg, insertRequestData.success);
+
+        console.log('values');
+        console.log(formValues);
+        let insertRequest;
+
+        try {
+            insertRequest = await axios.post(
+                `http://${REACT_APP_SERVER_URL}/items`,
+                {
+                    ...formValues
+                }
+            );
+        } catch ({response}) {
+            insertRequest = response;
+        }
+
+        const {data: insertRequestData} = insertRequest;
+
+        console.log(insertRequestData);
+        console.log(insertRequest);
+
+        var msg = '';
+
+        if (!insertRequestData.success) {
+            this.setState({
+                errors:
+                    insertRequestData.messages && insertRequestData.messages.errors
+            });
+            if (insertRequestData.messages.errors.databaseError) {
+                msg = insertRequestData.messages.errors.databaseError;
+            }
+        } else {
+            msg = insertRequestData.messages.success;
+        }
+
+        this.fillTable(this);
+        this.showAlert(this, msg, insertRequestData.success);
+    }
   }
 
   render() {
