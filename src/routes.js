@@ -12,8 +12,14 @@ import PurchasesReport from "views/Purchases/PurchasesReport.jsx";
 import Purchase from "views/Purchases/Purchase.jsx";
 import PurchaseDetails from "views/Purchases/PurchaseDetails.jsx";
 
+import Login from "@material-ui/icons/LockOpen";
+import Person from "@material-ui/icons/Person";
+
 // core components/views for Auth layout
 import RegisterPage from "views/Pages/RegisterPage.jsx";
+import LoginPage from "views/Pages/LoginPage.jsx";
+import UserProfile from "views/UserProfile/UserProfile.jsx";
+
 
 const dashboardRoutes = [
     {
@@ -88,6 +94,22 @@ const dashboardRoutes = [
         component: PurchaseDetails,
         layout: "/admin"
     },
+    {
+        path: "/user",
+        name: "Perfil de Usuario",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: Person,
+        component: UserProfile,
+        layout: "/admin"
+    },
+    {
+        path: "/login-page",
+            name: "Inicio de Sesión",
+        rtlName: "پشتیبانی از راست به چپ",
+        icon: Login,
+        component: LoginPage,
+        layout: "/auth"
+    }
 ];
 
 export default dashboardRoutes;
