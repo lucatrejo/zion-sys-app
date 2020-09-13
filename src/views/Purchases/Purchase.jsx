@@ -212,6 +212,7 @@ class UserProfile extends React.Component {
                 }
             } else {
                 msg = insertRequestData.messages.success;
+                window.location.reload(false);
             }
             this.showAlert(this, msg, insertRequestData.success);
         }

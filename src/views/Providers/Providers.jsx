@@ -74,6 +74,8 @@ class UserProfile extends React.Component {
             }))
             .reduce((current, next) => ({...current, ...next}));
 
+        formValues.name = formValues.name.trim();
+
         let insertRequest;
         try {
             insertRequest = await axios.post(
@@ -103,6 +105,7 @@ class UserProfile extends React.Component {
             }
         } else {
             msg = insertRequestData.messages.success;
+            window.location.reload(false);
         }
 
         this.fillTable(this);

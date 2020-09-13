@@ -96,6 +96,8 @@ class UserProfile extends React.Component {
             }))
             .reduce((current, next) => ({...current, ...next}));
 
+        formValues.name = formValues.name.trim();
+
         if (formValues.category_id === "") {
             this.showAlert(this, "Debe seleccionar una categoría", false)
         } else {
@@ -144,6 +146,7 @@ class UserProfile extends React.Component {
                 }
             } else {
                 msg = insertRequestData.messages.success;
+                window.location.reload(false);
             }
 
             this.fillTable(this);

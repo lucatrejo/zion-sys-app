@@ -83,6 +83,8 @@ class UserProfile extends React.Component {
             }))
             .reduce((current, next) => ({...current, ...next}));
 
+        formValues.identification = formValues.identification.trim();
+
         let insertRequest;
         try {
             insertRequest = await axios.post(
