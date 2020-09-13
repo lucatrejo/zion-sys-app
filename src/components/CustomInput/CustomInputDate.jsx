@@ -3,37 +3,30 @@ import classNames from "classnames";
 import PropTypes from "prop-types";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
+
 import FormControl from "@material-ui/core/FormControl";
 import InputLabel from "@material-ui/core/InputLabel";
+import TextField from '@material-ui/core/TextField';
 
 // @material-ui/icons
 import Clear from "@material-ui/icons/Clear";
 import Check from "@material-ui/icons/Check";
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-
 // core components
-import customInputStyle from "assets/jss/material-dashboard-react/components/customInputStyle.jsx";
+import customInputDateStyle from "assets/jss/material-dashboard-react/components/customInputDateStyle.jsx";
 
-function CustomInput({ ...props }) {
+function CustomInputDate({ ...props }) {
   const {
     classes,
     formControlProps,
     labelText,
     id,
     labelProps,
-    onChange,
-    value,
+    inputProps,
     error,
     success,
-    items,
-    readOnly,
+    onChange,
+    value
   } = props;
-
-  const labelClasses = classNames({
-    [" " + classes.labelRootError]: error,
-    [" " + classes.labelRootSuccess]: success && !error
-  });
 
   return (
     <FormControl
@@ -42,7 +35,7 @@ function CustomInput({ ...props }) {
     >
       { error ? (
         <InputLabel
-          className={classes.labelRootError + labelClasses}
+          className={classes.labelRootError}
           htmlFor={id}
           {...labelProps}
         >
@@ -50,28 +43,27 @@ function CustomInput({ ...props }) {
       </InputLabel>
       ) : labelText !== undefined ? (
         <InputLabel
-          className={classes.labelRoot + labelClasses}
+          className={classes.labelRoot}
           htmlFor={id}
           {...labelProps}
         >
           {labelText}
         </InputLabel>
       ) : null}
-      <Select
-          labelId="demo-simple-select-label"
-          id={id}
-          onChange={onChange}
-          value={value}
-          readOnly={readOnly}
-        >
-          {items.map((prop, key) => {
-                return (
-                  <MenuItem value={prop[0]}>
-                    {prop[1]}
-                  </MenuItem>
-                );
-          })}
-        </Select>
+      <TextField
+        classes={{
+          disabled: classes.disabled,
+        }}
+        id={id}
+        defaultValue="2017-05-24"
+        type="date"
+        value={value}
+        onChange={onChange}
+        {...inputProps}
+        InputLabelProps={{
+            shrink: true,
+        }}
+      />
       {error ? (
         <Clear className={classes.feedback + " " + classes.labelRootError} />
       ) : success ? (
@@ -81,19 +73,17 @@ function CustomInput({ ...props }) {
   );
 }
 
-CustomInput.propTypes = {
+CustomInputDate.propTypes = {
   classes: PropTypes.object.isRequired,
   labelText: PropTypes.node,
   labelProps: PropTypes.object,
   id: PropTypes.string,
+  value: PropTypes.string,
   inputProps: PropTypes.object,
   formControlProps: PropTypes.object,
   error: PropTypes.bool,
-  onChange: PropTypes.func,
-  value: PropTypes.any,
   success: PropTypes.bool,
-  readOnly: PropTypes.bool,
-  items: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.string))
+  onChange: PropTypes.func
 };
 
-export default withStyles(customInputStyle)(CustomInput);
+export default withStyles(customInputDateStyle)(CustomInputDate);

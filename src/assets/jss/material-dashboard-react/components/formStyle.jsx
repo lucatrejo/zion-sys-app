@@ -1,8 +1,6 @@
 import {
-  defaultFont,
   primaryColor,
-  dangerColor,
-  grayColor
+  dangerColor
 } from "assets/jss/material-dashboard-react.jsx";
 import tooltipStyle from "assets/jss/material-dashboard-react/tooltipStyle.jsx";
 import tableStyle from "assets/jss/material-dashboard-react/components/tableStyle.jsx";
@@ -47,6 +45,12 @@ const formStyle = {
     backgroundColor: "transparent",
     color: dangerColor[0],
     boxShadow: "none"
+  },
+  textField: {
+    marginTop: "26px",
+    marginLeft: "0px",
+    marginRight: "0px",
+    width: 200,
   }
 };
 export default formStyle;

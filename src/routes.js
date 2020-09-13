@@ -10,6 +10,7 @@ import Employees from "views/Employees/Employees.jsx";
 import Purchases from "views/Purchases/Purchases.jsx";
 import PurchasesReport from "views/Purchases/PurchasesReport.jsx";
 import Purchase from "views/Purchases/Purchase.jsx";
+import PurchaseDetails from "views/Purchases/PurchaseDetails.jsx";
 
 // core components/views for Auth layout
 import RegisterPage from "views/Pages/RegisterPage.jsx";
@@ -78,7 +79,15 @@ const dashboardRoutes = [
         icon: Register,
         component: RegisterPage,
         layout: "/auth"
-    }
+    },
+    {
+        path: "/purchase_detail",
+        name: "Ver Compra",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: PurchaseDetails,
+        layout: "/admin"
+    },
 ];
 
 export default dashboardRoutes;

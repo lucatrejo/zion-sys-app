@@ -1,7 +1,6 @@
 import React from "react";
 import classNames from "classnames";
 import { NavLink } from "react-router-dom";
-import axios from "axios";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -22,7 +21,7 @@ import Button from "components/CustomButtons/Button.jsx";
 
 import headerLinksStyle from "assets/jss/material-dashboard-react/components/headerLinksStyle.jsx";
 
-const { REACT_APP_SERVER_URL } = process.env;
+//const { REACT_APP_SERVER_URL } = process.env;
 
 class HeaderLinks extends React.Component {
   state = {

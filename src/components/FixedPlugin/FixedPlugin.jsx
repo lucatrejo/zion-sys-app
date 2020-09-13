@@ -43,7 +43,7 @@ class FixedPlugin extends Component {
           <ul className="dropdown-menu">
             <li className="header-title">SIDEBAR FILTERS</li>
             <li className="adjustments-line">
-              <a className="switch-trigger">
+              <a className="switch-trigger" href="/#">
                 <div>
                   <span
                     className={
@@ -106,6 +106,7 @@ class FixedPlugin extends Component {
             <li className="header-title">Images</li>
             <li className={this.state["bgImage"] === imagine1 ? "active" : ""}>
               <a
+                href="/#"
                 className="img-holder switch-trigger"
                 onClick={() => {
                   this.setState({ bgImage: imagine1 });
@@ -117,6 +118,7 @@ class FixedPlugin extends Component {
             </li>
             <li className={this.state["bgImage"] === imagine2 ? "active" : ""}>
               <a
+                href="/#"
                 className="img-holder switch-trigger"
                 onClick={() => {
                   this.setState({ bgImage: imagine2 });
@@ -128,6 +130,7 @@ class FixedPlugin extends Component {
             </li>
             <li className={this.state["bgImage"] === imagine3 ? "active" : ""}>
               <a
+                href="/#"
                 className="img-holder switch-trigger"
                 onClick={() => {
                   this.setState({ bgImage: imagine3 });
@@ -139,6 +142,7 @@ class FixedPlugin extends Component {
             </li>
             <li className={this.state["bgImage"] === imagine4 ? "active" : ""}>
               <a
+                href="/#"
                 className="img-holder switch-trigger"
                 onClick={() => {
                   this.setState({ bgImage: imagine4 });
