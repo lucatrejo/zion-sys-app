@@ -5,13 +5,12 @@ import "jspdf-autotable";
 const generatePDFCriticalStock = items => {
   const doc = new jsPDF();
 
-  const tableColumn = ["ID", "Codigo", "Nombre", "Stock", "Stock Crítico"];
+  const tableColumn = ["ID", "Nombre", "Stock", "Stock Crítico"];
   const tableRows = [];
 
   items.forEach(item => {
     const reportData = [
       item.id,
-      item.code,
       item.name,
       item.stock,
       item.critical_stock

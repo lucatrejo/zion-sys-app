@@ -4,15 +4,15 @@ import "jspdf-autotable";
 const generatePDF = topItems => {
   const doc = new jsPDF();
 
-  const tableColumn = ["ID", "Codigo", "Nombre", "Cantidad"];
+  const tableColumn = ["ID", "Nombre", "Cantidad", "Stock"];
   const tableRows = [];
 
   topItems.forEach(item => {
     const reportData = [
       item.item_id,
-      item.code,
       item.name,
       item.count,
+      item.stock
     ];
     tableRows.push(reportData);
   });
