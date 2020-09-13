@@ -108,6 +108,8 @@ class UserProfile extends React.Component {
             this.setState({unitPrice: ''});
             this.setState({quantity: ''});
             this.setState({itemComboVal: ''});
+        } else {
+            this.showAlert(this, "Debe completar todos los campos del Artículo", false);
         }
     }
 

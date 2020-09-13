@@ -23,10 +23,12 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
+import CustomInputNumber from "components/CustomInput/CustomInputNumber.jsx";
 
 const {REACT_APP_SERVER_URL} = process.env;
 const date = new Date();
 const dateNow = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
+
 
 
 class UserProfile extends React.Component {
@@ -168,7 +170,7 @@ class UserProfile extends React.Component {
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
-                                            <CustomInput
+                                            <CustomInputNumber
                                                 labelText="Cuil"
                                                 id="cuil"
                                                 error={errors.cuil}
@@ -191,10 +193,13 @@ class UserProfile extends React.Component {
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
+                                                inputProps={{
+                                                    required: true,
+                                                }}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
-                                            <CustomInput
+                                            <CustomInputNumber
                                                 labelText="DNI"
                                                 id="identification"
                                                 error={errors.identification}
@@ -217,6 +222,9 @@ class UserProfile extends React.Component {
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
+                                                inputProps={{
+                                                    required: true,
+                                                }}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
@@ -228,7 +236,7 @@ class UserProfile extends React.Component {
                                                     fullWidth: true
                                                 }}
                                                 inputProps={{
-                                                    required: false,
+                                                    required: true,
                                                     name: "address"
                                                 }}
                                             />
