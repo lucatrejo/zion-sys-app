@@ -23,7 +23,8 @@ function CustomInput({ ...props }) {
     error,
     success,
     onChange,
-    value
+    value,
+    defaultValue,
   } = props;
 
   const labelClasses = classNames({
@@ -68,6 +69,7 @@ function CustomInput({ ...props }) {
         }}
         id={id}
         value={value}
+        defaultValue={defaultValue}
         onChange={onChange}
         {...inputProps}
       />
@@ -86,6 +88,7 @@ CustomInput.propTypes = {
   labelProps: PropTypes.object,
   id: PropTypes.string,
   value: PropTypes.string,
+  defaultValue: PropTypes.string,
   inputProps: PropTypes.object,
   formControlProps: PropTypes.object,
   error: PropTypes.bool,

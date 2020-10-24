@@ -25,6 +25,10 @@ import TableCell from "@material-ui/core/TableCell";
 
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
 import CustomSelect from "../../components/CustomSelect/CustomSelect";
+import Link from '@material-ui/core/Link';
+
+const createHistory = require("history").createBrowserHistory;
+let history = createHistory();
 
 
 const {REACT_APP_SERVER_URL} = process.env;
@@ -32,13 +36,22 @@ const {REACT_APP_SERVER_URL} = process.env;
 class UserProfile extends React.Component {
     constructor(props) {
         super(props);
+        const query = new URLSearchParams(this.props.location.search);
         this.state = {
+            id: query.get('id'),
+            nameVal: query.get('name'),
+            descriptionVal: query.get('description'),
+            priceVal: query.get('price'),
+            stockVal: query.get('stock'),
+            stockCritVal: query.get('stock_crit'),
+            categoryVal: query.get('category'),
             errors: {},
             itemsData: [],
             categoriesData: [],
             alertColor: '',
             alertOpen: false,
-            categoryComboVal: '',
+            categoryComboVal: query.get('category') ? query.get('category') : '',
+            actionButton: query.get('id') ? 'Actualizar' : 'Guardar',
             alertMsg: '',
         };
         this.insertObject = this.insertObject.bind(this);
@@ -61,6 +74,8 @@ class UserProfile extends React.Component {
         axios.get(`http://${REACT_APP_SERVER_URL}/categories`)
             .then(res => {
                 const cat = res.data.categories;
+                console.log(cat);
+                console.log(cat.map(c => Object.values(c)));
                 this.setState({categoriesData: cat.map(c => Object.values(c))});
             })
     }
@@ -119,12 +134,21 @@ class UserProfile extends React.Component {
             let insertRequest;
 
             try {
-                insertRequest = await axios.post(
-                    `http://${REACT_APP_SERVER_URL}/items`,
-                    {
-                        ...formValues
-                    }
-                );
+                if (this.state.id) {
+                    insertRequest = await axios.put(
+                        `http://${REACT_APP_SERVER_URL}/items/` + this.state.id,
+                        {
+                            ...formValues
+                        }
+                    );
+                } else {
+                    insertRequest = await axios.post(
+                        `http://${REACT_APP_SERVER_URL}/items`,
+                        {
+                            ...formValues
+                        }
+                    );
+                }
             } catch ({response}) {
                 insertRequest = response;
             }
@@ -146,6 +170,7 @@ class UserProfile extends React.Component {
                 }
             } else {
                 msg = insertRequestData.messages.success;
+                history.push("/admin/items");
                 window.location.reload(false);
             }
 
@@ -183,6 +208,7 @@ class UserProfile extends React.Component {
                                                     required: true,
                                                     name: "name"
                                                 }}
+                                                defaultValue={this.state.nameVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={3} sm={3} md={6}>
@@ -197,6 +223,7 @@ class UserProfile extends React.Component {
                                                     required: true,
                                                     name: "description"
                                                 }}
+                                                defaultValue={this.state.descriptionVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={3} sm={3} md={2}>
@@ -211,6 +238,7 @@ class UserProfile extends React.Component {
                                                     required: true,
                                                     name: "price"
                                                 }}
+                                                defaultValue={this.state.priceVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={3} sm={3} md={2}>
@@ -225,6 +253,7 @@ class UserProfile extends React.Component {
                                                     required: false,
                                                     name: "stock"
                                                 }}
+                                                defaultValue={this.state.stockVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={3} sm={3} md={2}>
@@ -239,6 +268,7 @@ class UserProfile extends React.Component {
                                                     required: false,
                                                     name: "critical_stock"
                                                 }}
+                                                defaultValue={this.state.stockCritVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={3} sm={3} md={3}>
@@ -256,11 +286,12 @@ class UserProfile extends React.Component {
                                                     name: "category_id"
                                                 }}
                                                 items={this.state.categoriesData}
+                                                defaultValue={this.state.categoryVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={3} sm={3} md={3}>
                                             <Button type="submit" color="info" size="xs">
-                                                Guardar
+                                                {this.state.actionButton}
                                             </Button>
                                         </GridItem>
                                     </GridContainer>
@@ -275,7 +306,7 @@ class UserProfile extends React.Component {
                                         <Table className={classes.table}>
                                             <TableHead className={classes["primaryTableHeader"]}>
                                                 <TableRow>
-                                                    {["ID", "Nombre", "Descripción", "Precio", "Stock", "Stock Crítico", "Categoría"].map((prop, key) => {
+                                                    {["ID", "Nombre", "Descripción", "Precio", "Stock", "Stock Crítico", "Categoría", "Acciones"].map((prop, key) => {
                                                         return (
                                                             <TableCell
                                                                 className={classes.tableCell + " " + classes.tableHeadCell}
@@ -292,13 +323,27 @@ class UserProfile extends React.Component {
                                                     return (
                                                         <TableRow key={key}>
                                                             {prop.map((prop, key) => {
+                                                                console.log(key);
+                                                                if(key !== 7) {
                                                                 return (
                                                                     <TableCell className={classes.tableCell} key={key}>
                                                                         {prop}
                                                                     </TableCell>
                                                                 );
-                                                            })}
-
+                                                            }})}
+                                                            <TableCell className={classes.tableCell} key={key}>
+                                                                <Link href={"items?id=" + prop[0] +
+                                                                "&name=" + prop[1] +
+                                                                "&description=" + prop[2] +
+                                                                "&price=" + prop[3] +
+                                                                "&stock=" + prop[4] +
+                                                                "&stock_crit=" + prop[5] +
+                                                                "&category=" + prop[7]
+                                                                }
+                                                                      className={classes.tableCell}>
+                                                                    Editar
+                                                                </Link>
+                                                            </TableCell>
                                                         </TableRow>
                                                     );
                                                 })}

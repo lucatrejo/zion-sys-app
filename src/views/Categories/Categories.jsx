@@ -20,19 +20,28 @@ import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
+import Link from '@material-ui/core/Link';
 
+const createHistory = require("history").createBrowserHistory;
+let history = createHistory();
 
 const {REACT_APP_SERVER_URL} = process.env;
 
 class UserProfile extends React.Component {
     constructor(props) {
         super(props);
+
+        const query = new URLSearchParams(this.props.location.search);
         this.state = {
+            id: query.get('id'),
             errors: {},
             categoriesData: [],
             alertColor: '',
             alertOpen: false,
             alertMsg: '',
+            nameVal: query.get('name'),
+            descVal: query.get('description'),
+            actionButton: query.get('id') ? 'Actualizar' : 'Guardar'
         };
         this.insertObject = this.insertObject.bind(this);
         this.fillTable = this.fillTable.bind(this);
@@ -80,12 +89,21 @@ class UserProfile extends React.Component {
 
         let insertRequest;
         try {
-            insertRequest = await axios.post(
-                `http://${REACT_APP_SERVER_URL}/categories`,
-                {
-                    ...formValues
-                }
-            );
+            if (this.state.id) {
+                insertRequest = await axios.put(
+                    `http://${REACT_APP_SERVER_URL}/categories/` + this.state.id,
+                    {
+                        ...formValues
+                    }
+                );
+            } else {
+                insertRequest = await axios.post(
+                    `http://${REACT_APP_SERVER_URL}/categories`,
+                    {
+                        ...formValues
+                    }
+                );
+            }
         } catch ({response}) {
             insertRequest = response;
         }
@@ -107,6 +125,7 @@ class UserProfile extends React.Component {
             }
         } else {
             msg = insertRequestData.messages.success;
+            history.push("/admin/categories");
             window.location.reload(false);
         }
 
@@ -141,9 +160,9 @@ class UserProfile extends React.Component {
                                                 }}
                                                 inputProps={{
                                                     required: true,
-                                                    defaultValue: name,
-                                                    name: "name"
+                                                    name: "name",
                                                 }}
+                                                defaultValue={this.state.nameVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={4}>
@@ -158,11 +177,12 @@ class UserProfile extends React.Component {
                                                     required: true,
                                                     name: "description"
                                                 }}
+                                                defaultValue={this.state.descVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
                                             <Button type="submit" color="info" size="xs">
-                                                Guardar
+                                                {this.state.actionButton}
                                             </Button>
                                         </GridItem>
                                     </GridContainer>
@@ -177,7 +197,7 @@ class UserProfile extends React.Component {
                                         <Table className={classes.table}>
                                             <TableHead className={classes["primaryTableHeader"]}>
                                                 <TableRow>
-                                                    {["ID", "Nombre", "Descripción"].map((prop, key) => {
+                                                    {["ID", "Nombre", "Descripción", "Acciones"].map((prop, key) => {
                                                         return (
                                                             <TableCell
                                                                 className={classes.tableCell + " " + classes.tableHeadCell}
@@ -200,7 +220,12 @@ class UserProfile extends React.Component {
                                                                     </TableCell>
                                                                 );
                                                             })}
-
+                                                            <TableCell className={classes.tableCell} key={key}>
+                                                                <Link href={"categories?id=" + prop[0] + "&name=" + prop[1] + "&description=" + prop[2]}
+                                                                      className={classes.tableCell}>
+                                                                    Editar
+                                                                </Link>
+                                                            </TableCell>
                                                         </TableRow>
                                                     );
                                                 })}

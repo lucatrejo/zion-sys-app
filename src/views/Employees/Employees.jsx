@@ -24,27 +24,49 @@ import TableCell from "@material-ui/core/TableCell";
 
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
 import CustomInputNumber from "components/CustomInput/CustomInputNumber.jsx";
+import Link from '@material-ui/core/Link';
+
+const createHistory = require("history").createBrowserHistory;
+let history = createHistory();
 
 const {REACT_APP_SERVER_URL} = process.env;
 const date = new Date();
 const dateNow = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
 
 
-
 class UserProfile extends React.Component {
     constructor(props) {
         super(props);
+        const query = new URLSearchParams(this.props.location.search);
+        let admissionDate;
+        if (query.get('admission_date')) {
+           let date = new Date(query.get('admission_date'));
+           admissionDate = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
+        }
+
+        let birthdate;
+        if (query.get('birthdate')) {
+            let date = new Date(query.get('birthdate'));
+            birthdate = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
+        }
+
         this.state = {
+            id: query.get('id'),
+            nameVal: query.get('name'),
+            lastNameVal: query.get('last_name'),
+            cuilVal: query.get('cuil'),
+            dniVal: query.get('dni'),
+            addressVal: query.get('address'),
             errors: {},
             categoriesData: [],
             alertColor: 'success',
             alertOpen: false,
             alertMsg: '',
-            admission_date: dateNow,
-            birthdate: dateNow
+            admission_date: admissionDate ? admissionDate : dateNow,
+            actionButton: query.get('id') ? 'Actualizar' : 'Guardar',
+            birthdate: birthdate ? birthdate : dateNow
 
         };
-        console.log(this.state.admission_date);
         this.insertObject = this.insertObject.bind(this);
         this.fillTable = this.fillTable.bind(this);
         this.showAlert = this.showAlert.bind(this);
@@ -89,12 +111,21 @@ class UserProfile extends React.Component {
 
         let insertRequest;
         try {
-            insertRequest = await axios.post(
-                `http://${REACT_APP_SERVER_URL}/employees`,
-                {
-                    ...formValues
-                }
-            );
+            if (this.state.id) {
+                insertRequest = await axios.put(
+                    `http://${REACT_APP_SERVER_URL}/employees/` + this.state.id,
+                    {
+                        ...formValues
+                    }
+                );
+            } else {
+                insertRequest = await axios.post(
+                    `http://${REACT_APP_SERVER_URL}/employees`,
+                    {
+                        ...formValues
+                    }
+                );
+            }
         } catch ({response}) {
             insertRequest = response;
         }
@@ -116,6 +147,7 @@ class UserProfile extends React.Component {
             }
         } else {
             msg = insertRequestData.messages.success;
+            history.push("/admin/employees");
             window.location.reload(false);
         }
 
@@ -150,9 +182,9 @@ class UserProfile extends React.Component {
                                                 }}
                                                 inputProps={{
                                                     required: true,
-                                                    defaultValue: name,
                                                     name: "name"
                                                 }}
+                                                defaultValue={this.state.nameVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
@@ -167,6 +199,7 @@ class UserProfile extends React.Component {
                                                     required: true,
                                                     name: "last_name"
                                                 }}
+                                                defaultValue={this.state.lastNameVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
@@ -181,6 +214,7 @@ class UserProfile extends React.Component {
                                                     required: true,
                                                     name: "cuil"
                                                 }}
+                                                defaultValue={this.state.cuilVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
@@ -210,6 +244,7 @@ class UserProfile extends React.Component {
                                                     required: true,
                                                     name: "identification"
                                                 }}
+                                                defaultValue={this.state.dniVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
@@ -239,11 +274,12 @@ class UserProfile extends React.Component {
                                                     required: true,
                                                     name: "address"
                                                 }}
+                                                defaultValue={this.state.addressVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
                                             <Button type="submit" color="info" size="xs">
-                                                Guardar
+                                                {this.state.actionButton}
                                             </Button>
                                         </GridItem>
                                     </GridContainer>
@@ -258,7 +294,7 @@ class UserProfile extends React.Component {
                                         <Table className={classes.table}>
                                             <TableHead className={classes["primaryTableHeader"]}>
                                                 <TableRow>
-                                                    {["ID", "Nombre", "Apellido", "CUIL", "DNI", "Fecha de Nacimiento", "Dirección", "Fecha de Ingreso"].map((prop, key) => {
+                                                    {["Nombre", "Apellido", "CUIL", "DNI", "Fecha de Nacimiento", "Dirección", "Fecha de Ingreso", "Acciones"].map((prop, key) => {
                                                         return (
                                                             <TableCell
                                                                 className={classes.tableCell + " " + classes.tableHeadCell}
@@ -275,13 +311,27 @@ class UserProfile extends React.Component {
                                                     return (
                                                         <TableRow key={key}>
                                                             {prop.map((prop, key) => {
+                                                                if (key !== 0) {
                                                                 return (
                                                                     <TableCell className={classes.tableCell} key={key}>
                                                                         {prop}
                                                                     </TableCell>
                                                                 );
-                                                            })}
-
+                                                            }})}
+                                                            <TableCell className={classes.tableCell} key={key}>
+                                                                <Link href={"employees?id=" + prop[0] +
+                                                                            "&name=" + prop[1] +
+                                                                            "&last_name=" + prop[2] +
+                                                                            "&cuil=" + prop[3] +
+                                                                            "&dni=" + prop[4] +
+                                                                            "&birthdate=" + prop[5] +
+                                                                            "&address=" + prop[6] +
+                                                                            "&admission_date=" + prop[7]
+                                                                }
+                                                                      className={classes.tableCell}>
+                                                                    Editar
+                                                                </Link>
+                                                            </TableCell>
                                                         </TableRow>
                                                     );
                                                 })}

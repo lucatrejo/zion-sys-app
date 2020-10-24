@@ -20,19 +20,29 @@ import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
+import Link from '@material-ui/core/Link';
 
+const createHistory = require("history").createBrowserHistory;
+let history = createHistory();
 
 const {REACT_APP_SERVER_URL} = process.env;
 
 class UserProfile extends React.Component {
     constructor(props) {
         super(props);
+        const query = new URLSearchParams(this.props.location.search);
         this.state = {
+            id: query.get('id'),
+            nameVal: query.get('name'),
+            businessNameVal: query.get('business'),
+            descriptionVal: query.get('description'),
+            addressVal: query.get('address'),
             errors: {},
             categoriesData: [],
             alertColor: '',
             alertOpen: false,
-            alertMsg: ''
+            alertMsg: '',
+            actionButton: query.get('id') ? 'Actualizar' : 'Guardar',
         };
         this.insertObject = this.insertObject.bind(this);
         this.fillTable = this.fillTable.bind(this);
@@ -78,12 +88,21 @@ class UserProfile extends React.Component {
 
         let insertRequest;
         try {
-            insertRequest = await axios.post(
-                `http://${REACT_APP_SERVER_URL}/providers`,
-                {
-                    ...formValues
-                }
-            );
+            if (this.state.id) {
+                insertRequest = await axios.put(
+                    `http://${REACT_APP_SERVER_URL}/providers/` + this.state.id,
+                    {
+                        ...formValues
+                    }
+                );
+            } else {
+                insertRequest = await axios.post(
+                    `http://${REACT_APP_SERVER_URL}/providers`,
+                    {
+                        ...formValues
+                    }
+                );
+            }
         } catch ({response}) {
             insertRequest = response;
         }
@@ -105,6 +124,7 @@ class UserProfile extends React.Component {
             }
         } else {
             msg = insertRequestData.messages.success;
+            history.push("/admin/providers");
             window.location.reload(false);
         }
 
@@ -141,6 +161,7 @@ class UserProfile extends React.Component {
                                                     required: true,
                                                     name: "name"
                                                 }}
+                                                defaultValue={this.state.nameVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
@@ -155,6 +176,7 @@ class UserProfile extends React.Component {
                                                     required: true,
                                                     name: "business_name"
                                                 }}
+                                                defaultValue={this.state.businessNameVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={5}>
@@ -169,6 +191,7 @@ class UserProfile extends React.Component {
                                                     required: false,
                                                     name: "description"
                                                 }}
+                                                defaultValue={this.state.descriptionVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={4}>
@@ -183,11 +206,12 @@ class UserProfile extends React.Component {
                                                     required: false,
                                                     name: "address"
                                                 }}
+                                                defaultValue={this.state.addressVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
                                             <Button type="submit" color="info" size="xs">
-                                                Guardar
+                                                {this.state.actionButton}
                                             </Button>
                                         </GridItem>
                                     </GridContainer>
@@ -202,7 +226,7 @@ class UserProfile extends React.Component {
                                         <Table className={classes.table}>
                                             <TableHead className={classes["primaryTableHeader"]}>
                                                 <TableRow>
-                                                    {["ID", "Nombre", "Razón Social", "Descripción", "Dirección"].map((prop, key) => {
+                                                    {["ID", "Nombre", "Razón Social", "Descripción", "Dirección", "Acciones"].map((prop, key) => {
                                                         return (
                                                             <TableCell
                                                                 className={classes.tableCell + " " + classes.tableHeadCell}
@@ -225,7 +249,17 @@ class UserProfile extends React.Component {
                                                                     </TableCell>
                                                                 );
                                                             })}
-
+                                                            <TableCell className={classes.tableCell} key={key}>
+                                                                <Link href={"providers?id=" + prop[0] +
+                                                                            "&name=" + prop[1] +
+                                                                            "&business=" + prop[2] +
+                                                                            "&description=" + prop[3] +
+                                                                            "&address=" + prop[4]
+                                                                }
+                                                                      className={classes.tableCell}>
+                                                                    Editar
+                                                                </Link>
+                                                            </TableCell>
                                                         </TableRow>
                                                     );
                                                 })}

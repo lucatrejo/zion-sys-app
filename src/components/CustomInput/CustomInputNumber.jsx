@@ -51,6 +51,7 @@ function CustomInputNumber({ ...props }) {
     error,
     success,
     onChange,
+    defaultValue,
     value
   } = props;
 
@@ -96,6 +97,7 @@ function CustomInputNumber({ ...props }) {
         }}
         id={id}
         value={value}
+        defaultValue={defaultValue}
         onChange={onChange}
         inputComponent={NumberFormatCustom}
         {...inputProps}
@@ -116,6 +118,7 @@ CustomInputNumber.propTypes = {
   labelProps: PropTypes.object,
   id: PropTypes.string,
   value: PropTypes.string,
+  defaultValue: PropTypes.string,
   inputProps: PropTypes.object,
   formControlProps: PropTypes.object,
   error: PropTypes.bool,
