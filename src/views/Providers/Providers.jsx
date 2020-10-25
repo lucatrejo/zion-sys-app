@@ -21,9 +21,12 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
 import Link from '@material-ui/core/Link';
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 const createHistory = require("history").createBrowserHistory;
 let history = createHistory();
+
 
 const {REACT_APP_SERVER_URL} = process.env;
 
@@ -71,7 +74,34 @@ class UserProfile extends React.Component {
             );
         }
     }
+    async handleRemove(e) {
 
+        this.setState({errors: {}});
+
+
+        let deleteRequest;
+        try {
+            deleteRequest = await axios.delete(
+                `http://${REACT_APP_SERVER_URL}/providers/`+e,
+
+            );
+        } catch ({response}) {
+            console.log(response.data.messages)
+            deleteRequest = response;
+            this.showAlert(this, response.data.messages, deleteRequest.danger);
+            return;
+
+        }
+        console.log(deleteRequest)
+
+        const {data: deleteRequestData} = deleteRequest;
+
+
+
+        var msg = 'Se eliminó el proveedor correctamente';
+        this.showAlert(this, msg, deleteRequestData.success);
+        window.location.reload();
+    }
     async insertObject(e) {
         e.preventDefault();
         this.setState({errors: {}});
@@ -249,17 +279,22 @@ class UserProfile extends React.Component {
                                                                     </TableCell>
                                                                 );
                                                             })}
-                                                            <TableCell className={classes.tableCell} key={key}>
-                                                                <Link href={"providers?id=" + prop[0] +
-                                                                            "&name=" + prop[1] +
-                                                                            "&business=" + prop[2] +
-                                                                            "&description=" + prop[3] +
-                                                                            "&address=" + prop[4]
-                                                                }
-                                                                      className={classes.tableCell}>
-                                                                    Editar
-                                                                </Link>
-                                                            </TableCell>
+
+                                                                <TableCell className={classes.tableCell} key={key}>
+
+                                                                    <Link href={"providers?id=" + prop[0] +
+                                                                    "&name=" + prop[1] +
+                                                                    "&business=" + prop[2] +
+                                                                    "&description=" + prop[3] +
+                                                                    "&address=" + prop[4]
+                                                                    }
+                                                                          className={classes.tableCell}>
+                                                                        <EditIcon icon={EditIcon} size="2x"/>
+
+                                                                    </Link>
+
+                                                                    <DeleteIcon onClick={() => this.handleRemove(prop[0])} />
+                                                                </TableCell>
                                                         </TableRow>
                                                     );
                                                 })}

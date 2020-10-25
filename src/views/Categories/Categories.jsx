@@ -20,7 +20,10 @@ import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import Link from '@material-ui/core/Link';
+
 
 const createHistory = require("history").createBrowserHistory;
 let history = createHistory();
@@ -133,11 +136,40 @@ class UserProfile extends React.Component {
         this.showAlert(this, msg, insertRequestData.success);
     }
 
+
+
+    async handleRemove(e) {
+
+        this.setState({errors: {}});
+
+
+        let deleteRequest;
+        try {
+            deleteRequest = await axios.delete(
+                `http://${REACT_APP_SERVER_URL}/categories/`+e,
+
+            );
+        } catch ({response}) {
+            console.log(response.data.messages)
+            deleteRequest = response;
+            this.showAlert(this, response.data.messages, deleteRequest.danger);
+            return;
+
+        }
+        console.log(deleteRequest)
+
+        const {data: deleteRequestData} = deleteRequest;
+
+
+
+        var msg = 'Se eliminó la categoría correctamente';
+        this.showAlert(this, msg, deleteRequestData.success);
+        window.location.reload();
+    }
     render() {
         const {classes, name} = this.props;
         const {errors, alertColor, alertMsg, alertOpen} = this.state;
 
-        console.log(errors.name);
         return (
             <div>
                 <GridContainer>
@@ -154,7 +186,7 @@ class UserProfile extends React.Component {
                                             <CustomInput
                                                 labelText="Nombre"
                                                 id="name"
-                                                error={errors.name}
+                                                error={(errors)?errors.name:""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -169,7 +201,7 @@ class UserProfile extends React.Component {
                                             <CustomInput
                                                 labelText="Descripción"
                                                 id="description"
-                                                error={errors.username}
+                                                error={(errors)?errors.username:""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -221,10 +253,14 @@ class UserProfile extends React.Component {
                                                                 );
                                                             })}
                                                             <TableCell className={classes.tableCell} key={key}>
-                                                                <Link href={"categories?id=" + prop[0] + "&name=" + prop[1] + "&description=" + prop[2]}
-                                                                      className={classes.tableCell}>
-                                                                    Editar
-                                                                </Link>
+
+                                                                  <Link href={"categories?id=" + prop[0] + "&name=" + prop[1] + "&description=" + prop[2]}
+                                                                                 className={classes.tableCell}>
+                                                                         <EditIcon icon={EditIcon} size="2x"/>
+
+                                                                  </Link>
+
+                                                                <DeleteIcon onClick={() => this.handleRemove(prop[0])} />
                                                             </TableCell>
                                                         </TableRow>
                                                     );

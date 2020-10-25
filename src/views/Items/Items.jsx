@@ -26,6 +26,9 @@ import TableCell from "@material-ui/core/TableCell";
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
 import CustomSelect from "../../components/CustomSelect/CustomSelect";
 import Link from '@material-ui/core/Link';
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
+import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
 
 const createHistory = require("history").createBrowserHistory;
 let history = createHistory();
@@ -63,12 +66,14 @@ class UserProfile extends React.Component {
     }
 
     fillTable(e) {
-        axios.get(`http://${REACT_APP_SERVER_URL}/items`)
+        axios.get(`http://${REACT_APP_SERVER_URL}/items/`)
             .then(res => {
                 const cat = res.data.items;
                 this.setState({itemsData: cat.map(c => Object.values(c))});
             })
+
     }
+
 
     fillCombo(e) {
         axios.get(`http://${REACT_APP_SERVER_URL}/categories`)
@@ -99,6 +104,34 @@ class UserProfile extends React.Component {
     }
 
 
+    async handleRemove(e) {
+
+        this.setState({errors: {}});
+
+
+        let deleteRequest;
+        try {
+            deleteRequest = await axios.delete(
+                `http://${REACT_APP_SERVER_URL}/items/`+e,
+
+            );
+        } catch ({response}) {
+            console.log("GUARDA"+response.data.messages)
+            deleteRequest = response;
+            this.showAlert(this, response.data.messages, deleteRequest.danger);
+            return;
+
+        }
+        console.log("hay un problema"+deleteRequest)
+
+        const {data: deleteRequestData} = deleteRequest;
+
+
+
+        var msg = 'Se eliminó el item correctamente';
+        this.showAlert(this, msg, deleteRequestData.success);
+        window.location.reload();
+    }
     async insertObject(e) {
         e.preventDefault();
         this.setState({errors: {}});
@@ -178,12 +211,54 @@ class UserProfile extends React.Component {
             this.showAlert(this, msg, insertRequestData.success);
         }
     }
+    async searchItems(e) {
+        this.setState({errors: {}});
+
+
+
+
+
+            let insertRequest;
+
+            try {
+
+                    insertRequest= await axios.get(`http://${REACT_APP_SERVER_URL}/items/`+1)
+
+
+
+            } catch ({response}) {
+                insertRequest = response;
+            }
+
+            const {data: insertRequestData} = insertRequest;
+
+            console.log(insertRequestData);
+            console.log(insertRequest);
+
+            var msg = '';
+
+            if (!insertRequestData.success) {
+                this.setState({
+                    errors:
+                        insertRequestData.messages && insertRequestData.messages.errors
+                });
+                if (insertRequestData.messages.errors.databaseError) {
+                    msg = insertRequestData.messages.errors.databaseError;
+                }
+            } else {
+                msg = insertRequestData.messages.success;
+                history.push("/admin/items");
+            }
+
+            this.fillTable(this);
+            this.showAlert(this, msg, insertRequestData.success);
+
+    }
 
     render() {
         const {classes} = this.props;
         const {errors, alertColor, alertMsg, alertOpen} = this.state;
 
-        console.log(errors.name);
         return (
             <div>
                 <GridContainer>
@@ -196,11 +271,12 @@ class UserProfile extends React.Component {
                                 </CardHeader>
                                 <CardBody>
                                     <GridContainer>
+
                                         <GridItem xs={3} sm={3} md={3}>
                                             <CustomInput
                                                 labelText="Nombre"
                                                 id="name"
-                                                error={errors.name}
+                                                error={(errors)?errors.name:""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -210,12 +286,13 @@ class UserProfile extends React.Component {
                                                 }}
                                                 defaultValue={this.state.nameVal}
                                             />
+
                                         </GridItem>
-                                        <GridItem xs={3} sm={3} md={6}>
+                                        <GridItem xs={3} sm={3} md={3}>
                                             <CustomInput
                                                 labelText="Descripción"
                                                 id="description"
-                                                error={errors.description}
+                                                error={(errors)?errors.description:""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -230,7 +307,7 @@ class UserProfile extends React.Component {
                                             <CustomInputNumber
                                                 labelText="Precio"
                                                 id="price"
-                                                error={errors.price}
+                                                error={(errors)?errors.price:""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -245,7 +322,7 @@ class UserProfile extends React.Component {
                                             <CustomInputNumber
                                                 labelText="Stock"
                                                 id="stock"
-                                                error={errors.stock}
+                                                error={(errors)?errors.stock:""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -260,7 +337,7 @@ class UserProfile extends React.Component {
                                             <CustomInputNumber
                                                 labelText="Stock Crítico"
                                                 id="critical_stock"
-                                                error={errors.critical_stock}
+                                                error={(errors)?errors.critical_stock:""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -275,7 +352,7 @@ class UserProfile extends React.Component {
                                             <CustomSelect
                                                 labelText="Categoría"
                                                 id="category_id"
-                                                error={errors.category}
+                                                error={(errors)?errors.category:""}
                                                 value={this.state.categoryComboVal}
                                                 onChange={this.updateCategory}
                                                 formControlProps={{
@@ -289,9 +366,15 @@ class UserProfile extends React.Component {
                                                 defaultValue={this.state.categoryVal}
                                             />
                                         </GridItem>
-                                        <GridItem xs={3} sm={3} md={3}>
+                                        <GridItem xs={0} sm={0} md={0}>
                                             <Button type="submit" color="info" size="xs">
                                                 {this.state.actionButton}
+                                            </Button>
+                                        </GridItem>
+                                        <GridItem xs={0} sm={0} md={0}>
+                                            <Button  color="info" size="xs">
+                                                <SearchOutlinedIcon onClick={() => this.searchItems(1)} fontSize={"small"}></SearchOutlinedIcon>
+
                                             </Button>
                                         </GridItem>
                                     </GridContainer>
@@ -341,8 +424,11 @@ class UserProfile extends React.Component {
                                                                 "&category=" + prop[7]
                                                                 }
                                                                       className={classes.tableCell}>
-                                                                    Editar
+                                                                    <EditIcon icon={EditIcon} size="2x"/>
+
                                                                 </Link>
+
+                                                                <DeleteIcon onClick={() => this.handleRemove(prop[0])} />
                                                             </TableCell>
                                                         </TableRow>
                                                     );
