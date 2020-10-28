@@ -23,6 +23,7 @@ import formStyle from "assets/jss/material-dashboard-react/components/formStyle.
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Link from '@material-ui/core/Link';
+import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
 
 
 const createHistory = require("history").createBrowserHistory;
@@ -47,19 +48,38 @@ class UserProfile extends React.Component {
             actionButton: query.get('id') ? 'Actualizar' : 'Guardar'
         };
         this.insertObject = this.insertObject.bind(this);
+        this.updateNameVal = this.updateNameVal.bind(this);
         this.fillTable = this.fillTable.bind(this);
         this.showAlert = this.showAlert.bind(this);
         this.fillTable(this);
     }
 
     fillTable(e) {
-        axios.get(`http://${REACT_APP_SERVER_URL}/categories`)
-            .then(res => {
-                const cat = res.data.categories;
-                this.setState({categoriesData: cat.map(c => Object.values(c))});
-            })
-    }
+        if(this.state.nameVal === null || this.state.nameVal ==='null' || this.state.nameVal ==='') {
 
+            axios.get(`http://${REACT_APP_SERVER_URL}/categories`)
+                .then(res => {
+                    const cat = res.data.categories;
+                    this.setState({categoriesData: cat.map(c => Object.values(c))});
+                })
+        }else{
+            console.log("HOLAAAAAA   "+`http://${REACT_APP_SERVER_URL}/categories/`+this.state.nameVal+"/search/")
+            axios.get(`http://${REACT_APP_SERVER_URL}/categories/`+this.state.nameVal+"/search/")
+                .then(res => {
+                    console.log(res.data.items)
+                    const cat = res.data.categories;
+                    this.setState({categoriesData: cat.map(c => Object.values(c))});
+                })
+        }
+    }
+    updateNameVal(e) {
+        this.setState({nameVal: e.target.value});
+    }
+    async searchItems(e) {
+        window.location.href = "categories?name=" + this.state.nameVal;
+
+
+    }
     showAlert(e, msg, success) {
         if (msg) {
             this.setState({alertOpen: true});
@@ -182,7 +202,7 @@ class UserProfile extends React.Component {
                                 </CardHeader>
                                 <CardBody>
                                     <GridContainer>
-                                        <GridItem xs={12} sm={12} md={4}>
+                                        <GridItem xs={12} sm={12} md={3}>
                                             <CustomInput
                                                 labelText="Nombre"
                                                 id="name"
@@ -194,10 +214,11 @@ class UserProfile extends React.Component {
                                                     required: true,
                                                     name: "name",
                                                 }}
-                                                defaultValue={this.state.nameVal}
+                                                onChange={this.updateNameVal}
+                                                defaultValue={this.state.nameVal!="null"?this.state.nameVal:""}
                                             />
                                         </GridItem>
-                                        <GridItem xs={12} sm={12} md={4}>
+                                        <GridItem xs={12} sm={12} md={3}>
                                             <CustomInput
                                                 labelText="Descripción"
                                                 id="description"
@@ -212,9 +233,15 @@ class UserProfile extends React.Component {
                                                 defaultValue={this.state.descVal}
                                             />
                                         </GridItem>
-                                        <GridItem xs={12} sm={12} md={3}>
+                                        <GridItem xs={12} sm={12} md={2}>
                                             <Button type="submit" color="info" size="xs">
                                                 {this.state.actionButton}
+                                            </Button>
+                                        </GridItem>
+                                        <GridItem xs={0} sm={0} md={0}>
+                                            <Button  color="info" size="xs">
+                                                <SearchOutlinedIcon onClick={() => this.searchItems(1)} fontSize={"small"}></SearchOutlinedIcon>
+
                                             </Button>
                                         </GridItem>
                                     </GridContainer>

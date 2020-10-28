@@ -23,6 +23,7 @@ import formStyle from "assets/jss/material-dashboard-react/components/formStyle.
 import Link from '@material-ui/core/Link';
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
 
 const createHistory = require("history").createBrowserHistory;
 let history = createHistory();
@@ -49,16 +50,34 @@ class UserProfile extends React.Component {
         };
         this.insertObject = this.insertObject.bind(this);
         this.fillTable = this.fillTable.bind(this);
+        this.updateNameVal = this.updateNameVal.bind(this);
         this.showAlert = this.showAlert.bind(this);
         this.fillTable(this);
     }
 
     fillTable(e) {
-        axios.get(`http://${REACT_APP_SERVER_URL}/providers`)
-            .then(res => {
-                const cat = res.data.providers;
-                this.setState({categoriesData: cat.map(c => Object.values(c))});
-            })
+        if(this.state.nameVal === null || this.state.nameVal ==='null' || this.state.nameVal ==='') {
+
+            axios.get(`http://${REACT_APP_SERVER_URL}/providers`)
+                .then(res => {
+                    const cat = res.data.providers;
+                    this.setState({categoriesData: cat.map(c => Object.values(c))});
+                })
+        }else{
+            axios.get(`http://${REACT_APP_SERVER_URL}/providers/`+this.state.nameVal+"/search/")
+                .then(res => {
+                    const cat = res.data.providers;
+                    this.setState({categoriesData: cat.map(c => Object.values(c))});
+                })
+        }
+    }
+    updateNameVal(e) {
+        this.setState({nameVal: e.target.value});
+    }
+    async searchItems(e) {
+        window.location.href = "providers?name=" + this.state.nameVal;
+
+
     }
 
     showAlert(e, msg, success) {
@@ -191,7 +210,8 @@ class UserProfile extends React.Component {
                                                     required: true,
                                                     name: "name"
                                                 }}
-                                                defaultValue={this.state.nameVal}
+                                                onChange={this.updateNameVal}
+                                                defaultValue={this.state.nameVal!="null"?this.state.nameVal:""}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
@@ -242,6 +262,12 @@ class UserProfile extends React.Component {
                                         <GridItem xs={12} sm={12} md={3}>
                                             <Button type="submit" color="info" size="xs">
                                                 {this.state.actionButton}
+                                            </Button>
+                                        </GridItem>
+                                        <GridItem xs={0} sm={0} md={0}>
+                                            <Button  color="info" size="xs">
+                                                <SearchOutlinedIcon onClick={() => this.searchItems(1)} fontSize={"small"}></SearchOutlinedIcon>
+
                                             </Button>
                                         </GridItem>
                                     </GridContainer>

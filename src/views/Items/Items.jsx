@@ -61,16 +61,29 @@ class UserProfile extends React.Component {
         this.fillTable = this.fillTable.bind(this);
         this.showAlert = this.showAlert.bind(this);
         this.updateCategory = this.updateCategory.bind(this);
+        this.updateNameVal = this.updateNameVal.bind(this);
         this.fillTable(this);
         this.fillCombo(this);
     }
 
     fillTable(e) {
-        axios.get(`http://${REACT_APP_SERVER_URL}/items/`)
-            .then(res => {
-                const cat = res.data.items;
-                this.setState({itemsData: cat.map(c => Object.values(c))});
-            })
+        if(this.state.nameVal === null || this.state.nameVal ==='null' || this.state.nameVal ==='') {
+            axios.get(`http://${REACT_APP_SERVER_URL}/items/`)
+                .then(res => {
+                    const cat = res.data.items;
+                    this.setState({itemsData: cat.map(c => Object.values(c))});
+                })
+
+        }
+        else
+        {
+            axios.get(`http://${REACT_APP_SERVER_URL}/items/`+this.state.nameVal+"/search/")
+                .then(res => {
+                    console.log(res.data.items)
+                    const cat = res.data.items;
+                    this.setState({itemsData: cat.map(c => Object.values(c))});
+                })
+        }
 
     }
 
@@ -101,6 +114,9 @@ class UserProfile extends React.Component {
 
     updateCategory(e) {
         this.setState({categoryComboVal: e.target.value});
+    }
+    updateNameVal(e) {
+        this.setState({nameVal: e.target.value});
     }
 
 
@@ -212,46 +228,8 @@ class UserProfile extends React.Component {
         }
     }
     async searchItems(e) {
-        this.setState({errors: {}});
+        window.location.href = "items?name=" + this.state.nameVal;
 
-
-
-
-
-            let insertRequest;
-
-            try {
-
-                    insertRequest= await axios.get(`http://${REACT_APP_SERVER_URL}/items/`+1)
-
-
-
-            } catch ({response}) {
-                insertRequest = response;
-            }
-
-            const {data: insertRequestData} = insertRequest;
-
-            console.log(insertRequestData);
-            console.log(insertRequest);
-
-            var msg = '';
-
-            if (!insertRequestData.success) {
-                this.setState({
-                    errors:
-                        insertRequestData.messages && insertRequestData.messages.errors
-                });
-                if (insertRequestData.messages.errors.databaseError) {
-                    msg = insertRequestData.messages.errors.databaseError;
-                }
-            } else {
-                msg = insertRequestData.messages.success;
-                history.push("/admin/items");
-            }
-
-            this.fillTable(this);
-            this.showAlert(this, msg, insertRequestData.success);
 
     }
 
@@ -284,7 +262,8 @@ class UserProfile extends React.Component {
                                                     required: true,
                                                     name: "name"
                                                 }}
-                                                defaultValue={this.state.nameVal}
+                                                onChange={this.updateNameVal}
+                                                defaultValue={this.state.nameVal!="null"?this.state.nameVal:""}
                                             />
 
                                         </GridItem>
