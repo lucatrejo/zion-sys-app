@@ -25,6 +25,9 @@ import TableCell from "@material-ui/core/TableCell";
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
 import CustomInputNumber from "components/CustomInput/CustomInputNumber.jsx";
 import Link from '@material-ui/core/Link';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
 
 const createHistory = require("history").createBrowserHistory;
 let history = createHistory();
@@ -68,17 +71,37 @@ class UserProfile extends React.Component {
 
         };
         this.insertObject = this.insertObject.bind(this);
+        this.updateNameVal = this.updateNameVal.bind(this);
         this.fillTable = this.fillTable.bind(this);
         this.showAlert = this.showAlert.bind(this);
         this.fillTable(this);
     }
 
     fillTable(e) {
-        axios.get(`http://${REACT_APP_SERVER_URL}/employees`)
-            .then(res => {
-                const cat = res.data.employees;
-                this.setState({categoriesData: cat.map(c => Object.values(c))});
-            })
+        if(this.state.nameVal === null || this.state.nameVal ==='null' || this.state.nameVal ==='') {
+
+            axios.get(`http://${REACT_APP_SERVER_URL}/employees`)
+                .then(res => {
+                    const cat = res.data.employees;
+                    this.setState({categoriesData: cat.map(c => Object.values(c))});
+                })
+        }else{
+            console.log("HOLAAAAAA   "+`http://${REACT_APP_SERVER_URL}/employees/`+this.state.nameVal+"/search/")
+            axios.get(`http://${REACT_APP_SERVER_URL}/employees/`+this.state.nameVal+"/search/")
+                .then(res => {
+                    console.log(res.data.items)
+                    const cat = res.data.employees;
+                    this.setState({categoriesData: cat.map(c => Object.values(c))});
+                })
+        }
+    }
+    updateNameVal(e) {
+        this.setState({nameVal: e.target.value});
+    }
+    async searchItems(e) {
+        window.location.href = "employees?name=" + this.state.nameVal;
+
+
     }
 
     showAlert(e, msg, success) {
@@ -154,6 +177,34 @@ class UserProfile extends React.Component {
         this.fillTable(this);
         this.showAlert(this, msg, insertRequestData.success);
     }
+    async handleRemove(e) {
+
+        this.setState({errors: {}});
+
+
+        let deleteRequest;
+        try {
+            deleteRequest = await axios.delete(
+                `http://${REACT_APP_SERVER_URL}/employees/`+e,
+
+            );
+        } catch ({response}) {
+            console.log(response.data.messages)
+            deleteRequest = response;
+            this.showAlert(this, response.data.messages, deleteRequest.danger);
+            return;
+
+        }
+        console.log(deleteRequest)
+
+        const {data: deleteRequestData} = deleteRequest;
+
+
+
+        var msg = 'Se eliminó el empleado correctamente';
+        this.showAlert(this, msg, "success");
+        window.location.reload();
+    }
 
     render() {
         const {classes, name} = this.props;
@@ -176,7 +227,7 @@ class UserProfile extends React.Component {
                                             <CustomInput
                                                 labelText="Nombre"
                                                 id="name"
-                                                error={errors.name}
+                                                error={(errors)?errors.name:""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -184,14 +235,15 @@ class UserProfile extends React.Component {
                                                     required: true,
                                                     name: "name"
                                                 }}
-                                                defaultValue={this.state.nameVal}
+                                                onChange={this.updateNameVal}
+                                                defaultValue={this.state.nameVal!="null"?this.state.nameVal:""}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
                                             <CustomInput
                                                 labelText="Apellido"
                                                 id="last_name"
-                                                error={errors.last_name}
+                                                error={(errors)?errors.last_name:""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -206,7 +258,7 @@ class UserProfile extends React.Component {
                                             <CustomInputNumber
                                                 labelText="Cuil"
                                                 id="cuil"
-                                                error={errors.cuil}
+                                                error={(errors)?errors.cuil:""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -236,7 +288,7 @@ class UserProfile extends React.Component {
                                             <CustomInputNumber
                                                 labelText="DNI"
                                                 id="identification"
-                                                error={errors.identification}
+                                                error={(errors)?errors.identification:""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -266,7 +318,7 @@ class UserProfile extends React.Component {
                                             <CustomInput
                                                 labelText="Dirección"
                                                 id="address"
-                                                error={errors.address}
+                                                error={(errors)?errors.address:""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -277,9 +329,15 @@ class UserProfile extends React.Component {
                                                 defaultValue={this.state.addressVal}
                                             />
                                         </GridItem>
-                                        <GridItem xs={12} sm={12} md={3}>
+                                        <GridItem xs={12} sm={12} md={1}>
                                             <Button type="submit" color="info" size="xs">
                                                 {this.state.actionButton}
+                                            </Button>
+                                        </GridItem>
+                                        <GridItem xs={0} sm={0} md={0}>
+                                            <Button  color="info" size="xs">
+                                                <SearchOutlinedIcon onClick={() => this.searchItems(1)} fontSize={"small"}></SearchOutlinedIcon>
+
                                             </Button>
                                         </GridItem>
                                     </GridContainer>
@@ -329,8 +387,11 @@ class UserProfile extends React.Component {
                                                                             "&admission_date=" + prop[7]
                                                                 }
                                                                       className={classes.tableCell}>
-                                                                    Editar
+                                                                    <EditIcon icon={EditIcon} size="2x"/>
                                                                 </Link>
+                                                                <Link>
+                                                                    <DeleteIcon onClick={() => this.handleRemove(prop[0])} />
+                                                            </Link>
                                                             </TableCell>
                                                         </TableRow>
                                                     );
