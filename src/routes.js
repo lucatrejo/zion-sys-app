@@ -7,6 +7,7 @@ import Categories from "views/Categories/Categories.jsx";
 import Items from "views/Items/Items.jsx";
 import Providers from "views/Providers/Providers.jsx";
 import Employees from "views/Employees/Employees.jsx";
+import Customers from "views/Customers/Customers.jsx";
 import Purchases from "views/Purchases/Purchases.jsx";
 import PurchasesReport from "views/Purchases/PurchasesReport.jsx";
 import Purchase from "views/Purchases/Purchase.jsx";
@@ -52,6 +53,14 @@ const dashboardRoutes = [
         rtlName: "ملف تعريفي للمستخدم",
         icon: LibraryBooks,
         component: Employees,
+        layout: "/admin"
+    },
+    {
+        path: "/customers",
+        name: "Clientes",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: Customers,
         layout: "/admin"
     },
     {

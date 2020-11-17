@@ -41,20 +41,15 @@ class UserProfile extends React.Component {
     constructor(props) {
         super(props);
         const query = new URLSearchParams(this.props.location.search);
-        let admissionDate;
-        if (query.get('admission_date')) {
-            var date1 = query.get('admission_date').split('/')
-            var newDate = date1[1] + '/' +date1[0] +'/' +date1[2];
-           let date = new Date(newDate);
-           admissionDate = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
-        }
 
         let birthdate;
         if (query.get('birthdate')) {
             var date1 = query.get('birthdate').split('/')
             var newDate = date1[1] + '/' +date1[0] +'/' +date1[2];
             let date = new Date(newDate);
+            console.log(date);
             birthdate = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
+            console.log(birthdate);
         }
 
         this.state = {
@@ -69,7 +64,6 @@ class UserProfile extends React.Component {
             alertColor: 'success',
             alertOpen: false,
             alertMsg: '',
-            admission_date: admissionDate ? admissionDate : dateNow,
             actionButton: query.get('id') ? 'Actualizar' : 'Guardar',
             birthdate: birthdate ? birthdate : dateNow
 
@@ -84,17 +78,16 @@ class UserProfile extends React.Component {
     fillTable(e) {
         if(this.state.nameVal === null || this.state.nameVal ==='null' || this.state.nameVal ==='') {
 
-            axios.get(`http://${REACT_APP_SERVER_URL}/employees`)
+            axios.get(`http://${REACT_APP_SERVER_URL}/customers`)
                 .then(res => {
-                    const cat = res.data.employees;
+                    const cat = res.data.customers;
                     this.setState({categoriesData: cat.map(c => Object.values(c))});
                 })
         }else{
-            console.log("HOLAAAAAA   "+`http://${REACT_APP_SERVER_URL}/employees/`+this.state.nameVal+"/search/")
-            axios.get(`http://${REACT_APP_SERVER_URL}/employees/`+this.state.nameVal+"/search/")
+            axios.get(`http://${REACT_APP_SERVER_URL}/customers/`+this.state.nameVal+"/search/")
                 .then(res => {
                     console.log(res.data.items)
-                    const cat = res.data.employees;
+                    const cat = res.data.customers;
                     this.setState({categoriesData: cat.map(c => Object.values(c))});
                 })
         }
@@ -103,7 +96,7 @@ class UserProfile extends React.Component {
         this.setState({nameVal: e.target.value});
     }
     async searchItems(e) {
-        window.location.href = "employees?name=" + this.state.nameVal;
+        window.location.href = "customers?name=" + this.state.nameVal;
 
 
     }
@@ -126,7 +119,7 @@ class UserProfile extends React.Component {
         e.preventDefault();
         this.setState({errors: {}});
 
-        const fields = ["name", "last_name", "cuil", "admission_date", "identification", "birthdate", "address"];
+        const fields = ["name", "last_name", "identification", "birthdate", "address"];
         const formElements = e.target.elements;
         const formValues = fields
             .map(field => ({
@@ -140,14 +133,14 @@ class UserProfile extends React.Component {
         try {
             if (this.state.id) {
                 insertRequest = await axios.put(
-                    `http://${REACT_APP_SERVER_URL}/employees/` + this.state.id,
+                    `http://${REACT_APP_SERVER_URL}/customers/` + this.state.id,
                     {
                         ...formValues
                     }
                 );
             } else {
                 insertRequest = await axios.post(
-                    `http://${REACT_APP_SERVER_URL}/employees`,
+                    `http://${REACT_APP_SERVER_URL}/customers`,
                     {
                         ...formValues
                     }
@@ -174,7 +167,7 @@ class UserProfile extends React.Component {
             }
         } else {
             msg = insertRequestData.messages.success;
-            history.push("/admin/employees");
+            history.push("/admin/customers");
             window.location.reload(false);
         }
 
@@ -189,7 +182,7 @@ class UserProfile extends React.Component {
         let deleteRequest;
         try {
             deleteRequest = await axios.delete(
-                `http://${REACT_APP_SERVER_URL}/employees/`+e,
+                `http://${REACT_APP_SERVER_URL}/customers/`+e,
 
             );
         } catch ({response}) {
@@ -205,7 +198,7 @@ class UserProfile extends React.Component {
 
 
 
-        var msg = 'Se eliminó el empleado correctamente';
+        var msg = 'Se eliminó el cliente correctamente';
         this.showAlert(this, msg, "success");
         window.location.reload();
     }
@@ -222,7 +215,7 @@ class UserProfile extends React.Component {
                         <form onSubmit={this.insertObject}>
                             <Card>
                                 <CardHeader color="info">
-                                    <h4 className={classes.cardTitleWhite}>Empleados</h4>
+                                    <h4 className={classes.cardTitleWhite}>Clientes</h4>
                                     <p className={classes.cardCategoryWhite}>Administración</p>
                                 </CardHeader>
                                 <CardBody>
@@ -256,36 +249,6 @@ class UserProfile extends React.Component {
                                                     name: "last_name"
                                                 }}
                                                 defaultValue={this.state.lastNameVal}
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={3}>
-                                            <CustomInputNumber
-                                                labelText="Cuil"
-                                                id="cuil"
-                                                error={(errors)?errors.cuil:""}
-                                                formControlProps={{
-                                                    fullWidth: true
-                                                }}
-                                                inputProps={{
-                                                    required: true,
-                                                    name: "cuil"
-                                                }}
-                                                defaultValue={this.state.cuilVal}
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={12} sm={12} md={3}>
-                                            <TextField
-                                                id="admission_date"
-                                                label="Fecha de Ingreso"
-                                                type="date"
-                                                defaultValue={this.state.admission_date}
-                                                className={classes.textField}
-                                                InputLabelProps={{
-                                                    shrink: true,
-                                                }}
-                                                inputProps={{
-                                                    required: true,
-                                                }}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
@@ -356,7 +319,7 @@ class UserProfile extends React.Component {
                                         <Table className={classes.table}>
                                             <TableHead className={classes["primaryTableHeader"]}>
                                                 <TableRow>
-                                                    {["Nombre", "Apellido", "CUIL", "DNI", "Fecha de Nacimiento", "Dirección", "Fecha de Ingreso", "Acciones"].map((prop, key) => {
+                                                    {["Nombre", "Apellido", "DNI", "Fecha de Nacimiento", "Dirección", "Acciones"].map((prop, key) => {
                                                         return (
                                                             <TableCell
                                                                 className={classes.tableCell + " " + classes.tableHeadCell}
@@ -381,14 +344,12 @@ class UserProfile extends React.Component {
                                                                 );
                                                             }})}
                                                             <TableCell className={classes.tableCell} key={key}>
-                                                                <Link href={"employees?id=" + prop[0] +
+                                                                <Link href={"customers?id=" + prop[0] +
                                                                             "&name=" + prop[1] +
                                                                             "&last_name=" + prop[2] +
-                                                                            "&cuil=" + prop[3] +
-                                                                            "&dni=" + prop[4] +
-                                                                            "&birthdate=" + prop[5] +
-                                                                            "&address=" + prop[6] +
-                                                                            "&admission_date=" + prop[7]
+                                                                            "&dni=" + prop[3] +
+                                                                            "&birthdate=" + prop[4] +
+                                                                            "&address=" + prop[5]
                                                                 }
                                                                       className={classes.tableCell}>
                                                                     <EditIcon icon={EditIcon} size="2x"/>
