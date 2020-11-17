@@ -145,7 +145,7 @@ class UserProfile extends React.Component {
 
 
         var msg = 'Se eliminó el item correctamente';
-        this.showAlert(this, msg, deleteRequestData.success);
+        this.showAlert(this, msg, "success");
         window.location.reload();
     }
     async insertObject(e) {
@@ -407,7 +407,9 @@ class UserProfile extends React.Component {
 
                                                                 </Link>
 
-                                                                <DeleteIcon onClick={() => this.handleRemove(prop[0])} />
+                                                                <Link>
+                                                                    <DeleteIcon onClick={() => this.handleRemove(prop[0])} />
+                                                                </Link>
                                                             </TableCell>
                                                         </TableRow>
                                                     );
