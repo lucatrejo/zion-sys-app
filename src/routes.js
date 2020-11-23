@@ -65,7 +65,7 @@ const dashboardRoutes = [
     },
     {
         path: "/add_purchase",
-        name: "Agregar Compra",
+        name: "Compras",
         rtlName: "ملف تعريفي للمستخدم",
         icon: LibraryBooks,
         component: Purchase,
@@ -73,7 +73,7 @@ const dashboardRoutes = [
     },
     {
         path: "/purchases",
-        name: "Compras",
+        name: "Listado de Compras",
         rtlName: "ملف تعريفي للمستخدم",
         icon: LibraryBooks,
         component: Purchases,

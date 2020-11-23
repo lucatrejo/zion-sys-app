@@ -22,16 +22,16 @@ import TableCell from "@material-ui/core/TableCell";
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
 
 const {REACT_APP_SERVER_URL} = process.env;
-
 class UserProfile extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             errors: {},
             categoriesData: [],
             alertColor: '',
             alertOpen: false,
-            alertMsg: ''
+            alertMsg: '',
         };
         this.insertObject = this.insertObject.bind(this);
         this.fillTable = this.fillTable.bind(this);
@@ -135,7 +135,7 @@ class UserProfile extends React.Component {
                                         <Table className={classes.table}>
                                             <TableHead className={classes["primaryTableHeader"]}>
                                                 <TableRow>
-                                                    {["ID", "Nombre de Empleado", "Apellido de Empleado", "Proveedor", "Fecha"].map((prop, key) => {
+                                                    {["Empleado", "Proveedor", "Fecha"].map((prop, key) => {
                                                         return (
                                                             <TableCell
                                                                 className={classes.tableCell + " " + classes.tableHeadCell}
@@ -152,17 +152,29 @@ class UserProfile extends React.Component {
                                                     return (
                                                         <TableRow key={key}>
                                                             {prop.map((prop, key) => {
-                                                                return (
-                                                                    <TableCell className={classes.tableCell} key={key}>
-                                                                        {prop}
-                                                                    </TableCell>
+                                                                if (key !== 0 && key !== 4 && key !== 5) {
+                                                                    return (
+                                                                        <TableCell className={classes.tableCell}
+                                                                                   key={key}>
+                                                                            {prop}
+                                                                        </TableCell>
 
-                                                                );
-                                                            })}
+                                                                    );
+                                                            }})}
                                                             <TableCell className={classes.tableCell} key={key}>
                                                                 <Link href={"purchase_detail?id=" + prop[0]}
                                                                       className={classes.tableCell}>
                                                                     Ver
+                                                                </Link>
+                                                            </TableCell>
+                                                            <TableCell className={classes.tableCell} key={key}>
+                                                                <Link href={"add_purchase?id=" + prop[0] +
+                                                                        "&employeeId=" + prop[4] +
+                                                                        "&providerId=" + prop[5] +
+                                                                        "&date=" + prop[3]
+                                                                        }
+                                                                      className={classes.tableCell}>
+                                                                    Editar
                                                                 </Link>
                                                             </TableCell>
                                                         </TableRow>

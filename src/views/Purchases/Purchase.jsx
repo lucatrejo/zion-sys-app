@@ -24,6 +24,8 @@ import formStyle from "assets/jss/material-dashboard-react/components/formStyle.
 import CustomSelect from "../../components/CustomSelect/CustomSelect";
 import TextField from "@material-ui/core/TextField";
 
+const createHistory = require("history").createBrowserHistory;
+let history = createHistory();
 
 const {REACT_APP_SERVER_URL} = process.env;
 const date = new Date();
@@ -32,7 +34,20 @@ const dateNow = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(
 class UserProfile extends React.Component {
     constructor(props) {
         super(props);
+
+        const query = new URLSearchParams(this.props.location.search);
+        let purchaseDate;
+        if (query.get('date')) {
+            var date1 = query.get('date').split('/');
+            var newDate = date1[1] + '/' +date1[0] +'/' +date1[2];
+            let date = new Date(newDate);
+            purchaseDate = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
+        }
+
         this.state = {
+            id: query.get('id'),
+            employeeId: query.get('employeeId'),
+            providerId: query.get('providerId'),
             errors: {},
             categoriesData: [],
             employeesData: [],
@@ -42,14 +57,16 @@ class UserProfile extends React.Component {
             detailForm: [],
             item: '',
             itemComboVal: '',
-            employeeComboVal: '',
-            providerComboVal: '',
+            employeeComboVal: query.get('employeeId') ? query.get('employeeId') : '',
+            providerComboVal: query.get('providerId') ? query.get('providerId') : '',
             unitPrice: '',
             quantity: '',
             alertColor: 'success',
             alertOpen: false,
             alertMsg: '',
-            date: dateNow
+            date: dateNow,
+            actionButton: query.get('id') ? 'Actualizar' : 'Guardar',
+            purchaseDate: purchaseDate ? purchaseDate : dateNow
         };
         this.insertObject = this.insertObject.bind(this);
         this.showAlert = this.showAlert.bind(this);
@@ -100,7 +117,7 @@ class UserProfile extends React.Component {
             const fieldsForm = [this.state.itemComboVal, this.state.unitPrice, this.state.quantity];
 
             this.state.detailsData.push(fields);
-            this.setState({detailsData: this.state.detailsData})
+            this.setState({detailsData: this.state.detailsData});
 
             this.state.detailForm.push(fieldsForm);
 
@@ -164,6 +181,7 @@ class UserProfile extends React.Component {
         formValues.employee_id = parseInt(formValues.employee_id);
         formValues.provider_id = parseInt(formValues.provider_id);
 
+        console.log(formValues);
 
         let details = [];
 
@@ -176,7 +194,7 @@ class UserProfile extends React.Component {
             details.push(detail);
         });
 
-        if (details.length === 0) {
+        if (details.length === 0 && !this.state.id) {
             this.showAlert(this, "Debe agregar artículos a la lista", false);
         } else {
 
@@ -187,12 +205,21 @@ class UserProfile extends React.Component {
 
             let insertRequest;
             try {
-                insertRequest = await axios.post(
-                    `http://${REACT_APP_SERVER_URL}/purchases`,
-                    {
-                        ...formValues
-                    }
-                );
+                if (this.state.id) {
+                    insertRequest = await axios.put(
+                        `http://${REACT_APP_SERVER_URL}/purchases/` + this.state.id,
+                        {
+                            ...formValues
+                        }
+                    );
+                } else {
+                    insertRequest = await axios.post(
+                        `http://${REACT_APP_SERVER_URL}/purchases`,
+                        {
+                            ...formValues
+                        }
+                    );
+                }
             } catch ({response}) {
                 insertRequest = response;
             }
@@ -214,6 +241,7 @@ class UserProfile extends React.Component {
                 }
             } else {
                 msg = insertRequestData.messages.success;
+                history.push("/admin/purchases");
                 window.location.reload(false);
             }
             this.showAlert(this, msg, insertRequestData.success);
@@ -224,7 +252,6 @@ class UserProfile extends React.Component {
         const {classes} = this.props;
         const {errors, alertColor, alertMsg, alertOpen} = this.state;
 
-        console.log(errors.name);
         return (
             <div>
                 <GridContainer>
@@ -233,7 +260,7 @@ class UserProfile extends React.Component {
                             <Card>
                                 <CardHeader color="info">
                                     <h4 className={classes.cardTitleWhite}>Compras</h4>
-                                    <p className={classes.cardCategoryWhite}>Nueva Compra</p>
+                                    <p className={classes.cardCategoryWhite}>{this.state.id ? 'Actualizar Compra' : 'Nueva Compra'}</p>
                                 </CardHeader>
                                 <CardBody>
                                     <GridContainer>
@@ -252,6 +279,7 @@ class UserProfile extends React.Component {
                                                     name: "employee_id"
                                                 }}
                                                 items={this.state.employeesData}
+                                                defaultValue={this.state.employeeId}
                                             />
                                         </GridItem>
                                         <GridItem xs={3} sm={3} md={4}>
@@ -269,6 +297,7 @@ class UserProfile extends React.Component {
                                                     name: "provider_id"
                                                 }}
                                                 items={this.state.providersData}
+                                                defaultValue={this.state.providerId}
                                             />
                                         </GridItem>
                                         <GridItem xs={3} sm={3} md={3}>
@@ -276,72 +305,87 @@ class UserProfile extends React.Component {
                                                 id="date"
                                                 label="Fecha"
                                                 type="date"
-                                                defaultValue={this.state.date}
+                                                defaultValue={this.state.purchaseDate}
                                                 className={classes.textField}
                                                 InputLabelProps={{
                                                     shrink: true,
                                                 }}
                                             />
                                         </GridItem>
+                                        {
+                                            this.state.id ? '' :
+                                                <GridItem xs={3} sm={3} md={4}>
+                                                    <CustomSelect
+                                                        labelText="Artículo"
+                                                        id="item_id"
+                                                        error={errors.username}
+                                                        value={this.state.itemComboVal}
+                                                        onChange={this.updateItem}
+                                                        formControlProps={{
+                                                            fullWidth: true
+                                                        }}
+                                                        inputProps={{
+                                                            required: true,
+                                                            name: "item_id"
+                                                        }}
+                                                        items={this.state.itemsData}
+                                                    />
+                                                </GridItem>
+                                        }
 
-                                        <GridItem xs={3} sm={3} md={4}>
-                                            <CustomSelect
-                                                labelText="Artículo"
-                                                id="item_id"
-                                                error={errors.username}
-                                                value={this.state.itemComboVal}
-                                                onChange={this.updateItem}
-                                                formControlProps={{
-                                                    fullWidth: true
-                                                }}
-                                                inputProps={{
-                                                    required: true,
-                                                    name: "item_id"
-                                                }}
-                                                items={this.state.itemsData}
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={3} sm={3} md={2}>
-                                            <CustomInputNumber
-                                                labelText="Precio Unitario"
-                                                id="unit_price"
-                                                error={errors.username}
-                                                value={this.state.unitPrice}
-                                                onChange={this.updateUnitPrice}
-                                                formControlProps={{
-                                                    fullWidth: true
-                                                }}
-                                                inputProps={{
-                                                    name: "unit_price"
-                                                }}
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={3} sm={3} md={2}>
-                                            <CustomInputNumber
-                                                labelText="Cantidad"
-                                                id="quantity"
-                                                error={errors.username}
-                                                value={this.state.quantity}
-                                                onChange={this.updateQuantity}
-                                                formControlProps={{
-                                                    fullWidth: true
-                                                }}
-                                                inputProps={{
-                                                    name: "quantity"
-                                                }}
-                                            />
-                                        </GridItem>
-                                        <GridItem xs={3} sm={3} md={3}>
-                                            <Button type="button"
-                                                    color="info"
-                                                    size="xs"
-                                                    onClick={this.addDetail}
-                                            >
-                                                Agregar
-                                            </Button>
-                                        </GridItem>
+                                        {
+                                            this.state.id ? '' :
+                                                <GridItem xs={3} sm={3} md={2}>
+                                                    <CustomInputNumber
+                                                        labelText="Precio Unitario"
+                                                        id="unit_price"
+                                                        error={errors.username}
+                                                        value={this.state.unitPrice}
+                                                        onChange={this.updateUnitPrice}
+                                                        formControlProps={{
+                                                            fullWidth: true
+                                                        }}
+                                                        inputProps={{
+                                                            name: "unit_price"
+                                                        }}
+                                                    />
+                                                </GridItem>
+                                        }
+
+                                        {
+                                            this.state.id ? '' :
+                                                <GridItem xs={3} sm={3} md={2}>
+                                                    <CustomInputNumber
+                                                        labelText="Cantidad"
+                                                        id="quantity"
+                                                        error={errors.username}
+                                                        value={this.state.quantity}
+                                                        onChange={this.updateQuantity}
+                                                        formControlProps={{
+                                                            fullWidth: true
+                                                        }}
+                                                        inputProps={{
+                                                            name: "quantity"
+                                                        }}
+                                                    />
+                                                </GridItem>
+                                        }
+                                        {
+                                            this.state.id ? '' :
+                                                <GridItem xs={3} sm={3} md={3}>
+                                                    <Button type="button"
+                                                            color="info"
+                                                            size="xs"
+                                                            onClick={this.addDetail}
+                                                    >
+                                                        Agregar
+                                                    </Button>
+                                                </GridItem>
+                                        }
 
                                         <div className={classes.tableResponsive}>
+                                            {
+                                                this.state.id ? '' :
                                             <Table className={classes.table}>
                                                 <TableHead className={classes["primaryTableHeader"]}>
                                                     <TableRow>
@@ -375,9 +419,11 @@ class UserProfile extends React.Component {
                                                     })}
                                                 </TableBody>
                                             </Table>
+                                            }
+
                                             <GridItem xs={3} sm={3} md={3}>
                                                 <Button type="submit" color="info" size="xs">
-                                                    Guardar
+                                                    {this.state.actionButton}
                                                 </Button>
                                             </GridItem>
                                         </div>
@@ -402,8 +448,6 @@ class UserProfile extends React.Component {
 
 UserProfile.propTypes = {
     classes: PropTypes.object.isRequired,
-    name: PropTypes.string,
-    email: PropTypes.string
 };
 
 export default withStyles(formStyle)(UserProfile);
