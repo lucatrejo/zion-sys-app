@@ -8,10 +8,16 @@ import Items from "views/Items/Items.jsx";
 import Providers from "views/Providers/Providers.jsx";
 import Employees from "views/Employees/Employees.jsx";
 import Customers from "views/Customers/Customers.jsx";
+
 import Purchases from "views/Purchases/Purchases.jsx";
 import PurchasesReport from "views/Purchases/PurchasesReport.jsx";
 import Purchase from "views/Purchases/Purchase.jsx";
 import PurchaseDetails from "views/Purchases/PurchaseDetails.jsx";
+
+import Sales from "views/Sales/Sales.jsx";
+import SalesReport from "views/Sales/SalesReport.jsx";
+import Sale from "views/Sales/Sale.jsx";
+import SaleDetails from "views/Sales/SaleDetails.jsx";
 
 import Login from "@material-ui/icons/LockOpen";
 import Person from "@material-ui/icons/Person";
@@ -88,20 +94,36 @@ const dashboardRoutes = [
         layout: "/admin"
     },
     {
+        path: "/add_sale",
+        name: "Ventas",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: Sale,
+        layout: "/admin"
+    },
+    {
+        path: "/sales",
+        name: "Listado de Ventas",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: Sales,
+        layout: "/admin"
+    },
+    {
+        path: "/report_sales",
+        name: "Reporte de Ventas",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: SalesReport,
+        layout: "/admin"
+    },
+    {
         path: "/register-page",
         name: "Registro de Usuarios",
         rtlName: "پشتیبانی از راست به چپ",
         icon: Register,
         component: RegisterPage,
         layout: "/auth"
-    },
-    {
-        path: "/purchase_detail",
-        name: "Ver Compra",
-        rtlName: "ملف تعريفي للمستخدم",
-        icon: LibraryBooks,
-        component: PurchaseDetails,
-        layout: "/admin"
     },
     {
         path: "/user",
@@ -118,6 +140,22 @@ const dashboardRoutes = [
         icon: Login,
         component: LoginPage,
         layout: "/auth"
+    },
+    {
+        path: "/purchase_detail",
+        name: "Ver Compra",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: PurchaseDetails,
+        layout: "/admin"
+    },
+    {
+        path: "/sale_detail",
+        name: "Ver Venta",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: SaleDetails,
+        layout: "/admin"
     }
 ];
 
