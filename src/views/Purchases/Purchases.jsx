@@ -20,6 +20,9 @@ import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
+import DeleteIcon from "@material-ui/icons/Delete";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import EditIcon from "@material-ui/icons/Edit";
 
 const {REACT_APP_SERVER_URL} = process.env;
 class UserProfile extends React.Component {
@@ -107,7 +110,34 @@ class UserProfile extends React.Component {
         this.fillTable(this);
         this.showAlert(this, msg, insertRequestData.success);
     }
+    async handleRemove(e) {
 
+        this.setState({errors: {}});
+
+
+        let deleteRequest;
+        try {
+            deleteRequest = await axios.delete(
+                `http://${REACT_APP_SERVER_URL}/purchases/`+e,
+
+            );
+        } catch ({response}) {
+            console.log(response.data.messages)
+            deleteRequest = response;
+            this.showAlert(this, response.data.messages, deleteRequest.danger);
+            return;
+
+        }
+        console.log(deleteRequest)
+
+        const {data: deleteRequestData} = deleteRequest;
+
+
+
+        var msg = 'Se eliminó la compra correctamente';
+        this.showAlert(this, msg, "success");
+        window.location.reload();
+    }
     render() {
         const {classes} = this.props;
         const {errors, alertColor, alertMsg, alertOpen} = this.state;
@@ -164,7 +194,7 @@ class UserProfile extends React.Component {
                                                             <TableCell className={classes.tableCell} key={key}>
                                                                 <Link href={"purchase_detail?id=" + prop[0]}
                                                                       className={classes.tableCell}>
-                                                                    Ver
+                                                                    <VisibilityIcon icon={VisibilityIcon} size="2x"/>
                                                                 </Link>
                                                             </TableCell>
                                                             <TableCell className={classes.tableCell} key={key}>
@@ -174,7 +204,12 @@ class UserProfile extends React.Component {
                                                                         "&date=" + prop[3]
                                                                         }
                                                                       className={classes.tableCell}>
-                                                                    Editar
+                                                                    <EditIcon icon={EditIcon} size="2x"/>
+                                                                </Link>
+                                                            </TableCell>
+                                                            <TableCell className={classes.tableCell} key={key}>
+                                                                <Link >
+                                                                    <DeleteIcon icon={DeleteIcon} onClick={() => this.handleRemove(prop[0])}/>
                                                                 </Link>
                                                             </TableCell>
                                                         </TableRow>
