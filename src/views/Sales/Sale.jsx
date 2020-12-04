@@ -65,7 +65,7 @@ class UserProfile extends React.Component {
             alertOpen: false,
             alertMsg: '',
             date: dateNow,
-            actionButton: query.get('id') ? 'Actualizar' : 'Guardar',
+            actionButton: query.get('id') ? 'Actualizar' : 'Registrar',
             saleDate: saleDate ? saleDate : dateNow
         };
         this.insertObject = this.insertObject.bind(this);

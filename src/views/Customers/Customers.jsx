@@ -64,7 +64,7 @@ class UserProfile extends React.Component {
             alertColor: 'success',
             alertOpen: false,
             alertMsg: '',
-            actionButton: query.get('id') ? 'Actualizar' : 'Guardar',
+            actionButton: query.get('id') ? 'Actualizar' : 'Registrar',
             birthdate: birthdate ? birthdate : dateNow
 
         };
