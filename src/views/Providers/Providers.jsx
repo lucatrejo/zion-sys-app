@@ -46,7 +46,7 @@ class UserProfile extends React.Component {
             alertColor: '',
             alertOpen: false,
             alertMsg: '',
-            actionButton: query.get('id') ? 'Actualizar' : 'Guardar',
+            actionButton: query.get('id') ? 'Actualizar' : 'Registrar',
         };
         this.insertObject = this.insertObject.bind(this);
         this.fillTable = this.fillTable.bind(this);

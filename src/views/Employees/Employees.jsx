@@ -70,7 +70,7 @@ class UserProfile extends React.Component {
             alertOpen: false,
             alertMsg: '',
             admission_date: admissionDate ? admissionDate : dateNow,
-            actionButton: query.get('id') ? 'Actualizar' : 'Guardar',
+            actionButton: query.get('id') ? 'Actualizar' : 'Registrar',
             birthdate: birthdate ? birthdate : dateNow
 
         };

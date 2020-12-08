@@ -21,7 +21,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
-import CustomSelect from "../../components/CustomSelect/CustomSelect";
+import CustomAutoSelect from "../../components/CustomSelect/CustomAutoSelect";
 import TextField from "@material-ui/core/TextField";
 
 const createHistory = require("history").createBrowserHistory;
@@ -65,7 +65,7 @@ class UserProfile extends React.Component {
             alertOpen: false,
             alertMsg: '',
             date: dateNow,
-            actionButton: query.get('id') ? 'Actualizar' : 'Guardar',
+            actionButton: query.get('id') ? 'Actualizar' : 'Registrar',
             saleDate: saleDate ? saleDate : dateNow
         };
         this.insertObject = this.insertObject.bind(this);
@@ -88,7 +88,9 @@ class UserProfile extends React.Component {
                 cat.forEach(e => {
                     e.name = e.name + " " + e.last_name;
                 });
-                this.setState({employeesData: cat.map(c => Object.values(c))});
+                this.setState({employeesData: cat});
+
+                this.setState({employeeComboVal: this.state.employeesData.find(v => v.id === parseInt(this.state.employeeId))});
             })
     }
 
@@ -99,7 +101,10 @@ class UserProfile extends React.Component {
                 cat.forEach(e => {
                     e.name = e.name + " " + e.last_name;
                 });
-                this.setState({customersData: cat.map(c => Object.values(c))});
+                this.setState({customersData: cat});
+
+                this.setState({customerComboVal: this.state.customersData.find(v => v.id === parseInt(this.state.customerId))});
+
             })
     }
 
@@ -110,14 +115,15 @@ class UserProfile extends React.Component {
                 cat.forEach(e => {
                     e.code = e.code + " " + e.name;
                 });
-                this.setState({itemsData: cat.map(c => Object.values(c))});
+                this.setState({itemsData: cat});
+
             })
     }
 
     addDetail(e) {
         if (this.state.item !== '' && this.state.unitPrice !== '' && this.state.quantity !== '') {
             const fields = [this.state.item, this.state.unitPrice, this.state.quantity];
-            const fieldsForm = [this.state.itemComboVal, this.state.unitPrice, this.state.quantity];
+            const fieldsForm = [this.state.itemComboVal.id, this.state.unitPrice, this.state.quantity];
 
             this.state.detailsData.push(fields);
             this.setState({detailsData: this.state.detailsData});
@@ -141,18 +147,26 @@ class UserProfile extends React.Component {
         this.setState({quantity: e.target.value});
     }
 
-    updateItem(e) {
-        this.setState({itemComboVal: e.target.value});
-        this.setState({item: this.state.itemsData.filter(i => i[0] === e.target.value)[0][1]});
-        this.setState({unitPrice: this.state.itemsData.filter(i => i[0] === e.target.value)[0][3]});
+    updateItem(e, value) {
+        var val =  this.state.itemsData.find(v => v.id === value.id);
+        this.setState({itemComboVal: val});
+
+        this.setState({item: value.name});
+        this.setState({unitPrice: value.price});
     }
 
-    updateEmployee(e) {
-        this.setState({employeeComboVal: e.target.value});
+    updateEmployee(e, value) {
+        this.setState({employeeComboVal: value.id});
+
+        var val =  this.state.employeesData.find(v => v.id === value.id);
+        this.setState({employeeComboVal: val});
     }
 
-    updateCustomer(e) {
-        this.setState({customerComboVal: e.target.value});
+    updateCustomer(e, value) {
+        this.setState({customerComboVal: value.id});
+
+        var val =  this.state.customersData.find(v => v.id === value.id);
+        this.setState({customerComboVal: val});
     }
 
     showAlert(e, msg, success) {
@@ -173,7 +187,7 @@ class UserProfile extends React.Component {
         e.preventDefault();
         this.setState({errors: {}});
 
-        const fields = ["employee_id", "customer_id", "date"];
+        const fields = ["date"];
         const formElements = e.target.elements;
         const formValues = fields
             .map(field => ({
@@ -182,8 +196,8 @@ class UserProfile extends React.Component {
             .reduce((current, next) => ({...current, ...next}));
 
 
-        formValues.employee_id = parseInt(formValues.employee_id);
-        formValues.customer_id = parseInt(formValues.customer_id);
+        formValues.employee_id = this.state.employeeComboVal.id;
+        formValues.customer_id = this.state.customerComboVal.id;
 
         console.log(formValues);
 
@@ -269,7 +283,7 @@ class UserProfile extends React.Component {
                                 <CardBody>
                                     <GridContainer>
                                         <GridItem xs={3} sm={3} md={4}>
-                                            <CustomSelect
+                                            <CustomAutoSelect
                                                 labelText="Empleado"
                                                 id="employee_id"
                                                 error={errors.username}
@@ -283,11 +297,10 @@ class UserProfile extends React.Component {
                                                     name: "employee_id"
                                                 }}
                                                 items={this.state.employeesData}
-                                                defaultValue={this.state.employeeId}
                                             />
                                         </GridItem>
                                         <GridItem xs={3} sm={3} md={4}>
-                                            <CustomSelect
+                                            <CustomAutoSelect
                                                 labelText="Cliente"
                                                 id="customer_id"
                                                 value={this.state.customerComboVal}
@@ -301,7 +314,6 @@ class UserProfile extends React.Component {
                                                     name: "customer_id"
                                                 }}
                                                 items={this.state.customersData}
-                                                defaultValue={this.state.customerId}
                                             />
                                         </GridItem>
                                         <GridItem xs={3} sm={3} md={3}>
@@ -319,7 +331,7 @@ class UserProfile extends React.Component {
                                         {
                                             this.state.id ? '' :
                                                 <GridItem xs={3} sm={3} md={4}>
-                                                    <CustomSelect
+                                                    <CustomAutoSelect
                                                         labelText="Artículo"
                                                         id="item_id"
                                                         error={errors.username}
@@ -394,7 +406,7 @@ class UserProfile extends React.Component {
                                             <Table className={classes.table}>
                                                 <TableHead className={classes["primaryTableHeader"]}>
                                                     <TableRow>
-                                                        {["Artículo", "Precio Unitario", "Cantidad"].map((prop, key) => {
+                                                        {["Artículo", "Precio Unitario", "Cantidad", "Monto Parcial"].map((prop, key) => {
                                                             return (
                                                                 <TableCell
                                                                     className={classes.tableCell + " " + classes.tableHeadCell}
@@ -418,6 +430,10 @@ class UserProfile extends React.Component {
                                                                         </TableCell>
                                                                     );
                                                                 })}
+
+                                                                <TableCell className={classes.tableCell}>
+                                                                    {Math.round(prop[1] * prop[2] * 100) / 100}
+                                                                </TableCell>
 
                                                             </TableRow>
                                                         );

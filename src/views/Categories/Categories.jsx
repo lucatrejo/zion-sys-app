@@ -45,7 +45,7 @@ class UserProfile extends React.Component {
             alertMsg: '',
             nameVal: query.get('name'),
             descVal: query.get('description'),
-            actionButton: query.get('id') ? 'Actualizar' : 'Guardar'
+            actionButton: query.get('id') ? 'Actualizar' : 'Registrar'
         };
         this.insertObject = this.insertObject.bind(this);
         this.updateNameVal = this.updateNameVal.bind(this);
