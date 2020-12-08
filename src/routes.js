@@ -28,6 +28,7 @@ import LoginPage from "views/Pages/LoginPage.jsx";
 import UserProfile from "views/UserProfile/UserProfile.jsx";
 import GraphTop5ItemsSales from "./views/StadisticGraph/GraphTop5ItemsSales";
 import GraphSalesForDay from "./views/StadisticGraph/GraphSalesForDay";
+import GraphPurchasesForDay from "./views/StadisticGraph/GraphPurchasesForDay";
 
 
 
@@ -171,10 +172,18 @@ const dashboardRoutes = [
     },
     {
         path: "/reportCountSaleForDay",
-        name: "Cantidad de ventas por mes",
+        name: "Cantidad de ventas por dia",
         rtlName: "ملف تعريفي للمستخدم",
         icon: LibraryBooks,
         component: GraphSalesForDay,
+        layout: "/admin"
+    },
+    {
+        path: "/reportCountPurchasesForDay",
+        name: "Cantidad de compras por dia",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: GraphPurchasesForDay,
         layout: "/admin"
     }
 ];

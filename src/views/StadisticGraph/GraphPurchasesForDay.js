@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import Chart from '../../components/Graphs/ChartBar';
+import Chart from '../../components/Graphs/ChartLine';
 import $ from 'jquery';
 
 const {REACT_APP_SERVER_URL} = process.env;
@@ -23,17 +23,26 @@ class GraphTop5ArtVent extends Component {
 
     getChartData(){
         $.ajax({
-            url: `http://${REACT_APP_SERVER_URL}/sales/count_sales`,
+            url: `http://${REACT_APP_SERVER_URL}/purchases/purchases_month`,
             dataType: 'json',
             success: function(dataReturned){
                 //logging to test if correct data is being received
                 console.log('original data: ', dataReturned);
                 var arrCAT = [];
                 var arrTOTAL = [];
-                const sorted = dataReturned.getCountSales.sort((a, b) => new Date(...a.date.split('/').reverse()) - new Date(...b.date.split('/').reverse()))
-                for (var i = 0, len = sorted.length; i < len; i++) {
-                    arrCAT.push(sorted[i].date);
-                    arrTOTAL.push(sorted[i].count);
+
+                let result = Object.values(dataReturned.purchases.reduce((c, {date}) => {
+                    c[date] = c[date] || {date: date,count: 0};
+                    c[date].count++;
+                    return c;
+                }, {}))
+                result= result.sort((a, b) => new Date(...a.date.split('/').reverse()) - new Date(...b.date.split('/').reverse()))
+
+                console.log(result);
+
+                for (var i = 0, len = result.length; i < len; i++) {
+                    arrCAT.push(result[i].date);
+                    arrTOTAL.push(result[i].count);
                 }
                 //logging to test that arrays were loaded correctly
                 console.log('just name items: ', arrCAT);
