@@ -10,17 +10,20 @@
     "@material-ui/icons": "3.0.2",
     "@material-ui/pickers": "^3.2.10",
     "axios": "^0.18.0",
+    "chart.js": "^2.9.4",
     "chartist": "0.10.1",
     "classnames": "2.2.6",
     "date-fns": "^2.0.0-beta.5",
     "history": "4.7.2",
     "jspdf": "^2.1.0",
     "jspdf-autotable": "^3.5.9",
+    "ng2-charts": "^2.4.2",
     "perfect-scrollbar": "1.4.0",
     "prettier": "1.16.4",
     "prop-types": "15.7.1",
     "react": "16.8.1",
     "react-chartist": "0.13.3",
+    "react-chartjs-2": "^2.11.1",
     "react-dom": "16.8.1",
     "react-github-button": "^0.1.11",
     "react-google-maps": "9.4.5",
@@ -68,5 +71,7 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "devDependencies": {}
+  "devDependencies": {
+    "jquery": "^3.5.1"
+  }
 }
