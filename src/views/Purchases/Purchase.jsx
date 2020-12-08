@@ -394,7 +394,7 @@ class UserProfile extends React.Component {
                                             <Table className={classes.table}>
                                                 <TableHead className={classes["primaryTableHeader"]}>
                                                     <TableRow>
-                                                        {["Artículo", "Precio Unitario", "Cantidad"].map((prop, key) => {
+                                                        {["Artículo", "Precio Unitario", "Cantidad", "Monto Parcial"].map((prop, key) => {
                                                             return (
                                                                 <TableCell
                                                                     className={classes.tableCell + " " + classes.tableHeadCell}
@@ -408,9 +408,11 @@ class UserProfile extends React.Component {
                                                 </TableHead>
                                                 <TableBody>
                                                     {this.state.detailsData.map((prop, key) => {
+                                                        console.log(prop);
                                                         return (
                                                             <TableRow key={key}>
                                                                 {prop.map((prop, key) => {
+                                                                    console.log(prop);
                                                                     return (
                                                                         <TableCell className={classes.tableCell}
                                                                                    key={key}>
@@ -419,8 +421,13 @@ class UserProfile extends React.Component {
                                                                     );
                                                                 })}
 
+                                                                <TableCell className={classes.tableCell}>
+                                                                    {Math.round(prop[1] * prop[2] * 100) / 100}
+                                                                </TableCell>
+
                                                             </TableRow>
                                                         );
+
                                                     })}
                                                 </TableBody>
                                             </Table>

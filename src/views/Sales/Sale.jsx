@@ -406,7 +406,7 @@ class UserProfile extends React.Component {
                                             <Table className={classes.table}>
                                                 <TableHead className={classes["primaryTableHeader"]}>
                                                     <TableRow>
-                                                        {["Artículo", "Precio Unitario", "Cantidad"].map((prop, key) => {
+                                                        {["Artículo", "Precio Unitario", "Cantidad", "Monto Parcial"].map((prop, key) => {
                                                             return (
                                                                 <TableCell
                                                                     className={classes.tableCell + " " + classes.tableHeadCell}
@@ -430,6 +430,10 @@ class UserProfile extends React.Component {
                                                                         </TableCell>
                                                                     );
                                                                 })}
+
+                                                                <TableCell className={classes.tableCell}>
+                                                                    {Math.round(prop[1] * prop[2] * 100) / 100}
+                                                                </TableCell>
 
                                                             </TableRow>
                                                         );
