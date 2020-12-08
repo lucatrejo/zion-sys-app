@@ -23,6 +23,22 @@ import TableCell from "@material-ui/core/TableCell";
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
 import CustomSelect from "../../components/CustomSelect/CustomSelect";
 import TextField from "@material-ui/core/TextField";
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import SelectSearch from 'react-select-search';
+import Select from "react-dropdown-select";
+
+
+
+import {
+    Combobox,
+    ComboboxInput,
+    ComboboxPopover,
+    ComboboxList,
+    ComboboxOption,
+    ComboboxOptionText,
+} from "@reach/combobox";
+import "@reach/combobox/styles.css";
+
 
 const createHistory = require("history").createBrowserHistory;
 let history = createHistory();
@@ -39,7 +55,7 @@ class UserProfile extends React.Component {
         let saleDate;
         if (query.get('date')) {
             var date1 = query.get('date').split('/');
-            var newDate = date1[1] + '/' +date1[0] +'/' +date1[2];
+            var newDate = date1[1] + '/' + date1[0] + '/' + date1[2];
             let date = new Date(newDate);
             saleDate = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
         }
@@ -335,6 +351,37 @@ class UserProfile extends React.Component {
                                                         items={this.state.itemsData}
                                                     />
                                                 </GridItem>
+
+                                        }
+                                        {
+                                            this.state.id ? '' :
+                                                <GridItem xs={3} sm={3} md={4}>
+                                                    <Combobox aria-label="Cities">
+                                                        <ComboboxInput
+                                                            className="city-search-input"
+                                                            onChange={this.updateCustomer}
+                                                        />
+                                                        {this.state.itemsData && (
+                                                            <ComboboxPopover className="shadow-popup">
+                                                                {this.state.itemsData.length > 0 ? (
+                                                                    <ComboboxList>
+                                                                        {this.state.itemsData.slice(0, 10).map((result, index) => (
+                                                                            <ComboboxOption
+                                                                                key={result[0]}
+                                                                                value={result[1]}
+                                                                            />
+                                                                        ))}
+                                                                    </ComboboxList>
+                                                                ) : (
+                                                                    <span style={{display: "block", margin: 8}}>
+                  No results found
+                </span>
+                                                                )}
+                                                            </ComboboxPopover>
+                                                        )}
+                                                    </Combobox>
+                                                </GridItem>
+
                                         }
 
                                         {
@@ -391,39 +438,39 @@ class UserProfile extends React.Component {
                                         <div className={classes.tableResponsive}>
                                             {
                                                 this.state.id ? '' :
-                                            <Table className={classes.table}>
-                                                <TableHead className={classes["primaryTableHeader"]}>
-                                                    <TableRow>
-                                                        {["Artículo", "Precio Unitario", "Cantidad"].map((prop, key) => {
-                                                            return (
-                                                                <TableCell
-                                                                    className={classes.tableCell + " " + classes.tableHeadCell}
-                                                                    key={key}
-                                                                >
-                                                                    {prop}
-                                                                </TableCell>
-                                                            );
-                                                        })}
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody>
-                                                    {this.state.detailsData.map((prop, key) => {
-                                                        return (
-                                                            <TableRow key={key}>
-                                                                {prop.map((prop, key) => {
+                                                    <Table className={classes.table}>
+                                                        <TableHead className={classes["primaryTableHeader"]}>
+                                                            <TableRow>
+                                                                {["Artículo", "Precio Unitario", "Cantidad"].map((prop, key) => {
                                                                     return (
-                                                                        <TableCell className={classes.tableCell}
-                                                                                   key={key}>
+                                                                        <TableCell
+                                                                            className={classes.tableCell + " " + classes.tableHeadCell}
+                                                                            key={key}
+                                                                        >
                                                                             {prop}
                                                                         </TableCell>
                                                                     );
                                                                 })}
-
                                                             </TableRow>
-                                                        );
-                                                    })}
-                                                </TableBody>
-                                            </Table>
+                                                        </TableHead>
+                                                        <TableBody>
+                                                            {this.state.detailsData.map((prop, key) => {
+                                                                return (
+                                                                    <TableRow key={key}>
+                                                                        {prop.map((prop, key) => {
+                                                                            return (
+                                                                                <TableCell className={classes.tableCell}
+                                                                                           key={key}>
+                                                                                    {prop}
+                                                                                </TableCell>
+                                                                            );
+                                                                        })}
+
+                                                                    </TableRow>
+                                                                );
+                                                            })}
+                                                        </TableBody>
+                                                    </Table>
                                             }
 
                                             <GridItem xs={3} sm={3} md={3}>
