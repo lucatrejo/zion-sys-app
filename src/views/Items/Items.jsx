@@ -24,7 +24,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
-import CustomSelect from "../../components/CustomSelect/CustomSelect";
+import CustomAutoSelect from "../../components/CustomSelect/CustomAutoSelect";
 import Link from '@material-ui/core/Link';
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -79,7 +79,6 @@ class UserProfile extends React.Component {
         {
             axios.get(`http://${REACT_APP_SERVER_URL}/items/`+this.state.nameVal+"/search/")
                 .then(res => {
-                    console.log(res.data.items)
                     const cat = res.data.items;
                     this.setState({itemsData: cat.map(c => Object.values(c))});
                 })
@@ -92,10 +91,12 @@ class UserProfile extends React.Component {
         axios.get(`http://${REACT_APP_SERVER_URL}/categories`)
             .then(res => {
                 const cat = res.data.categories;
-                console.log(cat);
-                console.log(cat.map(c => Object.values(c)));
-                this.setState({categoriesData: cat.map(c => Object.values(c))});
-            })
+                this.setState({categoriesData: cat});
+
+                this.setState({categoryComboVal: this.state.categoriesData.find(v => v.id === parseInt(this.state.categoryVal))});
+            });
+
+
     }
 
     showAlert(e, msg, success) {
@@ -112,9 +113,12 @@ class UserProfile extends React.Component {
         }
     }
 
-    updateCategory(e) {
-        this.setState({categoryComboVal: e.target.value});
+    updateCategory(e, val) {
+        var value =  this.state.categoriesData.find(v => v.id === val.id);
+
+        this.setState({categoryComboVal: value});
     }
+
     updateNameVal(e) {
         this.setState({nameVal: e.target.value});
     }
@@ -151,8 +155,9 @@ class UserProfile extends React.Component {
     async insertObject(e) {
         e.preventDefault();
         this.setState({errors: {}});
+        console.log("paso 1");
 
-        const fields = ["name", "description", "price", "stock", "critical_stock", "category_id"];
+        const fields = ["name", "description", "price", "stock", "critical_stock"];
         const formElements = e.target.elements;
         const formValues = fields
             .map(field => ({
@@ -162,11 +167,11 @@ class UserProfile extends React.Component {
 
         formValues.name = formValues.name.trim();
 
-        if (formValues.category_id === "") {
+        formValues.category_id = this.state.categoryComboVal.id;
+
+        if (!formValues.category_id) {
             this.showAlert(this, "Debe seleccionar una categoría", false)
         } else {
-            formValues.category = parseInt(formValues.category);
-            console.log(formValues.price);
             formValues.price = parseFloat(formValues.price);
             formValues.stock = parseInt(formValues.stock);
             formValues.critical_stock = parseInt(formValues.critical_stock);
@@ -328,7 +333,7 @@ class UserProfile extends React.Component {
                                             />
                                         </GridItem>
                                         <GridItem xs={3} sm={3} md={3}>
-                                            <CustomSelect
+                                            <CustomAutoSelect
                                                 labelText="Categoría"
                                                 id="category_id"
                                                 error={(errors)?errors.category:""}
@@ -342,7 +347,6 @@ class UserProfile extends React.Component {
                                                     name: "category_id"
                                                 }}
                                                 items={this.state.categoriesData}
-                                                defaultValue={this.state.categoryVal}
                                             />
                                         </GridItem>
                                         <GridItem xs={0} sm={0} md={0}>
@@ -385,7 +389,6 @@ class UserProfile extends React.Component {
                                                     return (
                                                         <TableRow key={key}>
                                                             {prop.map((prop, key) => {
-                                                                console.log(key);
                                                                 if(key !== 7) {
                                                                 return (
                                                                     <TableCell className={classes.tableCell} key={key}>

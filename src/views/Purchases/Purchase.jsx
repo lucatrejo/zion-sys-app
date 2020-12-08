@@ -21,7 +21,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
-import CustomSelect from "../../components/CustomSelect/CustomSelect";
+import CustomAutoSelect from "../../components/CustomSelect/CustomAutoSelect";
 import TextField from "@material-ui/core/TextField";
 
 const createHistory = require("history").createBrowserHistory;
@@ -88,7 +88,9 @@ class UserProfile extends React.Component {
                 cat.forEach(e => {
                     e.name = e.name + " " + e.last_name;
                 });
-                this.setState({employeesData: cat.map(c => Object.values(c))});
+                this.setState({employeesData: cat});
+
+                this.setState({employeeComboVal: this.state.employeesData.find(v => v.id === parseInt(this.state.employeeId))});
             })
     }
 
@@ -96,7 +98,9 @@ class UserProfile extends React.Component {
         axios.get(`http://${REACT_APP_SERVER_URL}/providers`)
             .then(res => {
                 const cat = res.data.providers;
-                this.setState({providersData: cat.map(c => Object.values(c))});
+                this.setState({providersData: cat});
+
+                this.setState({providerComboVal: this.state.providersData.find(v => v.id === parseInt(this.state.providerId))});
             })
     }
 
@@ -107,14 +111,15 @@ class UserProfile extends React.Component {
                 cat.forEach(e => {
                     e.code = e.code + " " + e.name;
                 });
-                this.setState({itemsData: cat.map(c => Object.values(c))});
+                this.setState({itemsData: cat});
+
             })
     }
 
     addDetail(e) {
         if (this.state.item !== '' && this.state.unitPrice !== '' && this.state.quantity !== '') {
             const fields = [this.state.item, this.state.unitPrice, this.state.quantity];
-            const fieldsForm = [this.state.itemComboVal, this.state.unitPrice, this.state.quantity];
+            const fieldsForm = [this.state.itemComboVal.id, this.state.unitPrice, this.state.quantity];
 
             this.state.detailsData.push(fields);
             this.setState({detailsData: this.state.detailsData});
@@ -138,17 +143,26 @@ class UserProfile extends React.Component {
         this.setState({quantity: e.target.value});
     }
 
-    updateItem(e) {
-        this.setState({itemComboVal: e.target.value});
-        this.setState({item: this.state.itemsData.filter(i => i[0] === e.target.value)[0][1]});
+    updateItem(e, value) {
+        this.setState({itemComboVal: value.id});
+        this.setState({item: value.name});
+
+        var val =  this.state.itemsData.find(v => v.id === value.id);
+        this.setState({itemComboVal: val});
     }
 
-    updateEmployee(e) {
-        this.setState({employeeComboVal: e.target.value});
+    updateEmployee(e, value) {
+        this.setState({employeeComboVal: value.id});
+
+        var val =  this.state.employeesData.find(v => v.id === value.id);
+        this.setState({employeeComboVal: val});
     }
 
-    updateProvider(e) {
-        this.setState({providerComboVal: e.target.value});
+    updateProvider(e, value) {
+        this.setState({providerComboVal: value.id});
+
+        var val =  this.state.providersData.find(v => v.id === value.id);
+        this.setState({providerComboVal: val});
     }
 
     showAlert(e, msg, success) {
@@ -169,7 +183,7 @@ class UserProfile extends React.Component {
         e.preventDefault();
         this.setState({errors: {}});
 
-        const fields = ["employee_id", "provider_id", "date"];
+        const fields = ["date"];
         const formElements = e.target.elements;
         const formValues = fields
             .map(field => ({
@@ -177,11 +191,8 @@ class UserProfile extends React.Component {
             }))
             .reduce((current, next) => ({...current, ...next}));
 
-
-        formValues.employee_id = parseInt(formValues.employee_id);
-        formValues.provider_id = parseInt(formValues.provider_id);
-
-        console.log(formValues);
+        formValues.employee_id = this.state.employeeComboVal.id;
+        formValues.provider_id = this.state.providerComboVal.id;
 
         let details = [];
 
@@ -199,9 +210,8 @@ class UserProfile extends React.Component {
         } else {
 
             formValues.details = details;
-            console.log('formValues');
-            console.log(formValues);
 
+            console.log(formValues);
 
             let insertRequest;
             try {
@@ -225,9 +235,6 @@ class UserProfile extends React.Component {
             }
 
             const {data: insertRequestData} = insertRequest;
-
-            console.log(insertRequestData);
-            console.log(insertRequest);
 
             var msg = '';
 
@@ -265,7 +272,7 @@ class UserProfile extends React.Component {
                                 <CardBody>
                                     <GridContainer>
                                         <GridItem xs={3} sm={3} md={4}>
-                                            <CustomSelect
+                                            <CustomAutoSelect
                                                 labelText="Empleado"
                                                 id="employee_id"
                                                 error={errors.username}
@@ -279,11 +286,10 @@ class UserProfile extends React.Component {
                                                     name: "employee_id"
                                                 }}
                                                 items={this.state.employeesData}
-                                                defaultValue={this.state.employeeId}
                                             />
                                         </GridItem>
                                         <GridItem xs={3} sm={3} md={4}>
-                                            <CustomSelect
+                                            <CustomAutoSelect
                                                 labelText="Proveedor"
                                                 id="provider_id"
                                                 value={this.state.providerComboVal}
@@ -297,7 +303,6 @@ class UserProfile extends React.Component {
                                                     name: "provider_id"
                                                 }}
                                                 items={this.state.providersData}
-                                                defaultValue={this.state.providerId}
                                             />
                                         </GridItem>
                                         <GridItem xs={3} sm={3} md={3}>
@@ -315,7 +320,7 @@ class UserProfile extends React.Component {
                                         {
                                             this.state.id ? '' :
                                                 <GridItem xs={3} sm={3} md={4}>
-                                                    <CustomSelect
+                                                    <CustomAutoSelect
                                                         labelText="Artículo"
                                                         id="item_id"
                                                         error={errors.username}
