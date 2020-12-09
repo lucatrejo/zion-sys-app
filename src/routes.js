@@ -172,7 +172,7 @@ const dashboardRoutes = [
     },
     {
         path: "/reportCountSaleForDay",
-        name: "Cantidad de ventas por dia",
+        name: "Cantidad de ventas por dia del mes",
         rtlName: "ملف تعريفي للمستخدم",
         icon: LibraryBooks,
         component: GraphSalesForDay,
@@ -180,7 +180,7 @@ const dashboardRoutes = [
     },
     {
         path: "/reportCountPurchasesForDay",
-        name: "Cantidad de compras por dia",
+        name: "Cantidad de compras por Dia/Mes",
         rtlName: "ملف تعريفي للمستخدم",
         icon: LibraryBooks,
         component: GraphPurchasesForDay,

@@ -437,7 +437,7 @@ class UserProfile extends React.Component {
                                                                 })}
 
                                                                 <TableCell className={classes.tableCell}>
-                                                                    {Math.round(prop[1] * prop[2] * 100) / 100}
+                                                                    $   {Math.round(prop[1] * prop[2] * 100) / 100}
                                                                 </TableCell>
 
                                                             </TableRow>
@@ -454,7 +454,7 @@ class UserProfile extends React.Component {
                                                         <TableCell className={classes.tableCell}></TableCell>
 
                                                         <TableCell className={classes.tableCell}>
-                                                            {this.state.totalAmount}
+                                                            $ {this.state.totalAmount}
                                                         </TableCell>
 
                                                     </TableRow>
