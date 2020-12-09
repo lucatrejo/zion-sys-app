@@ -26,6 +26,11 @@ import Person from "@material-ui/icons/Person";
 import RegisterPage from "views/Pages/RegisterPage.jsx";
 import LoginPage from "views/Pages/LoginPage.jsx";
 import UserProfile from "views/UserProfile/UserProfile.jsx";
+import GraphTop5ItemsSales from "./views/StadisticGraph/GraphTop5ItemsSales";
+import GraphSalesForDay from "./views/StadisticGraph/GraphSalesForDay";
+import GraphPurchasesForDay from "./views/StadisticGraph/GraphPurchasesForDay";
+
+
 
 
 const dashboardRoutes = [
@@ -155,6 +160,30 @@ const dashboardRoutes = [
         rtlName: "ملف تعريفي للمستخدم",
         icon: LibraryBooks,
         component: SaleDetails,
+        layout: "/admin"
+    },
+    {
+        path: "/reportTop5",
+        name: "TOP 5 de Articulos mas vendidos",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: GraphTop5ItemsSales,
+        layout: "/admin"
+    },
+    {
+        path: "/reportCountSaleForDay",
+        name: "Cantidad de ventas por dia",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: GraphSalesForDay,
+        layout: "/admin"
+    },
+    {
+        path: "/reportCountPurchasesForDay",
+        name: "Cantidad de compras por dia",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: GraphPurchasesForDay,
         layout: "/admin"
     }
 ];
