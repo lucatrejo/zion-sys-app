@@ -23,6 +23,7 @@ import TableCell from "@material-ui/core/TableCell";
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
 import CustomAutoSelect from "../../components/CustomSelect/CustomAutoSelect";
 import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 const createHistory = require("history").createBrowserHistory;
 let history = createHistory();
@@ -364,6 +365,7 @@ class UserProfile extends React.Component {
                                                         inputProps={{
                                                             name: "unit_price",
                                                             disabled: true,
+                                                            startAdornment: <InputAdornment position="start">$</InputAdornment>,
                                                         }}
                                                     />
                                                 </GridItem>
@@ -423,12 +425,22 @@ class UserProfile extends React.Component {
                                                         return (
                                                             <TableRow key={key}>
                                                                 {prop.map((prop, key) => {
-                                                                    return (
-                                                                        <TableCell className={classes.tableCell}
-                                                                                   key={key}>
-                                                                            {prop}
-                                                                        </TableCell>
-                                                                    );
+                                                                    if( key===1){
+                                                                        return (
+                                                                            <TableCell className={classes.tableCell}
+                                                                                       key={key}>
+                                                                                ${prop}
+                                                                            </TableCell>
+                                                                        );
+                                                                    }
+                                                                    if( key!==1){
+                                                                        return (
+                                                                            <TableCell className={classes.tableCell}
+                                                                                       key={key}>
+                                                                                {prop}
+                                                                            </TableCell>
+                                                                        );
+                                                                    }
                                                                 })}
 
                                                                 <TableCell className={classes.tableCell}>

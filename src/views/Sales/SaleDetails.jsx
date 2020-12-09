@@ -181,12 +181,22 @@ class UserProfile extends React.Component {
                                                         return (
                                                             <TableRow key={key}>
                                                                 {prop.map((prop, key) => {
-                                                                    return (
-                                                                        <TableCell className={classes.tableCell}
-                                                                                   key={key}>
-                                                                            {prop}
-                                                                        </TableCell>
-                                                                    );
+                                                                    if( key===2){
+                                                                        return (
+                                                                            <TableCell className={classes.tableCell}
+                                                                                       key={key}>
+                                                                                ${prop}
+                                                                            </TableCell>
+                                                                        );
+                                                                    }
+                                                                    if( key!==2){
+                                                                        return (
+                                                                            <TableCell className={classes.tableCell}
+                                                                                       key={key}>
+                                                                                {prop}
+                                                                            </TableCell>
+                                                                        );
+                                                                    }
                                                                 })}
 
                                                             </TableRow>

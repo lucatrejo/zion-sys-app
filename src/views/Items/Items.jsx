@@ -29,6 +29,8 @@ import Link from '@material-ui/core/Link';
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import SearchOutlinedIcon from '@material-ui/icons/SearchOutlined';
+import InputAdornment from "@material-ui/core/InputAdornment";
+
 
 const createHistory = require("history").createBrowserHistory;
 let history = createHistory();
@@ -67,7 +69,7 @@ class UserProfile extends React.Component {
     }
 
     fillTable(e) {
-        if(this.state.nameVal === null || this.state.nameVal ==='null' || this.state.nameVal ==='') {
+        if (this.state.nameVal === null || this.state.nameVal === 'null' || this.state.nameVal === '') {
             axios.get(`http://${REACT_APP_SERVER_URL}/items/`)
                 .then(res => {
                     const cat = res.data.items;
@@ -114,7 +116,7 @@ class UserProfile extends React.Component {
     }
 
     updateCategory(e, val) {
-        var value =  this.state.categoriesData.find(v => v.id === val.id);
+        var value = this.state.categoriesData.find(v => v.id === val.id);
 
         this.setState({categoryComboVal: value});
     }
@@ -132,26 +134,25 @@ class UserProfile extends React.Component {
         let deleteRequest;
         try {
             deleteRequest = await axios.delete(
-                `http://${REACT_APP_SERVER_URL}/items/`+e,
-
+                `http://${REACT_APP_SERVER_URL}/items/` + e,
             );
         } catch ({response}) {
-            console.log("GUARDA"+response.data.messages)
+            console.log("GUARDA" + response.data.messages)
             deleteRequest = response;
             this.showAlert(this, response.data.messages, deleteRequest.danger);
             return;
 
         }
-        console.log("hay un problema"+deleteRequest)
+        console.log("hay un problema" + deleteRequest)
 
         const {data: deleteRequestData} = deleteRequest;
-
 
 
         var msg = 'Se eliminó el item correctamente';
         this.showAlert(this, msg, "success");
         window.location.reload();
     }
+
     async insertObject(e) {
         e.preventDefault();
         this.setState({errors: {}});
@@ -232,6 +233,7 @@ class UserProfile extends React.Component {
             this.showAlert(this, msg, insertRequestData.success);
         }
     }
+
     async searchItems(e) {
         window.location.href = "items?name=" + this.state.nameVal;
 
@@ -259,7 +261,7 @@ class UserProfile extends React.Component {
                                             <CustomInput
                                                 labelText="Nombre"
                                                 id="name"
-                                                error={(errors)?errors.name:""}
+                                                error={(errors) ? errors.name : ""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -268,7 +270,7 @@ class UserProfile extends React.Component {
                                                     name: "name"
                                                 }}
                                                 onChange={this.updateNameVal}
-                                                defaultValue={this.state.nameVal!="null"?this.state.nameVal:""}
+                                                defaultValue={this.state.nameVal != "null" ? this.state.nameVal : ""}
                                             />
 
                                         </GridItem>
@@ -276,7 +278,7 @@ class UserProfile extends React.Component {
                                             <CustomInput
                                                 labelText="Descripción"
                                                 id="description"
-                                                error={(errors)?errors.description:""}
+                                                error={(errors) ? errors.description : ""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -291,22 +293,24 @@ class UserProfile extends React.Component {
                                             <CustomInputNumber
                                                 labelText="Precio"
                                                 id="price"
-                                                error={(errors)?errors.price:""}
+                                                error={(errors) ? errors.price : ""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
                                                 inputProps={{
                                                     required: true,
-                                                    name: "price"
+                                                    name: "price",
+                                                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
                                                 }}
                                                 defaultValue={this.state.priceVal}
                                             />
                                         </GridItem>
+
                                         <GridItem xs={3} sm={3} md={2}>
                                             <CustomInputNumber
                                                 labelText="Stock"
                                                 id="stock"
-                                                error={(errors)?errors.stock:""}
+                                                error={(errors) ? errors.stock : ""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -321,7 +325,7 @@ class UserProfile extends React.Component {
                                             <CustomInputNumber
                                                 labelText="Stock Crítico"
                                                 id="critical_stock"
-                                                error={(errors)?errors.critical_stock:""}
+                                                error={(errors) ? errors.critical_stock : ""}
                                                 formControlProps={{
                                                     fullWidth: true
                                                 }}
@@ -336,7 +340,7 @@ class UserProfile extends React.Component {
                                             <CustomAutoSelect
                                                 labelText="Categoría"
                                                 id="category_id"
-                                                error={(errors)?errors.category:""}
+                                                error={(errors) ? errors.category : ""}
                                                 value={this.state.categoryComboVal}
                                                 onChange={this.updateCategory}
                                                 formControlProps={{
@@ -355,8 +359,9 @@ class UserProfile extends React.Component {
                                             </Button>
                                         </GridItem>
                                         <GridItem xs={0} sm={0} md={0}>
-                                            <Button  color="info" size="xs">
-                                                <SearchOutlinedIcon onClick={() => this.searchItems(1)} fontSize={"small"}></SearchOutlinedIcon>
+                                            <Button color="info" size="xs">
+                                                <SearchOutlinedIcon onClick={() => this.searchItems(1)}
+                                                                    fontSize={"small"}></SearchOutlinedIcon>
 
                                             </Button>
                                         </GridItem>
@@ -389,13 +394,27 @@ class UserProfile extends React.Component {
                                                     return (
                                                         <TableRow key={key}>
                                                             {prop.map((prop, key) => {
-                                                                if(key !== 7) {
-                                                                return (
-                                                                    <TableCell className={classes.tableCell} key={key}>
-                                                                        {prop}
-                                                                    </TableCell>
-                                                                );
-                                                            }})}
+                                                                if (key !== 7 ) {
+                                                                    if( key===3){
+                                                                    return (
+                                                                        <TableCell className={classes.tableCell}
+                                                                                   key={key}>
+                                                                            ${prop}
+                                                                        </TableCell>
+                                                                    );
+                                                                }
+                                                                }
+                                                                if (key !== 7 ) {
+                                                                    if( key!==3){
+                                                                        return (
+                                                                            <TableCell className={classes.tableCell}
+                                                                                       key={key}>
+                                                                                {prop}
+                                                                            </TableCell>
+                                                                        );
+                                                                    }
+                                                                }
+                                                            })}
                                                             <TableCell className={classes.tableCell} key={key}>
                                                                 <Link href={"items?id=" + prop[0] +
                                                                 "&name=" + prop[1] +
@@ -411,7 +430,8 @@ class UserProfile extends React.Component {
                                                                 </Link>
 
                                                                 <Link>
-                                                                    <DeleteIcon onClick={() => this.handleRemove(prop[0])} />
+                                                                    <DeleteIcon
+                                                                        onClick={() => this.handleRemove(prop[0])}/>
                                                                 </Link>
                                                             </TableCell>
                                                         </TableRow>
