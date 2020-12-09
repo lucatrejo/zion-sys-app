@@ -66,7 +66,8 @@ class UserProfile extends React.Component {
             alertMsg: '',
             date: dateNow,
             actionButton: query.get('id') ? 'Actualizar' : 'Registrar',
-            saleDate: saleDate ? saleDate : dateNow
+            saleDate: saleDate ? saleDate : dateNow,
+            totalAmount: 0
         };
         this.insertObject = this.insertObject.bind(this);
         this.showAlert = this.showAlert.bind(this);
@@ -128,6 +129,7 @@ class UserProfile extends React.Component {
             this.state.detailsData.push(fields);
             this.setState({detailsData: this.state.detailsData});
 
+            this.setState({totalAmount: this.state.totalAmount + (this.state.unitPrice * this.state.quantity)});
             this.state.detailForm.push(fieldsForm);
 
             this.setState({item: ''});
@@ -438,6 +440,20 @@ class UserProfile extends React.Component {
                                                             </TableRow>
                                                         );
                                                     })}
+
+                                                    <TableRow>
+                                                        <TableCell className={classes.tableCell}>
+                                                            Monto Total
+                                                        </TableCell>
+
+                                                        <TableCell className={classes.tableCell}></TableCell>
+                                                        <TableCell className={classes.tableCell}></TableCell>
+
+                                                        <TableCell className={classes.tableCell}>
+                                                            {this.state.totalAmount}
+                                                        </TableCell>
+
+                                                    </TableRow>
                                                 </TableBody>
                                             </Table>
                                             }

@@ -66,7 +66,8 @@ class UserProfile extends React.Component {
             alertMsg: '',
             date: dateNow,
             actionButton: query.get('id') ? 'Actualizar' : 'Registrar',
-            purchaseDate: purchaseDate ? purchaseDate : dateNow
+            purchaseDate: purchaseDate ? purchaseDate : dateNow,
+            totalAmount: 0
         };
         this.insertObject = this.insertObject.bind(this);
         this.showAlert = this.showAlert.bind(this);
@@ -124,6 +125,7 @@ class UserProfile extends React.Component {
             this.state.detailsData.push(fields);
             this.setState({detailsData: this.state.detailsData});
 
+            this.setState({totalAmount: this.state.totalAmount + (Math.round(this.state.unitPrice * this.state.quantity * 100) / 100)});
             this.state.detailForm.push(fieldsForm);
 
             this.setState({item: ''});
@@ -429,6 +431,20 @@ class UserProfile extends React.Component {
                                                         );
 
                                                     })}
+
+                                                    <TableRow>
+                                                        <TableCell className={classes.tableCell}>
+                                                            Monto Total
+                                                        </TableCell>
+
+                                                        <TableCell className={classes.tableCell}></TableCell>
+                                                        <TableCell className={classes.tableCell}></TableCell>
+
+                                                        <TableCell className={classes.tableCell}>
+                                                            {this.state.totalAmount}
+                                                        </TableCell>
+
+                                                    </TableRow>
                                                 </TableBody>
                                             </Table>
                                             }
