@@ -48,50 +48,6 @@ class AuthNavbar extends React.Component {
     const appBarClasses = cx({
       [" " + classes[color]]: color
     });
-    var list = (
-      <List className={classes.list}>
-        <ListItem className={classes.listItem}>
-          <NavLink to={"/admin/dashboard"} className={classes.navLink}>
-            <Dashboard className={classes.listItemIcon} />
-            <ListItemText
-              primary={"Dashboard"}
-              disableTypography={true}
-              className={classes.listItemText}
-            />
-          </NavLink>
-        </ListItem>
-        <ListItem className={classes.listItem}>
-          <NavLink
-            to={"/auth/register-page"}
-            className={cx(classes.navLink, {
-              [classes.navLinkActive]: this.activeRoute("/auth/register-page")
-            })}
-          >
-            <PersonAdd className={classes.listItemIcon} />
-            <ListItemText
-              primary={"Register"}
-              disableTypography={true}
-              className={classes.listItemText}
-            />
-          </NavLink>
-        </ListItem>
-        <ListItem className={classes.listItem}>
-          <NavLink
-            to={"/auth/login-page"}
-            className={cx(classes.navLink, {
-              [classes.navLinkActive]: this.activeRoute("/auth/login-page")
-            })}
-          >
-            <Fingerprint className={classes.listItemIcon} />
-            <ListItemText
-              primary={"Login"}
-              disableTypography={true}
-              className={classes.listItemText}
-            />
-          </NavLink>
-        </ListItem>
-      </List>
-    );
     return (
       <AppBar position="static" className={classes.appBar + appBarClasses}>
         <Toolbar className={classes.container}>
@@ -109,7 +65,6 @@ class AuthNavbar extends React.Component {
               </Button>
             </div>
           </Hidden>
-          <Hidden smDown>{list}</Hidden>
           <Hidden mdUp>
             <Button
               className={classes.sidebarButton}
@@ -135,7 +90,6 @@ class AuthNavbar extends React.Component {
                   keepMounted: true // Better open performance on mobile.
                 }}
               >
-                {list}
               </Drawer>
             </Hidden>
           </Hidden>

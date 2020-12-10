@@ -153,28 +153,6 @@ class LoginPage extends React.Component {
                                             )
                                         }}
                                     />
-                                    <FormControlLabel
-                                        classes={{
-                                            root:
-                                                classes.checkboxLabelControl +
-                                                " " +
-                                                classes.checkboxLabelControlClassName,
-                                            label: classes.checkboxLabel
-                                        }}
-                                        control={
-                                            <Checkbox
-                                                tabIndex={-1}
-                                                onClick={() => this.handleToggle(1)}
-                                                checkedIcon={<Check className={classes.checkedIcon}/>}
-                                                icon={<Check className={classes.uncheckedIcon}/>}
-                                                classes={{
-                                                    checked: classes.checked,
-                                                    root: classes.checkRoot
-                                                }}
-                                            />
-                                        }
-                                        label={<span>Recuérdame</span>}
-                                    />
                                 </CardBody>
                                 <CardFooter className={classes.justifyContentCenter}>
                                     <Button type="submit" color="primary" simple size="lg" block>
