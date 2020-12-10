@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { NavLink } from "react-router-dom";
+import axios from "axios";
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -21,7 +22,7 @@ import Button from "components/CustomButtons/Button.jsx";
 
 import headerLinksStyle from "assets/jss/material-dashboard-react/components/headerLinksStyle.jsx";
 
-//const { REACT_APP_SERVER_URL } = process.env;
+const { REACT_APP_SERVER_URL } = process.env;
 
 class HeaderLinks extends React.Component {
   state = {
@@ -46,8 +47,12 @@ class HeaderLinks extends React.Component {
 
   logout = async () => {
     const { history } = this.props;
+
+    localStorage.clear();
     history.push('/auth/login-page');
     /*
+    history.push('/auth/login-page');
+
     let logoutRequest;
     try {
       logoutRequest = await axios.post(
@@ -63,41 +68,13 @@ class HeaderLinks extends React.Component {
       history.push('/auth/login-page');
     }
     */
-  }
+  };
 
   render() {
     const { classes } = this.props;
     const { open, profilePopupOpen } = this.state;
     return (
       <div>
-        <div className={classes.searchWrapper}>
-          <CustomInput
-            formControlProps={{
-              className: classes.margin + " " + classes.search
-            }}
-            inputProps={{
-              placeholder: "Buscar...",
-              inputProps: {
-                "aria-label": "Search"
-              }
-            }}
-          />
-          <Button color="white" aria-label="edit" justIcon round>
-            <Search />
-          </Button>
-        </div>
-        <Button
-          color={window.innerWidth > 959 ? "transparent" : "white"}
-          justIcon={window.innerWidth > 959}
-          simple={!(window.innerWidth > 959)}
-          aria-label="Dashboard"
-          className={classes.buttonLink}
-        >
-          <Dashboard className={classes.icons} />
-          <Hidden mdUp implementation="css">
-            <p className={classes.linkText}>Dashboard</p>
-          </Hidden>
-        </Button>
         <div className={classes.manager}>
           <Button
             buttonRef={node => {
@@ -111,8 +88,6 @@ class HeaderLinks extends React.Component {
             onClick={this.handleToggle}
             className={classes.buttonLink}
           >
-            <Notifications className={classes.icons} />
-            <span className={classes.notifications}>5</span>
             <Hidden mdUp implementation="css">
               <p onClick={this.handleClick} className={classes.linkText}>
                 Notification
@@ -218,37 +193,12 @@ class HeaderLinks extends React.Component {
                 <Paper>
                   <ClickAwayListener onClickAway={this.handleClose}>
                     <MenuList role="menu">
-                      <NavLink to="/admin/user">
-                        <MenuItem
-                          onClick={this.handleClose}
-                          className={classes.dropdownItem}
-                        >
-                          Profile
-                        </MenuItem>
-                      </NavLink>
-                      <MenuItem
-                        onClick={this.handleClose}
-                        className={classes.dropdownItem}
-                      >
-                        Settings
-                      </MenuItem>
-                      <MenuItem
-                        onClick={this.handleClose}
-                        className={classes.dropdownItem}
-                      >
-                        Activity
-                      </MenuItem>
-                      <MenuItem
-                        onClick={this.handleClose}
-                        className={classes.dropdownItem}
-                      >
-                        Support
-                      </MenuItem>
+
                       <MenuItem
                         onClick={this.logout}
                         className={classes.dropdownItem}
                       >
-                        Logout
+                        Cerrar Sesión
                       </MenuItem>
                     </MenuList>
                   </ClickAwayListener>

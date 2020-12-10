@@ -63,6 +63,8 @@ class LoginPage extends React.Component {
         console.log('validate');
         if (loginRequestData.success) {
             console.log('success');
+            localStorage.setItem("user_id", loginRequestData.userInfo.id);
+            localStorage.setItem("role", loginRequestData.userInfo.role);
             return history.push("/dashboard");
         }
 

@@ -94,7 +94,7 @@ class UserProfile extends React.Component {
             .then(res => {
                 const cat = res.data.categories;
                 this.setState({categoriesData: cat});
-
+                console.log(cat);
                 this.setState({categoryComboVal: this.state.categoriesData.find(v => v.id === parseInt(this.state.categoryVal))});
             });
 
@@ -116,9 +116,11 @@ class UserProfile extends React.Component {
     }
 
     updateCategory(e, val) {
-        var value = this.state.categoriesData.find(v => v.id === val.id);
+        if(val) {
+            var value = this.state.categoriesData.find(v => v.id === val.id);
 
-        this.setState({categoryComboVal: value});
+            this.setState({categoryComboVal: value});
+        }
     }
 
     updateNameVal(e) {

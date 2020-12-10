@@ -14,6 +14,9 @@ import Footer from "components/Footer/Footer.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 
 import routes from "routes.js";
+import routesAdmin from "routesAdmin.js";
+import routesCompra from "routesCompra.js";
+import routesVenta from "routesVenta.js";
 
 import dashboardStyle from "assets/jss/material-dashboard-react/layouts/dashboardStyle.jsx";
 
@@ -88,12 +91,16 @@ class Dashboard extends React.Component {
         }
         window.addEventListener("resize", this.resizeFunction);
 
+        if(!localStorage.getItem("user_id")) {
+            return history.push("/auth/login-page");
+        }
+        /*
         let getSessionRequest;
         try {
             getSessionRequest = await axios.get(
                 `http://${REACT_APP_SERVER_URL}/get-session`,
                 {
-                    withCredentials: true
+                    withCredentials: true,
                 }
             );
         } catch ({response}) {
@@ -103,12 +110,13 @@ class Dashboard extends React.Component {
         console.log('SESSION');
         console.log(getSessionRequest);
         const {data: getSessionRequestData} = getSessionRequest;
-        console.log(getSessionRequestData)
+        console.log(getSessionRequest.data);
         if (getSessionRequestData.success) {
             return userInfo = getSessionRequestData.userInfo;
         } else {
-            //return history.push("/auth/login-page");
+            return history.push("/auth/login-page");
         }
+        */
     }
 
     componentDidUpdate(e) {
@@ -129,16 +137,42 @@ class Dashboard extends React.Component {
 
         return (
             <div className={classes.wrapper}>
-                <Sidebar
-                    routes={routes}
-                    logoText={"Creative Tim"}
-                    logo={logo}
-                    image={this.state.image}
-                    handleDrawerToggle={this.handleDrawerToggle}
-                    open={this.state.mobileOpen}
-                    color={this.state.color}
-                    {...rest}
-                />
+                {localStorage.getItem('role') === "Compras" ?
+                    <Sidebar
+                        routes={routesCompra}
+                        logoText={"Creative Tim"}
+                        logo={logo}
+                        image={this.state.image}
+                        handleDrawerToggle={this.handleDrawerToggle}
+                        open={this.state.mobileOpen}
+                        color={this.state.color}
+                        {...rest}
+                    /> : ''
+                }
+                {localStorage.getItem('role') === "Ventas" ?
+                    <Sidebar
+                        routes={routesVenta}
+                        logoText={"Creative Tim"}
+                        logo={logo}
+                        image={this.state.image}
+                        handleDrawerToggle={this.handleDrawerToggle}
+                        open={this.state.mobileOpen}
+                        color={this.state.color}
+                        {...rest}
+                    /> : ''
+                }
+                {localStorage.getItem('role') === "Administrador" ?
+                    <Sidebar
+                        routes={routesAdmin}
+                        logoText={"Creative Tim"}
+                        logo={logo}
+                        image={this.state.image}
+                        handleDrawerToggle={this.handleDrawerToggle}
+                        open={this.state.mobileOpen}
+                        color={this.state.color}
+                        {...rest}
+                    /> : ''
+                }
                 <div className={classes.mainPanel} ref="mainPanel">
                     <Navbar
                         routes={routes}

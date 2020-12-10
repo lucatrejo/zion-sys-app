@@ -15,6 +15,7 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 
 import Snackbar from "components/Snackbar/Snackbar.jsx";
+import CustomAutoSelect from "../../components/CustomSelect/CustomAutoSelect";
 
 import Table from "@material-ui/core/Table";
 import TableHead from "@material-ui/core/TableHead";
@@ -62,10 +63,14 @@ class UserProfile extends React.Component {
             nameVal: query.get('name'),
             lastNameVal: query.get('last_name'),
             cuilVal: query.get('cuil'),
+            emailVal: query.get('email'),
             dniVal: query.get('dni'),
+            roleVal: query.get('role'),
             addressVal: query.get('address'),
             errors: {},
             categoriesData: [],
+            roleData: [{"name": "Administrador"}, {"name": "Compras"}, {"name": "Ventas"}],
+            roleComboVal: query.get('role') ? [{"name": "Administrador"}, {"name": "Compras"}, {"name": "Ventas"}].find(v => v.name === query.get('role')) : '',
             alertColor: 'success',
             alertOpen: false,
             alertMsg: '',
@@ -78,6 +83,7 @@ class UserProfile extends React.Component {
         this.updateNameVal = this.updateNameVal.bind(this);
         this.fillTable = this.fillTable.bind(this);
         this.showAlert = this.showAlert.bind(this);
+        this.updateRole = this.updateRole.bind(this);
         this.fillTable(this);
     }
 
@@ -88,12 +94,12 @@ class UserProfile extends React.Component {
                 .then(res => {
                     const cat = res.data.employees;
                     this.setState({categoriesData: cat.map(c => Object.values(c))});
+                    this.setState({roleComboVal: this.state.roleData.find(v => v.name === this.state.roleVal)});
                 })
         }else{
             console.log("HOLAAAAAA   "+`http://${REACT_APP_SERVER_URL}/employees/`+this.state.nameVal+"/search/")
             axios.get(`http://${REACT_APP_SERVER_URL}/employees/`+this.state.nameVal+"/search/")
                 .then(res => {
-                    console.log(res.data.items)
                     const cat = res.data.employees;
                     this.setState({categoriesData: cat.map(c => Object.values(c))});
                 })
@@ -102,6 +108,16 @@ class UserProfile extends React.Component {
     updateNameVal(e) {
         this.setState({nameVal: e.target.value});
     }
+
+    updateRole(e, val) {
+        if(val) {
+            var value = this.state.roleData.find(v => v.name === val.name);
+            console.log(value);
+            this.setState({roleComboVal: value});
+        }
+    }
+
+
     async searchItems(e) {
         window.location.href = "employees?name=" + this.state.nameVal;
 
@@ -124,63 +140,78 @@ class UserProfile extends React.Component {
 
     async insertObject(e) {
         e.preventDefault();
-        this.setState({errors: {}});
 
-        const fields = ["name", "last_name", "cuil", "admission_date", "identification", "birthdate", "address"];
-        const formElements = e.target.elements;
-        const formValues = fields
-            .map(field => ({
-                [field]: formElements.namedItem(field).value
-            }))
-            .reduce((current, next) => ({...current, ...next}));
-
-        formValues.identification = formValues.identification.trim();
-
-        let insertRequest;
-        try {
-            if (this.state.id) {
-                insertRequest = await axios.put(
-                    `http://${REACT_APP_SERVER_URL}/employees/` + this.state.id,
-                    {
-                        ...formValues
-                    }
-                );
-            } else {
-                insertRequest = await axios.post(
-                    `http://${REACT_APP_SERVER_URL}/employees`,
-                    {
-                        ...formValues
-                    }
-                );
-            }
-        } catch ({response}) {
-            insertRequest = response;
-        }
-
-        const {data: insertRequestData} = insertRequest;
-
-        console.log(insertRequestData);
-        console.log(insertRequest);
-
-        var msg = '';
-
-        if (!insertRequestData.success) {
-            this.setState({
-                errors:
-                    insertRequestData.messages && insertRequestData.messages.errors
-            });
-            if (insertRequestData.messages.errors.databaseError) {
-                msg = insertRequestData.messages.errors.databaseError;
-            }
+        console.log(this.state.roleComboVal);
+        if (!this.state.roleComboVal) {
+            this.showAlert(this, "Debe seleccionar un rol", false);
         } else {
-            msg = insertRequestData.messages.success;
-            history.push("/admin/employees");
-            window.location.reload(false);
-        }
+            this.setState({errors: {}});
 
-        this.fillTable(this);
-        this.showAlert(this, msg, insertRequestData.success);
+            console.log("ROLE");
+            const fields = ["name", "last_name", "cuil", "email", "pass", "admission_date", "identification", "birthdate", "address"];
+            const formElements = e.target.elements;
+            const formValues = fields
+                .map(field => ({
+                    [field]: formElements.namedItem(field).value
+                }))
+                .reduce((current, next) => ({...current, ...next}));
+
+            console.log("ROLE");
+            formValues.identification = formValues.identification.trim();
+
+            console.log(this.state.roleComboVal.name);
+            formValues.role = this.state.roleComboVal.name;
+
+            console.log("ROLE");
+            console.log(formValues.role);
+
+            let insertRequest;
+            try {
+                if (this.state.id) {
+                    insertRequest = await axios.put(
+                        `http://${REACT_APP_SERVER_URL}/employees/` + this.state.id,
+                        {
+                            ...formValues
+                        }
+                    );
+                } else {
+                    insertRequest = await axios.post(
+                        `http://${REACT_APP_SERVER_URL}/employees`,
+                        {
+                            ...formValues
+                        }
+                    );
+                }
+            } catch ({response}) {
+                insertRequest = response;
+            }
+
+            const {data: insertRequestData} = insertRequest;
+
+            console.log(insertRequestData);
+            console.log(insertRequest);
+
+            var msg = '';
+
+            if (!insertRequestData.success) {
+                this.setState({
+                    errors:
+                        insertRequestData.messages && insertRequestData.messages.errors
+                });
+                if (insertRequestData.messages.errors.databaseError) {
+                    msg = insertRequestData.messages.errors.databaseError;
+                }
+            } else {
+                msg = insertRequestData.messages.success;
+                history.push("/admin/employees");
+                window.location.reload(false);
+            }
+
+            this.fillTable(this);
+            this.showAlert(this, msg, insertRequestData.success);
+        }
     }
+
     async handleRemove(e) {
 
         this.setState({errors: {}});
@@ -214,7 +245,6 @@ class UserProfile extends React.Component {
         const {classes, name} = this.props;
         const {errors, alertColor, alertMsg, alertOpen} = this.state;
 
-        console.log(errors.name);
         return (
             <div>
                 <GridContainer>
@@ -272,6 +302,52 @@ class UserProfile extends React.Component {
                                                 }}
                                                 defaultValue={this.state.cuilVal}
                                             />
+                                        </GridItem>
+                                        <GridItem xs={12} sm={12} md={3}>
+                                            <CustomInput
+                                                labelText="Email"
+                                                id="email"
+                                                error={(errors)?errors.email:""}
+                                                formControlProps={{
+                                                    fullWidth: true
+                                                }}
+                                                inputProps={{
+                                                    required: true,
+                                                    name: "email",
+                                                    type: "email",
+                                                }}
+                                                defaultValue={this.state.emailVal}
+                                            />
+                                        </GridItem>
+                                        <GridItem xs={12} sm={12} md={3}>
+                                            {this.state.id ?
+                                            <CustomInput
+                                                labelText="Password"
+                                                id="pass"
+                                                error={(errors)?errors.pass:""}
+                                                formControlProps={{
+                                                    fullWidth: true
+                                                }}
+                                                inputProps={{
+                                                    required: false,
+                                                    name: "pass",
+                                                    type: "password",
+                                                }}
+                                            /> :
+                                            <CustomInput
+                                                labelText="Password"
+                                                id="pass"
+                                                error={(errors)?errors.pass:""}
+                                                formControlProps={{
+                                                    fullWidth: true
+                                                }}
+                                                inputProps={{
+                                                    required: true,
+                                                    name: "pass",
+                                                    type: "password",
+                                                }}
+                                                />
+                                            }
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
                                             <TextField
@@ -333,10 +409,30 @@ class UserProfile extends React.Component {
                                                 defaultValue={this.state.addressVal}
                                             />
                                         </GridItem>
+
+                                        <GridItem xs={12} sm={12} md={3}>
+                                            <CustomAutoSelect
+                                                labelText="Rol"
+                                                id="role_id"
+                                                error={(errors) ? errors.role : ""}
+                                                value={this.state.roleComboVal}
+                                                onChange={this.updateRole}
+                                                formControlProps={{
+                                                    fullWidth: true
+                                                }}
+                                                inputProps={{
+                                                    required: false,
+                                                    name: "role_id"
+                                                }}
+                                                items={this.state.roleData}
+                                            />
+                                        </GridItem>
                                         <GridItem xs={12} sm={12} md={1}>
                                             <Button type="submit" color="info" size="xs">
                                                 {this.state.actionButton}
                                             </Button>
+                                        </GridItem>
+                                        <GridItem xs={12} sm={12} md={1}>
                                         </GridItem>
                                         <GridItem xs={0} sm={0} md={0}>
                                             <Button  color="info" size="xs">
@@ -356,7 +452,7 @@ class UserProfile extends React.Component {
                                         <Table className={classes.table}>
                                             <TableHead className={classes["primaryTableHeader"]}>
                                                 <TableRow>
-                                                    {["Nombre", "Apellido", "CUIL", "DNI", "Fecha de Nacimiento", "Dirección", "Fecha de Ingreso", "Acciones"].map((prop, key) => {
+                                                    {["Nombre", "Apellido", "CUIL", "Email", "Rol", "DNI", "Fecha de Nac.", "Dirección", "Ingreso", "Acciones"].map((prop, key) => {
                                                         return (
                                                             <TableCell
                                                                 className={classes.tableCell + " " + classes.tableHeadCell}
@@ -385,10 +481,12 @@ class UserProfile extends React.Component {
                                                                             "&name=" + prop[1] +
                                                                             "&last_name=" + prop[2] +
                                                                             "&cuil=" + prop[3] +
-                                                                            "&dni=" + prop[4] +
-                                                                            "&birthdate=" + prop[5] +
-                                                                            "&address=" + prop[6] +
-                                                                            "&admission_date=" + prop[7]
+                                                                            "&email=" + prop[4] +
+                                                                            "&role=" + prop[5] +
+                                                                            "&dni=" + prop[6] +
+                                                                            "&birthdate=" + prop[7] +
+                                                                            "&address=" + prop[8] +
+                                                                            "&admission_date=" + prop[9]
                                                                 }
                                                                       className={classes.tableCell}>
                                                                     <EditIcon icon={EditIcon} size="2x"/>

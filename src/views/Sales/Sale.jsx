@@ -151,25 +151,31 @@ class UserProfile extends React.Component {
     }
 
     updateItem(e, value) {
-        var val =  this.state.itemsData.find(v => v.id === value.id);
-        this.setState({itemComboVal: val});
+        if(val) {
+            var val = this.state.itemsData.find(v => v.id === value.id);
+            this.setState({itemComboVal: val});
 
-        this.setState({item: value.name});
-        this.setState({unitPrice: value.price});
+            this.setState({item: value.name});
+            this.setState({unitPrice: value.price});
+        }
     }
 
     updateEmployee(e, value) {
-        this.setState({employeeComboVal: value.id});
+        if(val) {
+            this.setState({employeeComboVal: value.id});
 
-        var val =  this.state.employeesData.find(v => v.id === value.id);
-        this.setState({employeeComboVal: val});
+            var val = this.state.employeesData.find(v => v.id === value.id);
+            this.setState({employeeComboVal: val});
+        }
     }
 
     updateCustomer(e, value) {
-        this.setState({customerComboVal: value.id});
+        if(val) {
+            this.setState({customerComboVal: value.id});
 
-        var val =  this.state.customersData.find(v => v.id === value.id);
-        this.setState({customerComboVal: val});
+            var val = this.state.customersData.find(v => v.id === value.id);
+            this.setState({customerComboVal: val});
+        }
     }
 
     showAlert(e, msg, success) {
