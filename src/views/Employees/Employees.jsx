@@ -237,7 +237,12 @@ class UserProfile extends React.Component {
                                                 }}
                                                 inputProps={{
                                                     required: true,
-                                                    name: "name"
+                                                    name: "name",
+                                                    endAdornment:
+                                                        <Link>
+                                                            <SearchOutlinedIcon onClick={() => this.searchItems(1)} fontSize={"small"}></SearchOutlinedIcon>
+                                                        </Link>
+                                                    ,
                                                 }}
                                                 onChange={this.updateNameVal}
                                                 defaultValue={this.state.nameVal!="null"?this.state.nameVal:""}
@@ -338,12 +343,7 @@ class UserProfile extends React.Component {
                                                 {this.state.actionButton}
                                             </Button>
                                         </GridItem>
-                                        <GridItem xs={0} sm={0} md={0}>
-                                            <Button  color="info" size="xs">
-                                                <SearchOutlinedIcon onClick={() => this.searchItems(1)} fontSize={"small"}></SearchOutlinedIcon>
 
-                                            </Button>
-                                        </GridItem>
                                     </GridContainer>
                                     <Snackbar
                                         place="br"
