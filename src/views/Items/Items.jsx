@@ -116,11 +116,9 @@ class UserProfile extends React.Component {
     }
 
     updateCategory(e, val) {
-        if(val) {
             var value = this.state.categoriesData.find(v => v.id === val.id);
 
             this.setState({categoryComboVal: value});
-        }
     }
 
     updateNameVal(e) {

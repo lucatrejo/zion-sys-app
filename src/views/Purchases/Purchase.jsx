@@ -47,7 +47,7 @@ class UserProfile extends React.Component {
 
         this.state = {
             id: query.get('id'),
-            employeeId: query.get('employeeId'),
+            employeeId: query.get('employeeId') ? query.get('employeeId') : localStorage.getItem('user_id'),
             providerId: query.get('providerId'),
             errors: {},
             categoriesData: [],
@@ -147,31 +147,23 @@ class UserProfile extends React.Component {
     }
 
     updateItem(e, value) {
-        if(val) {
-            this.setState({itemComboVal: value.id});
-            this.setState({item: value.name});
+        this.setState({itemComboVal: value.id});
+        this.setState({item: value.name});
 
-            var val = this.state.itemsData.find(v => v.id === value.id);
-            this.setState({itemComboVal: val});
-        }
+        var val = this.state.itemsData.find(v => v.id === value.id);
+        this.setState({itemComboVal: val});
     }
 
     updateEmployee(e, value) {
-        if(val) {
-            this.setState({employeeComboVal: value.id});
+        this.setState({employeeComboVal: value.id});
 
-            var val = this.state.employeesData.find(v => v.id === value.id);
-            this.setState({employeeComboVal: val});
-        }
+        var val = this.state.employeesData.find(v => v.id === value.id);
+        this.setState({employeeComboVal: val});
     }
 
     updateProvider(e, value) {
-        if(val) {
-            this.setState({providerComboVal: value.id});
-
-            var val = this.state.providersData.find(v => v.id === value.id);
-            this.setState({providerComboVal: val});
-        }
+        var val = this.state.providersData.find(v => v.id === value.id);
+        this.setState({providerComboVal: val});
     }
 
     showAlert(e, msg, success) {

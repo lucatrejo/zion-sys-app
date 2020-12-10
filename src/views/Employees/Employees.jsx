@@ -110,11 +110,9 @@ class UserProfile extends React.Component {
     }
 
     updateRole(e, val) {
-        if(val) {
             var value = this.state.roleData.find(v => v.name === val.name);
             console.log(value);
             this.setState({roleComboVal: value});
-        }
     }
 
 

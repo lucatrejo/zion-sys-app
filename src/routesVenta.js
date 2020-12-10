@@ -51,14 +51,6 @@ const dashboardRoutes = [
         layout: "/admin"
     },
     {
-        path: "/providers",
-        name: "Proveedores",
-        rtlName: "ملف تعريفي للمستخدم",
-        icon: LibraryBooks,
-        component: Providers,
-        layout: "/admin"
-    },
-    {
         path: "/customers",
         name: "Clientes",
         rtlName: "ملف تعريفي للمستخدم",

@@ -43,8 +43,8 @@ function CustomAutoSelect({ ...props }) {
           onChange={(event, newValue) => {
               onChange(event, newValue);
           }}
+          disableClearable
           size="small"
-          readOnly={readOnly}
           options={items}
           defaultValue={defaultValue}
           renderInput={(params) => <TextField {...params} label={labelText} variant="outlined" />}

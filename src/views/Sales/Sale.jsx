@@ -47,7 +47,7 @@ class UserProfile extends React.Component {
 
         this.state = {
             id: query.get('id'),
-            employeeId: query.get('employeeId'),
+            employeeId: query.get('employeeId') ? query.get('employeeId') : localStorage.getItem('user_id'),
             customerId: query.get('customerId'),
             errors: {},
             categoriesData: [],
@@ -151,31 +151,25 @@ class UserProfile extends React.Component {
     }
 
     updateItem(e, value) {
-        if(val) {
             var val = this.state.itemsData.find(v => v.id === value.id);
             this.setState({itemComboVal: val});
 
             this.setState({item: value.name});
             this.setState({unitPrice: value.price});
-        }
     }
 
     updateEmployee(e, value) {
-        if(val) {
             this.setState({employeeComboVal: value.id});
 
             var val = this.state.employeesData.find(v => v.id === value.id);
             this.setState({employeeComboVal: val});
-        }
     }
 
     updateCustomer(e, value) {
-        if(val) {
             this.setState({customerComboVal: value.id});
 
             var val = this.state.customersData.find(v => v.id === value.id);
             this.setState({customerComboVal: val});
-        }
     }
 
     showAlert(e, msg, success) {
