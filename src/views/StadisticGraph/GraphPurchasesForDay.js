@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import Chart from '../../components/Graphs/ChartLine';
 import $ from 'jquery';
@@ -9,29 +9,29 @@ const {REACT_APP_SERVER_URL} = process.env;
 
 
 class GraphTop5ArtVent extends Component {
-    constructor(props){
+    constructor(props) {
 
         super(props);
         const query = new URLSearchParams(this.props.location.search);
         this.state = {
-            chartData:{},
+            chartData: {},
             isLoaded: false,
-            month:[
-                { name: 'Enero', id: 1 },
-                { name: 'Febrero', id: 2 },
-                { name: 'Marzo', id: 3 },
-                { name: 'Abril', id: 4 },
-                { name: 'Mayo', id: 5 },
-                { name: 'Junio', id: 6 },
-                { name: 'Julio', id: 7 },
-                { name: 'Agosto', id: 8 },
-                { name: 'Septiembre', id: 9 },
-                { name: 'Octubre', id: 10 },
-                { name: 'Noviembre', id: 11 },
-                { name: 'Diciembre', id: 12 },
+            month: [
+                {name: 'Enero', id: 1},
+                {name: 'Febrero', id: 2},
+                {name: 'Marzo', id: 3},
+                {name: 'Abril', id: 4},
+                {name: 'Mayo', id: 5},
+                {name: 'Junio', id: 6},
+                {name: 'Julio', id: 7},
+                {name: 'Agosto', id: 8},
+                {name: 'Septiembre', id: 9},
+                {name: 'Octubre', id: 10},
+                {name: 'Noviembre', id: 11},
+                {name: 'Diciembre', id: 12},
 
             ],
-            idMonth: query.get('id')?query.get('id'):null,
+            idMonth: query.get('id') ? query.get('id') : null,
             monthCombo: "",
 
 
@@ -41,34 +41,39 @@ class GraphTop5ArtVent extends Component {
     }
 
 
-    componentWillMount(){
+    componentWillMount() {
         // this.getchartData(); // this should be this.getChartData();
         this.getChartData();
     }
 
-    getChartData(){
+    getChartData() {
         $.ajax({
             url: `http://${REACT_APP_SERVER_URL}/purchases/purchases_months`,
             dataType: 'json',
-            success: function(dataReturned){
+            success: function (dataReturned) {
                 //logging to test if correct data is being received
                 console.log('original data: ', dataReturned);
                 var arrCAT = [];
                 var arrTOTAL = [];
 
                 let result = Object.values(dataReturned.purchases.reduce((c, {date}) => {
-                    c[date] = c[date] || {date: date,count: 0};
+                    c[date] = c[date] || {date: date, count: 0};
                     c[date].count++;
                     return c;
                 }, {}))
-                result= result.sort((a, b) => new Date(...a.date.split('/').reverse()) - new Date(...b.date.split('/').reverse()))
-                console.log("ESTO ES EL MES"+this.state.idMonth)
-                if(this.state.idMonth!==null){
-                result = result.filter(e => {
-                   var month = e.date.split('/')[1]; // Or, var month = e.date.split('-')[1];
-                    console.log(month)
-                    return (this.state.idMonth === month) ;
-                })};
+                result = result.sort((a, b) => new Date(...a.date.split('/').reverse()) - new Date(...b.date.split('/').reverse()))
+                console.log("ESTO ES EL MES" + this.state.idMonth)
+                if (this.state.idMonth !== null) {
+                    result = result.filter(e => {
+                        var month = e.date.split('/')[1]; // Or, var month = e.date.split('-')[1];
+                        console.log(month)
+                        if (this.state.idMonth === 1 || this.state.idMonth === 2 || this.state.idMonth === 3 || this.state.idMonth !== 4 || this.state.idMonth === 5 || this.state.idMonth === 6 || this.state.idMonth === 7 || this.state.idMonth === 8 || this.state.idMonth === 9 || this.state.idMonth === 10) {
+                            this.setState({idMonth: 0 + this.state.idMonth})
+                        }
+                        return (this.state.idMonth === month);
+                    })
+                }
+                ;
                 console.log(result);
                 for (var i = 0, len = result.length; i < len; i++) {
                     arrCAT.push(result[i].date);
@@ -92,18 +97,18 @@ class GraphTop5ArtVent extends Component {
                                     'rgba(255, 159, 64, 0.6)',  //orange
                                     'rgba(90, 96, 104, 0.6)'    //grey
                                 ]
-                    }
-                ]
-            },
+                            }
+                        ]
+                    },
                     isLoaded: true
-        });
+                });
             }.bind(this),
         });
     }
 
-    async searchItems(e,value) {
-        if(value!==null)
-        window.location.href = "reportCountPurchasesForDay?id=" +value.id;
+    async searchItems(e, value) {
+        if (value !== null)
+            window.location.href = "reportCountPurchasesForDay?id=" + value.id;
         else
             window.location.href = "reportCountPurchasesForDay";
 
@@ -113,21 +118,21 @@ class GraphTop5ArtVent extends Component {
     render() {
         return (
             <div className="App">
-                    <CustomAutoSelect
-                        labelText="Filtrado de meses"
-                        id="meses"
-                        value={this.state.monthCombo}
-                        onChange={this.searchItems}
-                        formControlProps={{
-                            fullWidth: true
-                        }}
-                        inputProps={{
-                            required: true,
-                            name: "meses_id"
-                        }}
-                        items={this.state.month}
-                    />
-                {this.state.isLoaded ? <Chart chartData={this.state.chartData} location={""} /> : <div>Loading...</div>}
+                <CustomAutoSelect
+                    labelText="Filtrado de meses"
+                    id="meses"
+                    value={this.state.monthCombo}
+                    onChange={this.searchItems}
+                    formControlProps={{
+                        fullWidth: true
+                    }}
+                    inputProps={{
+                        required: true,
+                        name: "meses_id"
+                    }}
+                    items={this.state.month}
+                />
+                {this.state.isLoaded ? <Chart chartData={this.state.chartData} location={""}/> : <div>Loading...</div>}
 
             </div>
         );
