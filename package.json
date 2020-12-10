@@ -34,7 +34,8 @@
     "react-share": "^2.4.0",
     "react-swipeable-views": "0.13.1",
     "react-text-mask": "^5.4.3",
-    "serve": "^11.3.2"
+    "serve": "^11.3.2",
+    "jquery": "^3.5.1"
   },
   "scripts": {
     "start": "react-scripts start",
