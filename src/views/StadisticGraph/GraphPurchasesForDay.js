@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import Chart from '../../components/Graphs/ChartLine';
-import $ from 'jquery';
+import $ from 'jquery/dist/jquery';
 import CustomAutoSelect from "../../components/CustomSelect/CustomAutoSelect";
 import GridItem from "../../components/Grid/GridItem";
 
@@ -62,15 +62,18 @@ class GraphTop5ArtVent extends Component {
                     return c;
                 }, {}))
                 result = result.sort((a, b) => new Date(...a.date.split('/').reverse()) - new Date(...b.date.split('/').reverse()))
-                console.log("ESTO ES EL MES" + this.state.idMonth)
                 if (this.state.idMonth !== null) {
                     result = result.filter(e => {
                         var month = e.date.split('/')[1]; // Or, var month = e.date.split('-')[1];
-                        console.log(month)
-                        if (this.state.idMonth === 1 || this.state.idMonth === 2 || this.state.idMonth === 3 || this.state.idMonth !== 4 || this.state.idMonth === 5 || this.state.idMonth === 6 || this.state.idMonth === 7 || this.state.idMonth === 8 || this.state.idMonth === 9 || this.state.idMonth === 10) {
-                            this.setState({idMonth: 0 + this.state.idMonth})
+                        if (this.state.idMonth === 1 || this.state.idMonth === 2 || this.state.idMonth === 3 || this.state.idMonth == 4 || this.state.idMonth === 5 || this.state.idMonth === 6 || this.state.idMonth === 7 || this.state.idMonth === 8 || this.state.idMonth === 9) {
+                           let mesHardcode= 0 + this.state.idMonth;
+                            return (mesHardcode.toString() === month);
                         }
-                        return (this.state.idMonth === month);
+                        else{
+                            let mesHardcode=  this.state.idMonth;
+                            return (mesHardcode === month);
+
+                        }
                     })
                 }
                 ;
@@ -89,13 +92,8 @@ class GraphTop5ArtVent extends Component {
                             {
                                 data: arrTOTAL,
                                 backgroundColor: [
-                                    'rgba(255, 99, 132, 0.6)',  //red
-                                    'rgba(54, 162, 235, 0.6)',  //blue
-                                    'rgba(255, 206, 86, 0.6)',  //yellow
-                                    'rgba(75, 192, 192, 0.6)',  //green
                                     'rgba(153, 102, 255, 0.6)', //purple
-                                    'rgba(255, 159, 64, 0.6)',  //orange
-                                    'rgba(90, 96, 104, 0.6)'    //grey
+
                                 ]
                             }
                         ]
