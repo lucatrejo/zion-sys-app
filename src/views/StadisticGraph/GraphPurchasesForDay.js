@@ -65,7 +65,7 @@ class GraphTop5ArtVent extends Component {
                 if (this.state.idMonth !== null) {
                     result = result.filter(e => {
                         var month = e.date.split('/')[1]; // Or, var month = e.date.split('-')[1];
-                        if (this.state.idMonth === 1 || this.state.idMonth === 2 || this.state.idMonth === 3 || this.state.idMonth == 4 || this.state.idMonth === 5 || this.state.idMonth === 6 || this.state.idMonth === 7 || this.state.idMonth === 8 || this.state.idMonth === 9) {
+                        if (this.state.idMonth == 1 || this.state.idMonth == 2 || this.state.idMonth == 3 || this.state.idMonth == 4 || this.state.idMonth == 5 || this.state.idMonth == 6 || this.state.idMonth == 7 || this.state.idMonth == 8 || this.state.idMonth == 9) {
                            let mesHardcode= 0 + this.state.idMonth;
                             return (mesHardcode.toString() === month);
                         }
