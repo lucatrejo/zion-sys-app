@@ -10,8 +10,8 @@ class ChartBar extends Component{
     }
 
     static defaultProps = {
-        displayTitle:false,
-        displayLegend: false,
+        displayTitle:true,
+        displayLegend: true,
         legendPosition:'right',
         location:'City'
     }
@@ -27,6 +27,7 @@ class ChartBar extends Component{
                             text:this.props.location,
                             fontSize:25
                         },
+
                         legend:{
                             display:this.props.displayLegend,
                             position:this.props.legendPosition

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 
-import Chart from '../../components/Graphs/ChartDought';
+import Chart from '../../components/Graphs/ChartTorta';
 import $ from 'jquery';
+import {number} from "prop-types";
 
 const {REACT_APP_SERVER_URL} = process.env;
 
 
-class GraphTop5ItemsSales extends Component {
+class GraphTopItemsSales extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -14,7 +15,7 @@ class GraphTop5ItemsSales extends Component {
             isLoaded: false
 
         }
-    }fillStyle
+    }
 
     componentWillMount(){
         // this.getchartData(); // this should be this.getChartData();
@@ -31,12 +32,15 @@ class GraphTop5ItemsSales extends Component {
                 var arrCAT = [];
                 var arrTOTAL = [];
                 var arrMostrar = [];
-                var size= (5< dataReturned.top_items.length)?5:dataReturned.top_items.length;
-                for (var i = 0, len = size; i < len; i++) {
+                var totalVent=0;
+                for (var i = 0, len = dataReturned.top_items.length; i < len; i++) {
+                    totalVent=totalVent+ new Number(dataReturned.top_items[i].count);
+                }
+                for (var i = 0, len = dataReturned.top_items.length; i < len; i++) {
                     arrCAT.push(dataReturned.top_items[i].name);
-                    arrTOTAL.push(dataReturned.top_items[i].count);
-                    arrMostrar.push(dataReturned.top_items[i].name+ ":  "+dataReturned.top_items[i].count + " ventas")
-
+                    var number= (dataReturned.top_items[i].count/totalVent*100).toFixed(0)
+                    arrTOTAL.push(number);
+                    arrMostrar.push(dataReturned.top_items[i].name+ " "+number+ "%")
                 }
                 //logging to test that arrays were loaded correctly
                 console.log('just name items: ', arrCAT);
@@ -47,7 +51,6 @@ class GraphTop5ItemsSales extends Component {
                         labels: arrMostrar,
                         datasets: [
                             {
-                                label: '# of Transactions',
                                 data: arrTOTAL,
                                 backgroundColor: [
                                     'rgba(75, 192, 192, 0.2)',
@@ -70,7 +73,7 @@ class GraphTop5ItemsSales extends Component {
                                     'rgba(75, 192, 192, 1)',
                                     'rgba(153, 102, 255, 1)',
                                     'rgba(255, 159, 64, 1)'
-                                ]
+                                ],
                     }
                 ]
             },
@@ -93,4 +96,4 @@ class GraphTop5ItemsSales extends Component {
 }
 
 
-export default GraphTop5ItemsSales;
+export default GraphTopItemsSales;

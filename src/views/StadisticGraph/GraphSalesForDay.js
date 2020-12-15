@@ -81,19 +81,38 @@ class GraphTop5ArtVent extends Component {
 
                 this.setState({
                     chartData: {
-                        labels: arrCAT,
+                        labels:arrCAT,
                         datasets: [
                             {
+                                label:"cantidad de ventas por dia",
                                 data: arrTOTAL,
                                 backgroundColor: [
-                                    'rgba(54, 162, 235, 0.6)',  //blue
-                                    'rgba(255, 206, 86, 0.6)',  //yellow
-                                    'rgba(75, 192, 192, 0.6)',  //green
-                                    'rgba(153, 102, 255, 0.6)', //purple
-                                    'rgba(255, 159, 64, 0.6)',  //orange
-                                    'rgba(90, 96, 104, 0.6)',    //grey
-                                    'rgba(255, 99, 132, 0.6)',  //red
-                                ]
+
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                ],
+                                borderColor: [
+
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)',
+                                ],
+                                borderWidth: 1
                     }
                 ]
             },

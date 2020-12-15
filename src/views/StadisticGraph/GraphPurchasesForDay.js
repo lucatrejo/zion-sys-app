@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import Chart from '../../components/Graphs/ChartLine';
 import $ from 'jquery/dist/jquery';
 import CustomAutoSelect from "../../components/CustomSelect/CustomAutoSelect";
-import GridItem from "../../components/Grid/GridItem";
 
 const {REACT_APP_SERVER_URL} = process.env;
 
@@ -90,11 +89,16 @@ class GraphTop5ArtVent extends Component {
                         labels: arrCAT,
                         datasets: [
                             {
+                                label:"Cantidad de compras por dia",
                                 data: arrTOTAL,
                                 backgroundColor: [
-                                    'rgba(153, 102, 255, 0.6)', //purple
+                                    'rgba(75, 192, 192, 0.2)'
 
-                                ]
+                                ],
+                                borderColor: [
+                                    'rgba(75, 192, 192, 1)',
+
+                                ],
                             }
                         ]
                     },
