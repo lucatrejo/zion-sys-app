@@ -29,6 +29,8 @@ import UserProfile from "views/UserProfile/UserProfile.jsx";
 import GraphTop5ItemsSales from "./views/StadisticGraph/GraphTop5ItemsSales";
 import GraphSalesForDay from "./views/StadisticGraph/GraphSalesForDay";
 import GraphPurchasesForDay from "./views/StadisticGraph/GraphPurchasesForDay";
+import GraphTopItemsSales from "./views/StadisticGraph/GraphTopItemsSales";
+import GraphSalesAndPurchasesForMonth from "./views/StadisticGraph/GraphSalesAndPurchasesForMonth";
 
 
 
@@ -88,6 +90,14 @@ const dashboardRoutes = [
         rtlName: "ملف تعريفي للمستخدم",
         icon: LibraryBooks,
         component: GraphPurchasesForDay,
+        layout: "/admin"
+    },
+    {
+        path: "/reportComparation",
+        name: "Comparación de cantidad de ventas y compras por mes",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: GraphSalesAndPurchasesForMonth,
         layout: "/admin"
     }
 ];

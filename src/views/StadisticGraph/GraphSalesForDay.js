@@ -86,32 +86,13 @@ class GraphTop5ArtVent extends Component {
                             {
                                 label:"cantidad de ventas por dia",
                                 data: arrTOTAL,
-                                backgroundColor: [
+                                backgroundColor: 'rgb(169,106,173)',
 
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                ],
-                                borderColor: [
 
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                    'rgba(255, 159, 64, 0.2)',
-                                ],
+                                borderColor:
+
+                                    'rgb(226,64,255)'
+                                  ,
                                 borderWidth: 1
                     }
                 ]
