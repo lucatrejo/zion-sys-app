@@ -65,7 +65,19 @@ class LoginPage extends React.Component {
             console.log('success');
             localStorage.setItem("user_id", loginRequestData.userInfo.id);
             localStorage.setItem("role", loginRequestData.userInfo.role);
-            return history.push("/dashboard");
+
+            if(loginRequestData.userInfo.role === "Compras") {
+                return history.push("/admin/add_purchase");
+            }
+
+            if(loginRequestData.userInfo.role === "Ventas") {
+                return history.push("/admin/add_sale");
+            }
+
+            if(loginRequestData.userInfo.role === "Administrador") {
+                return history.push("/admin/sales");
+            }
+
         }
 
         this.setState({
