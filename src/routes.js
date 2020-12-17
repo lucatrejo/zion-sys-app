@@ -29,6 +29,7 @@ import UserProfile from "views/UserProfile/UserProfile.jsx";
 import GraphTop5ItemsSales from "./views/StadisticGraph/GraphTop5ItemsSales";
 import GraphSalesForDay from "./views/StadisticGraph/GraphSalesForDay";
 import GraphPurchasesForDay from "./views/StadisticGraph/GraphPurchasesForDay";
+import GraphTopItemsSales from "./views/StadisticGraph/GraphTopItemsSales";
 
 
 
@@ -184,6 +185,14 @@ const dashboardRoutes = [
         rtlName: "ملف تعريفي للمستخدم",
         icon: LibraryBooks,
         component: GraphPurchasesForDay,
+        layout: "/admin"
+    },
+    {
+        path: "/reportTopArt",
+        name: "Porcentaje de ventas de  los articulos",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: GraphTopItemsSales,
         layout: "/admin"
     }
 ];

@@ -3,7 +3,6 @@ import React, {Component} from 'react';
 import Chart from '../../components/Graphs/ChartLine';
 import $ from 'jquery/dist/jquery';
 import CustomAutoSelect from "../../components/CustomSelect/CustomAutoSelect";
-import GridItem from "../../components/Grid/GridItem";
 
 const {REACT_APP_SERVER_URL} = process.env;
 
@@ -65,7 +64,7 @@ class GraphTop5ArtVent extends Component {
                 if (this.state.idMonth !== null) {
                     result = result.filter(e => {
                         var month = e.date.split('/')[1]; // Or, var month = e.date.split('-')[1];
-                        if (this.state.idMonth === 1 || this.state.idMonth === 2 || this.state.idMonth === 3 || this.state.idMonth == 4 || this.state.idMonth === 5 || this.state.idMonth === 6 || this.state.idMonth === 7 || this.state.idMonth === 8 || this.state.idMonth === 9) {
+                        if (this.state.idMonth == 1 || this.state.idMonth == 2 || this.state.idMonth == 3 || this.state.idMonth == 4 || this.state.idMonth == 5 || this.state.idMonth == 6 || this.state.idMonth == 7 || this.state.idMonth == 8 || this.state.idMonth == 9) {
                            let mesHardcode= 0 + this.state.idMonth;
                             return (mesHardcode.toString() === month);
                         }
@@ -90,11 +89,16 @@ class GraphTop5ArtVent extends Component {
                         labels: arrCAT,
                         datasets: [
                             {
+                                label:"Cantidad de compras por dia",
                                 data: arrTOTAL,
                                 backgroundColor: [
-                                    'rgba(153, 102, 255, 0.6)', //purple
+                                    'rgba(75, 192, 192, 0.2)'
 
-                                ]
+                                ],
+                                borderColor: [
+                                    'rgba(75, 192, 192, 1)',
+
+                                ],
                             }
                         ]
                     },
