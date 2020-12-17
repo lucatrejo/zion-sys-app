@@ -86,6 +86,8 @@ class GraphTopItemsSales extends Component {
     render() {
         return (
             <div className="App">
+                <h3>PROCENTAJE DE ITEMS MAS VENDIDOS</h3>
+
                 <div className="App-header">
                 </div>
                 {this.state.isLoaded ? <Chart chartData={this.state.chartData} location={""} /> : <div>Loading...</div>}

@@ -13,8 +13,7 @@ import Link from '@material-ui/core/Link';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-
-
+import ReceiptIcon from '@material-ui/icons/Receipt';
 
 import Snackbar from "components/Snackbar/Snackbar.jsx";
 
@@ -24,6 +23,8 @@ import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
+
+import generateReceipt from "components/Reports/reportReceipt.js";
 
 const {REACT_APP_SERVER_URL} = process.env;
 class UserProfile extends React.Component {
@@ -111,6 +112,7 @@ class UserProfile extends React.Component {
         this.fillTable(this);
         this.showAlert(this, msg, insertRequestData.success);
     }
+
     async handleRemove(e) {
 
         this.setState({errors: {}});
@@ -139,6 +141,16 @@ class UserProfile extends React.Component {
         this.showAlert(this, msg, "success");
         window.location.reload();
     }
+
+    async handleReceipt(id, employee, client, date) {
+        console.log("Hola");
+        axios.get(`http://${REACT_APP_SERVER_URL}/sales/` + id + `/details`)
+            .then(res => {
+                const cat = res.data.details;
+                generateReceipt(cat, id, employee, client, date);
+            });
+    }
+
     render() {
         const {classes} = this.props;
         const {errors, alertColor, alertMsg, alertOpen} = this.state;
@@ -196,20 +208,21 @@ class UserProfile extends React.Component {
                                                                 <Link href={"sale_detail?id=" + prop[0]}
                                                                       className={classes.tableCell}>
                                                                     <VisibilityIcon icon={VisibilityIcon} size="2x"/>
-
                                                                 </Link>
-                                                            </TableCell>
-                                                            <TableCell className={classes.tableCell} key={key}>
+
+                                                                <Link >
+                                                                    <ReceiptIcon icon={ReceiptIcon} onClick={() => this.handleReceipt(prop[0], prop[1], prop[2], prop[3])}/>
+                                                                </Link>
+
                                                                 <Link href={"add_sale?id=" + prop[0] +
-                                                                        "&employeeId=" + prop[4] +
-                                                                        "&customerId=" + prop[5] +
-                                                                        "&date=" + prop[3]
-                                                                        }
+                                                                "&employeeId=" + prop[4] +
+                                                                "&customerId=" + prop[5] +
+                                                                "&date=" + prop[3]
+                                                                }
                                                                       className={classes.tableCell}>
                                                                     <EditIcon icon={EditIcon} size="2x"/>
                                                                 </Link>
-                                                            </TableCell>
-                                                            <TableCell className={classes.tableCell} key={key}>
+
                                                                 <Link >
                                                                     <DeleteIcon icon={DeleteIcon} onClick={() => this.handleRemove(prop[0])}/>
                                                                 </Link>

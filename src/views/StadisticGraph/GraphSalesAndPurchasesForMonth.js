@@ -275,6 +275,7 @@ class GraphTop5ArtVent extends Component {
     render() {
         return (
             <div className="App">
+                <h3>COMPARATIVA DE VENTAS Y COMPRAS POR MES</h3>
 
                 {this.state.isLoaded ? <Chart chartData={this.state.chartData} location={""}/> : <div>Loading...</div>}
 

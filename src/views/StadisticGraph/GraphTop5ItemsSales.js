@@ -83,6 +83,8 @@ class GraphTop5ItemsSales extends Component {
     render() {
         return (
             <div className="App">
+                <h3>TOP 5 DE ITEMS VENDIDOS</h3>
+
                 <div className="App-header">
                 </div>
                 {this.state.isLoaded ? <Chart chartData={this.state.chartData} location={""} /> : <div>Loading...</div>}

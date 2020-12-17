@@ -165,7 +165,7 @@ class UserProfile extends React.Component {
                                         <Table className={classes.table}>
                                             <TableHead className={classes["primaryTableHeader"]}>
                                                 <TableRow>
-                                                    {["Empleado", "Proveedor", "Fecha"].map((prop, key) => {
+                                                    {["Empleado", "Proveedor", "Fecha", "Acciones"].map((prop, key) => {
                                                         return (
                                                             <TableCell
                                                                 className={classes.tableCell + " " + classes.tableHeadCell}
@@ -196,18 +196,14 @@ class UserProfile extends React.Component {
                                                                       className={classes.tableCell}>
                                                                     <VisibilityIcon icon={VisibilityIcon} size="2x"/>
                                                                 </Link>
-                                                            </TableCell>
-                                                            <TableCell className={classes.tableCell} key={key}>
                                                                 <Link href={"add_purchase?id=" + prop[0] +
-                                                                        "&employeeId=" + prop[4] +
-                                                                        "&providerId=" + prop[5] +
-                                                                        "&date=" + prop[3]
-                                                                        }
-                                                                      className={classes.tableCell}>
+                                                                    "&employeeId=" + prop[4] +
+                                                                    "&providerId=" + prop[5] +
+                                                                    "&date=" + prop[3]
+                                                                    }
+                                                                          className={classes.tableCell}>
                                                                     <EditIcon icon={EditIcon} size="2x"/>
                                                                 </Link>
-                                                            </TableCell>
-                                                            <TableCell className={classes.tableCell} key={key}>
                                                                 <Link >
                                                                     <DeleteIcon icon={DeleteIcon} onClick={() => this.handleRemove(prop[0])}/>
                                                                 </Link>
