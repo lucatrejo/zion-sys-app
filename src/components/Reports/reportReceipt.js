@@ -17,13 +17,13 @@ const generateReceipt = (items, id, employee, client, dateSale) => {
     const reportData = [
       item.name,
       "$ " + item.unit_price,
-      item.quantity + " u",
-      Math.round(item.unit_price * item.quantity * 100) / 100,
+      item.quantity + " u.",
+      "$ " + Math.round(item.unit_price * item.quantity * 100) / 100,
     ];
     tableRows.push(reportData);
   });
 
-  tableRows.push(["Monto Total", "", "", total]);
+  tableRows.push(["Monto Total", "", "", "$ " + total]);
 
   doc.autoTable(tableColumn, tableRows, { startY: 60 });
 
