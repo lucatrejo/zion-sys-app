@@ -24,6 +24,12 @@ import formStyle from "assets/jss/material-dashboard-react/components/formStyle.
 import CustomAutoSelect from "../../components/CustomSelect/CustomAutoSelect";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import Checkbox from '@material-ui/core/Checkbox';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+
 
 const createHistory = require("history").createBrowserHistory;
 let history = createHistory();
@@ -393,7 +399,21 @@ class UserProfile extends React.Component {
                                         }
                                         {
                                             this.state.id ? '' :
-                                                <GridItem xs={3} sm={3} md={3}>
+
+                                                <GridItem xs={2} sm={2} md={2}>
+                                                    <br/>
+                                                    <FormControlLabel
+                                                    value="start"
+                                                    control={<Checkbox color="primary" />}
+                                                    label="A deuda:"
+                                                    labelPlacement="Start"
+                                                />
+                                                </GridItem>
+
+                                        }
+                                        {
+                                            this.state.id ? '' :
+                                                <GridItem xs={1} sm={1} md={1}>
                                                     <Button type="button"
                                                             color="info"
                                                             size="xs"
