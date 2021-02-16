@@ -65,26 +65,36 @@ class UserProfile extends React.Component {
             alertOpen: false,
             alertMsg: '',
             actionButton: query.get('id') ? 'Actualizar' : 'Registrar',
-            birthdate: birthdate ? birthdate : dateNow
+            birthdate: birthdate ? birthdate : dateNow,
 
         };
         this.insertObject = this.insertObject.bind(this);
         this.updateNameVal = this.updateNameVal.bind(this);
+        this.updateLastName = this.updateLastName.bind(this);
         this.fillTable = this.fillTable.bind(this);
         this.showAlert = this.showAlert.bind(this);
         this.fillTable(this);
     }
 
     fillTable(e) {
-        if(this.state.nameVal === null || this.state.nameVal ==='null' || this.state.nameVal ==='') {
+        if((this.state.nameVal === null || this.state.nameVal ==='null' || this.state.nameVal ==='') &&
+        (this.state.lastNameVal === null || this.state.lastNameVal ==='null' || this.state.lastNameVal ==='')) {
 
             axios.get(`http://${REACT_APP_SERVER_URL}/customers`)
                 .then(res => {
                     const cat = res.data.customers;
                     this.setState({categoriesData: cat.map(c => Object.values(c))});
                 })
-        }else{
+        }else if(!(this.state.nameVal === null || this.state.nameVal ==='null' || this.state.nameVal ==='') ){
+
             axios.get(`http://${REACT_APP_SERVER_URL}/customers/`+this.state.nameVal+"/search/")
+                .then(res => {
+                    console.log(res.data.items)
+                    const cat = res.data.customers;
+                    this.setState({categoriesData: cat.map(c => Object.values(c))});
+                })
+        }else{
+            axios.get(`http://${REACT_APP_SERVER_URL}/customers/`+this.state.lastNameVal+"/searchLastName/")
                 .then(res => {
                     console.log(res.data.items)
                     const cat = res.data.customers;
@@ -95,12 +105,16 @@ class UserProfile extends React.Component {
     updateNameVal(e) {
         this.setState({nameVal: e.target.value});
     }
+    updateLastName(e) {
+        this.setState({lastNameVal: e.target.value});
+    }
     async searchItems(e) {
         window.location.href = "customers?name=" + this.state.nameVal;
-
-
     }
 
+     searchItemsWithName(e) {
+        window.location.href = "customers?last_name=" + this.state.lastNameVal;
+    }
     showAlert(e, msg, success) {
         if (msg) {
             this.setState({alertOpen: true});
@@ -251,9 +265,15 @@ class UserProfile extends React.Component {
                                                 }}
                                                 inputProps={{
                                                     required: true,
-                                                    name: "last_name"
+                                                    name: "last_name",
+                                                    endAdornment:
+                                                        <Link>
+                                                            <SearchOutlinedIcon onClick={() => this.searchItemsWithName(1)} fontSize={"small"}></SearchOutlinedIcon>
+                                                        </Link>
+                                                    ,
                                                 }}
-                                                defaultValue={this.state.lastNameVal}
+                                                onChange={this.updateLastName}
+                                                defaultValue={this.state.lastNameVal!="null"?this.state.lastNameVal:""}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
