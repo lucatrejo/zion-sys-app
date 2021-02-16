@@ -25,10 +25,10 @@ import CustomAutoSelect from "../../components/CustomSelect/CustomAutoSelect";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Checkbox from '@material-ui/core/Checkbox';
-import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
+import Alert from '@material-ui/lab/Alert';
+
+import FormGroup from '@material-ui/core/FormGroup';
 
 
 const createHistory = require("history").createBrowserHistory;
@@ -60,6 +60,8 @@ class UserProfile extends React.Component {
             employeesData: [],
             customersData: [],
             itemsData: [],
+            credit: false,
+            clientStatus: false,
             detailsData: [],
             detailForm: [],
             item: '',
@@ -84,6 +86,7 @@ class UserProfile extends React.Component {
         this.addDetail = this.addDetail.bind(this);
         this.updateUnitPrice = this.updateUnitPrice.bind(this);
         this.updateQuantity = this.updateQuantity.bind(this);
+        this.updateCredit = this.updateCredit.bind(this);
         this.updateItem = this.updateItem.bind(this);
         this.updateEmployee = this.updateEmployee.bind(this);
         this.updateCustomer = this.updateCustomer.bind(this);
@@ -156,6 +159,14 @@ class UserProfile extends React.Component {
         this.setState({quantity: e.target.value});
     }
 
+    updateCredit(e) {
+        if(this.state.credit) {
+            this.setState({credit: false});
+        } else {
+            this.setState({credit: true});
+        }
+    }
+
     updateItem(e, value) {
             var val = this.state.itemsData.find(v => v.id === value.id);
             this.setState({itemComboVal: val});
@@ -176,6 +187,31 @@ class UserProfile extends React.Component {
 
             var val = this.state.customersData.find(v => v.id === value.id);
             this.setState({customerComboVal: val});
+
+
+            if (val.first_debt_date == null) {
+                this.setState({clientStatus: "up_to_date"});
+            } else {
+                console.log(val.first_debt_date);
+                var date1 = val.first_debt_date.split('/');
+                var newDate = date1[1] + '/' +date1[0] +'/' +date1[2];
+                let date = new Date(newDate);
+
+                console.log(date);
+                console.log(new Date());
+
+                var dateDiff = new Date().getTime() - date.getTime();
+                var daysDiff = Math.floor(dateDiff / (1000 * 60 * 60 * 24));
+                console.log(daysDiff);
+
+                if (daysDiff >= 45) {
+                    this.setState({clientStatus: "defaulter"});
+                } else {
+                    this.setState({clientStatus: "debtor"});
+                }
+
+
+            }
     }
 
     showAlert(e, msg, success) {
@@ -207,6 +243,7 @@ class UserProfile extends React.Component {
 
         formValues.employee_id = this.state.employeeComboVal.id;
         formValues.customer_id = this.state.customerComboVal.id;
+        formValues.credit = this.state.credit;
 
         console.log(formValues);
 
@@ -357,7 +394,6 @@ class UserProfile extends React.Component {
                                                     />
                                                 </GridItem>
                                         }
-
                                         {
                                             this.state.id ? '' :
                                                 <GridItem xs={3} sm={3} md={2}>
@@ -378,7 +414,6 @@ class UserProfile extends React.Component {
                                                     />
                                                 </GridItem>
                                         }
-
                                         {
                                             this.state.id ? '' :
                                                 <GridItem xs={3} sm={3} md={2}>
@@ -396,20 +431,6 @@ class UserProfile extends React.Component {
                                                         }}
                                                     />
                                                 </GridItem>
-                                        }
-                                        {
-                                            this.state.id ? '' :
-
-                                                <GridItem xs={2} sm={2} md={2}>
-                                                    <br/>
-                                                    <FormControlLabel
-                                                    value="start"
-                                                    control={<Checkbox color="primary" />}
-                                                    label="A deuda:"
-                                                    labelPlacement="Start"
-                                                />
-                                                </GridItem>
-
                                         }
                                         {
                                             this.state.id ? '' :
@@ -490,8 +511,38 @@ class UserProfile extends React.Component {
                                                 </TableBody>
                                             </Table>
                                             }
+                                            <br/>
+
+
+
+                                                <FormGroup row>
+                                                    <FormControlLabel
+                                                        value="start"
+                                                        control={<Checkbox color="primary" />}
+                                                        onChange={this.updateCredit}
+                                                        disabled={this.state.clientStatus === "defaulter"}
+                                                        label="A Crédito:"
+                                                        labelPlacement="Start"
+                                                    />
+                                                    <GridItem xs={1} sm={1} md={1}>
+                                                    </GridItem>
+                                                    {
+                                                        this.state.clientStatus === "up_to_date" ?
+                                                            <Alert severity="success">Cliente al día</Alert> :
+                                                            this.state.clientStatus === "debtor" ?
+                                                                <Alert severity="warning">Cliente en deuda</Alert> :
+                                                                this.state.clientStatus === "defaulter" ?
+                                                                    <Alert severity="error">Cliente moroso</Alert> :
+                                                                    ''
+                                                    }
+                                                </FormGroup>
 
                                             <GridItem xs={3} sm={3} md={3}>
+                                            </GridItem>
+
+
+
+                                            <GridItem xs={3} sm={3} md={2}>
                                                 <Button type="submit" color="info" size="xs">
                                                     {this.state.actionButton}
                                                 </Button>
