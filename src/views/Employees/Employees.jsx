@@ -45,15 +45,15 @@ class UserProfile extends React.Component {
         let admissionDate;
         if (query.get('admission_date')) {
             var date1 = query.get('admission_date').split('/')
-            var newDate = date1[1] + '/' +date1[0] +'/' +date1[2];
-           let date = new Date(newDate);
-           admissionDate = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
+            var newDate = date1[1] + '/' + date1[0] + '/' + date1[2];
+            let date = new Date(newDate);
+            admissionDate = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
         }
 
         let birthdate;
         if (query.get('birthdate')) {
             var date1 = query.get('birthdate').split('/')
-            var newDate = date1[1] + '/' +date1[0] +'/' +date1[2];
+            var newDate = date1[1] + '/' + date1[0] + '/' + date1[2];
             let date = new Date(newDate);
             birthdate = date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, '0') + "-" + String(date.getDate()).padStart(2, '0');
         }
@@ -81,6 +81,7 @@ class UserProfile extends React.Component {
         };
         this.insertObject = this.insertObject.bind(this);
         this.updateNameVal = this.updateNameVal.bind(this);
+        this.updateLastName = this.updateLastName.bind(this);
         this.fillTable = this.fillTable.bind(this);
         this.showAlert = this.showAlert.bind(this);
         this.updateRole = this.updateRole.bind(this);
@@ -88,7 +89,8 @@ class UserProfile extends React.Component {
     }
 
     fillTable(e) {
-        if(this.state.nameVal === null || this.state.nameVal ==='null' || this.state.nameVal ==='') {
+        if((this.state.nameVal === null || this.state.nameVal ==='null' || this.state.nameVal ==='') &&
+            (this.state.lastNameVal === null || this.state.lastNameVal ==='null' || this.state.lastNameVal ==='')) {
 
             axios.get(`http://${REACT_APP_SERVER_URL}/employees`)
                 .then(res => {
@@ -96,17 +98,26 @@ class UserProfile extends React.Component {
                     this.setState({tableData: cat.map(c => Object.values(c))});
                     this.setState({roleComboVal: this.state.roleData.find(v => v.name === this.state.roleVal)});
                 })
-        }else{
+        }else if(!(this.state.nameVal === null || this.state.nameVal ==='null' || this.state.nameVal ==='') ){
             console.log("HOLAAAAAA   "+`http://${REACT_APP_SERVER_URL}/employees/`+this.state.nameVal+"/search/")
             axios.get(`http://${REACT_APP_SERVER_URL}/employees/`+this.state.nameVal+"/search/")
                 .then(res => {
                     const cat = res.data.employees;
                     this.setState({tableData: cat.map(c => Object.values(c))});
                 })
+        }else{
+            axios.get(`http://${REACT_APP_SERVER_URL}/employees/`+this.state.lastNameVal+"/searchLastName/")
+                .then(res => {
+                    const cat = res.data.employees;
+                    this.setState({categoriesData: cat.map(c => Object.values(c))});
+                })
         }
     }
     updateNameVal(e) {
         this.setState({nameVal: e.target.value});
+    }
+    updateLastName(e) {
+        this.setState({lastNameVal: e.target.value});
     }
 
     updateRole(e, val) {
@@ -115,7 +126,9 @@ class UserProfile extends React.Component {
             this.setState({roleComboVal: value});
     }
 
-
+    searchItemsWithName(e) {
+        window.location.href = "employees?last_name=" + this.state.lastNameVal;
+    }
     async searchItems(e) {
         window.location.href = "employees?name=" + this.state.nameVal;
 
@@ -286,9 +299,15 @@ class UserProfile extends React.Component {
                                                 }}
                                                 inputProps={{
                                                     required: true,
-                                                    name: "last_name"
+                                                    name: "last_name",
+                                                    endAdornment:
+                                                        <Link>
+                                                            <SearchOutlinedIcon onClick={() => this.searchItemsWithName(1)} fontSize={"small"}></SearchOutlinedIcon>
+                                                        </Link>
+                                                    ,
                                                 }}
-                                                defaultValue={this.state.lastNameVal}
+                                                onChange={this.updateLastName}
+                                                defaultValue={this.state.lastNameVal!="null"?this.state.lastNameVal:""}
                                             />
                                         </GridItem>
                                         <GridItem xs={12} sm={12} md={3}>
