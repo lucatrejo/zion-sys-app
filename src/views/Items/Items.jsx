@@ -52,7 +52,7 @@ class UserProfile extends React.Component {
             categoryVal: query.get('category'),
             errors: {},
             itemsData: [],
-            categoriesData: [],
+            tableData: [],
             alertColor: '',
             alertOpen: false,
             categoryComboVal: query.get('category') ? query.get('category') : '',
@@ -93,9 +93,9 @@ class UserProfile extends React.Component {
         axios.get(`http://${REACT_APP_SERVER_URL}/categories`)
             .then(res => {
                 const cat = res.data.categories;
-                this.setState({categoriesData: cat});
+                this.setState({tableData: cat});
                 console.log(cat);
-                this.setState({categoryComboVal: this.state.categoriesData.find(v => v.id === parseInt(this.state.categoryVal))});
+                this.setState({categoryComboVal: this.state.tableData.find(v => v.id === parseInt(this.state.categoryVal))});
             });
 
 
@@ -116,7 +116,7 @@ class UserProfile extends React.Component {
     }
 
     updateCategory(e, val) {
-            var value = this.state.categoriesData.find(v => v.id === val.id);
+            var value = this.state.tableData.find(v => v.id === val.id);
 
             this.setState({categoryComboVal: value});
     }
@@ -355,7 +355,7 @@ class UserProfile extends React.Component {
                                                     required: true,
                                                     name: "category_id"
                                                 }}
-                                                items={this.state.categoriesData}
+                                                items={this.state.tableData}
                                             />
                                         </GridItem>
                                         <GridItem xs={0} sm={0} md={0}>

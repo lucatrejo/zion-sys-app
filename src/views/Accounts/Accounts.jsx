@@ -71,7 +71,7 @@ class UserProfile extends React.Component {
             dniVal: query.get('dni'),
             addressVal: query.get('address'),
             errors: {},
-            categoriesData: [],
+            tableData: [],
             alertColor: 'success',
             alertOpen: false,
             alertMsg: '',
@@ -115,11 +115,11 @@ class UserProfile extends React.Component {
                 this.setState({accountId: res.data.account.id});
                 this.setState({totalAmount: res.data.account.amount});
                 console.log(cat);
-                this.setState({categoriesData: cat.map(c => Object.values(c))});
+                this.setState({tableData: cat.map(c => Object.values(c))});
             });
 
         console.log("TERMINO");
-        console.log(this.state.categoriesData);
+        console.log(this.state.tableData);
 
         if (val.first_debt_date == null) {
             this.setState({clientStatus: "up_to_date"});
@@ -386,7 +386,7 @@ class UserProfile extends React.Component {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {this.state.categoriesData.map((prop, key) => {
+                                                {this.state.tableData.map((prop, key) => {
                                                     return (
                                                         <TableRow key={key}>
                                                             {prop.map((prop, key) => {

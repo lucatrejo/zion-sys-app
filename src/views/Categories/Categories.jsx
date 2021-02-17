@@ -39,7 +39,7 @@ class UserProfile extends React.Component {
         this.state = {
             id: query.get('id'),
             errors: {},
-            categoriesData: [],
+            tableData: [],
             alertColor: '',
             alertOpen: false,
             alertMsg: '',
@@ -60,7 +60,7 @@ class UserProfile extends React.Component {
             axios.get(`http://${REACT_APP_SERVER_URL}/categories`)
                 .then(res => {
                     const cat = res.data.categories;
-                    this.setState({categoriesData: cat.map(c => Object.values(c))});
+                    this.setState({tableData: cat.map(c => Object.values(c))});
                 })
         }else{
             console.log("HOLAAAAAA   "+`http://${REACT_APP_SERVER_URL}/categories/`+this.state.nameVal+"/search/")
@@ -68,7 +68,7 @@ class UserProfile extends React.Component {
                 .then(res => {
                     console.log(res.data.items)
                     const cat = res.data.categories;
-                    this.setState({categoriesData: cat.map(c => Object.values(c))});
+                    this.setState({tableData: cat.map(c => Object.values(c))});
                 })
         }
     }
@@ -270,7 +270,7 @@ class UserProfile extends React.Component {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {this.state.categoriesData.map((prop, key) => {
+                                                {this.state.tableData.map((prop, key) => {
                                                     return (
                                                         <TableRow key={key}>
                                                             {prop.map((prop, key) => {

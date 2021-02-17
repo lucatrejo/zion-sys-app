@@ -31,7 +31,7 @@ class UserProfile extends React.Component {
 
         this.state = {
             errors: {},
-            categoriesData: [],
+            tableData: [],
             alertColor: '',
             alertOpen: false,
             alertMsg: '',
@@ -46,7 +46,7 @@ class UserProfile extends React.Component {
         axios.get(`http://${REACT_APP_SERVER_URL}/purchases`)
             .then(res => {
                 const cat = res.data.purchases;
-                this.setState({categoriesData: cat.map(c => Object.values(c))});
+                this.setState({tableData: cat.map(c => Object.values(c))});
             })
     }
 
@@ -178,7 +178,7 @@ class UserProfile extends React.Component {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {this.state.categoriesData.map((prop, key) => {
+                                                {this.state.tableData.map((prop, key) => {
                                                     return (
                                                         <TableRow key={key}>
                                                             {prop.map((prop, key) => {

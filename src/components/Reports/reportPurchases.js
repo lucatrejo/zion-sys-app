@@ -9,19 +9,15 @@ const generatePDFPurchases = items => {
   const tableRows = [];
 
   items.forEach(item => {
-    item.details.forEach(detail => {
-
       const reportData = [
-          detail.name,
-          detail.quantity + " u.",
-          "$ " + detail.unit_price,
+          item.name,
+          item.quantity + " u.",
+          "$ " + item.unit_price,
           item.provider,
           item.date
       ];
 
     tableRows.push(reportData);
-
-    });
   });
 
   doc.addImage(logo, "JPEG", 5, 10, 50, 25);

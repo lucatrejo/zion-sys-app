@@ -9,19 +9,15 @@ const generatePDFPurchasesEmployee = items => {
   const tableRows = [];
 
   items.forEach(item => {
-    item.details.forEach(detail => {
-
       const reportData = [
-          item.employee_last_name + ", " + item.employee_name,
+          item.employee_name,
           item.date,
-          detail.name,
-          detail.quantity + " u.",
-          "$ " + detail.unit_price
+          item.item,
+          item.quantity + " u.",
+          "$ " + item.unit_price
       ];
 
     tableRows.push(reportData);
-
-    });
   });
 
   doc.addImage(logo, "JPEG", 5, 10, 50, 25);

@@ -12,6 +12,11 @@ import Accounts from "views/Accounts/Accounts.jsx";
 
 import Purchases from "views/Purchases/Purchases.jsx";
 import PurchasesReport from "views/Purchases/PurchasesReport.jsx";
+import PurchasesReport1 from "views/Purchases/PurchasesReport_1.jsx";
+import PurchasesReport2 from "views/Purchases/PurchasesReport_2.jsx";
+import PurchasesReport3 from "views/Purchases/PurchasesReport_3.jsx";
+import PurchasesReport4 from "views/Purchases/PurchasesReport_4.jsx";
+import PurchasesReport5 from "views/Purchases/PurchasesReport_5.jsx";
 import Purchase from "views/Purchases/Purchase.jsx";
 import PurchaseDetails from "views/Purchases/PurchaseDetails.jsx";
 
@@ -107,6 +112,46 @@ const dashboardRoutes = [
         rtlName: "ملف تعريفي للمستخدم",
         icon: LibraryBooks,
         component: PurchasesReport,
+        layout: "/admin"
+    },
+    {
+        path: "/report_purchases_1",
+        name: "Reporte de Compras",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: PurchasesReport1,
+        layout: "/admin"
+    },
+    {
+        path: "/report_purchases_2",
+        name: "Reporte de Compras",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: PurchasesReport2,
+        layout: "/admin"
+    },
+    {
+        path: "/report_purchases_3",
+        name: "Reporte de Compras",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: PurchasesReport3,
+        layout: "/admin"
+    },
+    {
+        path: "/report_purchases_4",
+        name: "Reporte de Compras",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: PurchasesReport4,
+        layout: "/admin"
+    },
+    {
+        path: "/report_purchases_5",
+        name: "Reporte de Compras",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: PurchasesReport5,
         layout: "/admin"
     },
     {

@@ -68,7 +68,7 @@ class UserProfile extends React.Component {
             roleVal: query.get('role'),
             addressVal: query.get('address'),
             errors: {},
-            categoriesData: [],
+            tableData: [],
             roleData: [{"name": "Administrador"}, {"name": "Compras"}, {"name": "Ventas"}],
             roleComboVal: query.get('role') ? [{"name": "Administrador"}, {"name": "Compras"}, {"name": "Ventas"}].find(v => v.name === query.get('role')) : '',
             alertColor: 'success',
@@ -93,7 +93,7 @@ class UserProfile extends React.Component {
             axios.get(`http://${REACT_APP_SERVER_URL}/employees`)
                 .then(res => {
                     const cat = res.data.employees;
-                    this.setState({categoriesData: cat.map(c => Object.values(c))});
+                    this.setState({tableData: cat.map(c => Object.values(c))});
                     this.setState({roleComboVal: this.state.roleData.find(v => v.name === this.state.roleVal)});
                 })
         }else{
@@ -101,7 +101,7 @@ class UserProfile extends React.Component {
             axios.get(`http://${REACT_APP_SERVER_URL}/employees/`+this.state.nameVal+"/search/")
                 .then(res => {
                     const cat = res.data.employees;
-                    this.setState({categoriesData: cat.map(c => Object.values(c))});
+                    this.setState({tableData: cat.map(c => Object.values(c))});
                 })
         }
     }
@@ -461,7 +461,7 @@ class UserProfile extends React.Component {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {this.state.categoriesData.map((prop, key) => {
+                                                {this.state.tableData.map((prop, key) => {
                                                     return (
                                                         <TableRow key={key}>
                                                             {prop.map((prop, key) => {

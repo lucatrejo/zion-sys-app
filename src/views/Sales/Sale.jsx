@@ -56,7 +56,7 @@ class UserProfile extends React.Component {
             employeeId: query.get('employeeId') ? query.get('employeeId') : localStorage.getItem('user_id'),
             customerId: query.get('customerId'),
             errors: {},
-            categoriesData: [],
+            tableData: [],
             employeesData: [],
             customersData: [],
             itemsData: [],
