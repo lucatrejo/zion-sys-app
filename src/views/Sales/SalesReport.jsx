@@ -13,10 +13,7 @@ import CardBody from "components/Card/CardBody.jsx";
 
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
 
-import generatePDFCustomers from "components/Reports/reportCustomerList";
-import generatePDFReportSales from "components/Reports/reportSales";
-import generatePDFSalesEmployee from "components/Reports/reportSalesEmployee";
-import generatePDFTopItemsSale from "components/Reports/reportTopItemsSale";
+import Link from "@material-ui/core/Link";
 
 const {REACT_APP_SERVER_URL} = process.env;
 
@@ -30,39 +27,9 @@ class UserProfile extends React.Component {
             reportPurchasesEmployee: []
         };
 
-        this.fillReportData = this.fillReportData.bind(this);
-        this.fillReportProviders = this.fillReportProviders.bind(this);
-        this.fillReportPurchases = this.fillReportPurchases.bind(this);
         this.fillReportPurchasesEmployee = this.fillReportPurchasesEmployee.bind(this);
-        this.fillReportData(this);
-        this.fillReportProviders(this);
-        this.fillReportPurchases(this);
         this.fillReportPurchasesEmployee(this);
     };
-
-    fillReportData(e) {
-        axios.get(`http://${REACT_APP_SERVER_URL}/sales/top_items`)
-            .then(res => {
-                const top_items = res.data.top_items;
-                this.setState({reportData: top_items});
-            })
-    }
-
-    fillReportProviders(e) {
-        axios.get(`http://${REACT_APP_SERVER_URL}/customers`)
-            .then(res => {
-                const items = res.data.customers;
-                this.setState({reportProviders: items});
-            })
-    }
-
-    fillReportPurchases(e) {
-        axios.get(`http://${REACT_APP_SERVER_URL}/sales/sales_month`)
-            .then(res => {
-                const items = res.data.sales;
-                this.setState({reportPurchases: items});
-            })
-    }
 
     fillReportPurchasesEmployee(e) {
         axios.get(`http://${REACT_APP_SERVER_URL}/sales/sales_employee`)
@@ -88,37 +55,41 @@ class UserProfile extends React.Component {
                                 <GridContainer>
 
                                     <GridItem xs={3} sm={3} md={3}>
-                                        <Button type="submit" color="info" size="xs"
-                                                onClick={() => generatePDFTopItemsSale(this.state.reportData)}>
-                                            Generar Reporte de Artículos mas Vendidos
-                                        </Button>
+                                        <Link href={"report_sales_1"}>
+                                            <Button type="submit" color="info" size="xs">
+                                                Generar Reporte de Artículos mas Vendidos
+                                            </Button>
+                                        </Link>
                                     </GridItem>
                                 </GridContainer>
 
                                 <GridContainer>
                                     <GridItem xs={3} sm={3} md={3}>
-                                        <Button type="submit" color="info" size="xs"
-                                                onClick={() => generatePDFCustomers(this.state.reportProviders)}>
-                                            Generar Listado de Clientes
-                                        </Button>
+                                        <Link href={"report_sales_2"}>
+                                            <Button type="submit" color="info" size="xs">
+                                                Generar Listado de Clientes
+                                            </Button>
+                                        </Link>
                                     </GridItem>
                                 </GridContainer>
 
                                 <GridContainer>
                                     <GridItem xs={3} sm={3} md={3}>
-                                        <Button type="submit" color="info" size="xs"
-                                                onClick={() => generatePDFReportSales(this.state.reportPurchases)}>
-                                            Generar Reporte de Ventas del mes
-                                        </Button>
+                                        <Link href={"report_sales_3"}>
+                                            <Button type="submit" color="info" size="xs">
+                                                Generar Reporte de Ventas del mes
+                                            </Button>
+                                        </Link>
                                     </GridItem>
                                 </GridContainer>
 
                                 <GridContainer>
                                     <GridItem xs={3} sm={3} md={3}>
-                                        <Button type="submit" color="info" size="xs"
-                                                onClick={() => generatePDFSalesEmployee(this.state.reportPurchasesEmployee)}>
-                                            Generar Reporte de Ventas por Empleado
-                                        </Button>
+                                        <Link href={"report_sales_4"}>
+                                            <Button type="submit" color="info" size="xs">
+                                                Generar Reporte de Ventas por Empleado
+                                            </Button>
+                                        </Link>
                                     </GridItem>
                                 </GridContainer>
 
