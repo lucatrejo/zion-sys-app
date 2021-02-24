@@ -77,7 +77,7 @@ class UserProfile extends React.Component {
                                                     return (
                                                         <TableRow key={key}>
                                                             {prop.map((prop, key) => {
-                                                                if(key !== 1) {
+                                                                if(key !== 4 && key !== 6) {
                                                                     return (
                                                                         <TableCell className={classes.tableCell}
                                                                                    key={key}>
