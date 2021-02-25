@@ -25,7 +25,7 @@ class GraphTop5ItemsSales extends Component {
         $.ajax({
             url: `http://${REACT_APP_SERVER_URL}/sales/top_items`,
             dataType: 'json',
-            success: function(dataReturned){
+                success: function(dataReturned){
                 //logging to test if correct data is being received
                 console.log('original data: ', dataReturned);
                 var arrCAT = [];
@@ -83,7 +83,7 @@ class GraphTop5ItemsSales extends Component {
     render() {
         return (
             <div className="App">
-                <h3>TOP 5 DE ITEMS VENDIDOS</h3>
+                <h3>REPORTE DE "TOP 5 DE ITEMS VENDIDOS"</h3>
 
                 <div className="App-header">
                 </div>

@@ -86,7 +86,7 @@ class GraphTopItemsSales extends Component {
     render() {
         return (
             <div className="App">
-                <h3>PROCENTAJE DE ITEMS MAS VENDIDOS</h3>
+                <h3>REPORTE DE ITEMS MAS VENDIDOS</h3>
 
                 <div className="App-header">
                 </div>
