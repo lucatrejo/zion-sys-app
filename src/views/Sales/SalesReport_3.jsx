@@ -16,7 +16,7 @@ import TableRow from "@material-ui/core/TableRow";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import formStyle from "assets/jss/material-dashboard-react/components/formStyle.jsx";
-import generatePDFPurchasesEmployee from "components/Reports/reportPurchasesEmployee";
+import generatePDFReportSales from "components/Reports/reportSales";
 import Button from "components/CustomButtons/Button.jsx";
 
 const {REACT_APP_SERVER_URL} = process.env;
@@ -26,8 +26,8 @@ class UserProfile extends React.Component {
         super(props);
 
         this.state = {
-            tableHeader: ["Empleado", "Fecha", "Artículo", "Cantidad", "Precio"],
-            endpointUrl: `http://${REACT_APP_SERVER_URL}/purchases/purchases_employee`,
+            tableHeader: ["Artículo", "Cantidad", "Precio de Venta", "Cliente", "Fecha"],
+            endpointUrl: `http://${REACT_APP_SERVER_URL}/sales/sales_month`,
             tableData: [],
             reportData: [],
         };
@@ -50,9 +50,10 @@ class UserProfile extends React.Component {
             <div>
                 <GridContainer>
                     <GridItem xs={12} sm={12} md={12}>
+                        <form onSubmit={this.insertObject}>
                             <Card>
                                 <CardHeader color="info">
-                                    <h4 className={classes.cardTitleWhite}>Reporte de Compras del mes</h4>
+                                    <h4 className={classes.cardTitleWhite}>Reporte de Ventas del Mes</h4>
                                 </CardHeader>
                                 <CardBody>
                                     <div className={classes.tableResponsive}>
@@ -73,38 +74,34 @@ class UserProfile extends React.Component {
                                             </TableHead>
                                             <TableBody>
                                                 {this.state.tableData.map((prop, key) => {
-                                                    console.log(key);
-                                                    console.log(prop);
                                                     return (
                                                         <TableRow key={key}>
-                                                            {
-                                                                prop.map((prop, key) => {
-                                                                    if(key === 3) {
-                                                                        return (
-                                                                            <TableCell className={classes.tableCell}
-                                                                                       key={key}>
-                                                                                {prop} U.
-                                                                            </TableCell>
-                                                                        );
-                                                                    }
+                                                            {prop.map((prop, key) => {
+                                                                if(key === 1) {
+                                                                    return (
+                                                                        <TableCell className={classes.tableCell}
+                                                                                   key={key}>
+                                                                            {prop} U.
+                                                                        </TableCell>
+                                                                    );
+                                                                }
 
-                                                                    if(key === 4) {
-                                                                        return (
-                                                                            <TableCell className={classes.tableCell}
-                                                                                       key={key}>
-                                                                                $ {prop}
-                                                                            </TableCell>
-                                                                        );
-                                                                    }
+                                                                if(key === 2) {
+                                                                    return (
+                                                                        <TableCell className={classes.tableCell}
+                                                                                   key={key}>
+                                                                            $ {prop}
+                                                                        </TableCell>
+                                                                    );
+                                                                }
 
-                                                                        return (
-                                                                            <TableCell className={classes.tableCell}
-                                                                                       key={key}>
-                                                                                {prop}
-                                                                            </TableCell>
-                                                                        );
-                                                                })
-                                                            }
+                                                                    return (
+                                                                        <TableCell className={classes.tableCell}
+                                                                                   key={key}>
+                                                                            {prop}
+                                                                        </TableCell>
+                                                                    );
+                                                            })}
                                                         </TableRow>
                                                     );
                                                 })}
@@ -114,13 +111,14 @@ class UserProfile extends React.Component {
                                     <GridContainer>
                                         <GridItem xs={3} sm={3} md={3}>
                                             <Button type="button" color="info" size="xs"
-                                                    onClick={() => generatePDFPurchasesEmployee(this.state.reportData)}>
+                                                    onClick={() => generatePDFReportSales(this.state.reportData)}>
                                                 Generar PDF
                                             </Button>
                                         </GridItem>
                                     </GridContainer>
                                 </CardBody>
                             </Card>
+                        </form>
                     </GridItem>
                 </GridContainer>
             </div>

@@ -22,6 +22,10 @@ import PurchaseDetails from "views/Purchases/PurchaseDetails.jsx";
 
 import Sales from "views/Sales/Sales.jsx";
 import SalesReport from "views/Sales/SalesReport.jsx";
+import SalesReport1 from "views/Sales/SalesReport_1.jsx";
+import SalesReport2 from "views/Sales/SalesReport_2.jsx";
+import SalesReport3 from "views/Sales/SalesReport_3.jsx";
+import SalesReport4 from "views/Sales/SalesReport_4.jsx";
 import Sale from "views/Sales/Sale.jsx";
 import SaleDetails from "views/Sales/SaleDetails.jsx";
 
@@ -177,6 +181,38 @@ const dashboardRoutes = [
         rtlName: "ملف تعريفي للمستخدم",
         icon: LibraryBooks,
         component: SalesReport,
+        layout: "/admin"
+    },
+    {
+        path: "/report_sales_1",
+        name: "Reporte de Ventas",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: SalesReport1,
+        layout: "/admin"
+    },
+    {
+        path: "/report_sales_2",
+        name: "Reporte de Ventas",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: SalesReport2,
+        layout: "/admin"
+    },
+    {
+        path: "/report_sales_3",
+        name: "Reporte de Ventas",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: SalesReport3,
+        layout: "/admin"
+    },
+    {
+        path: "/report_sales_4",
+        name: "Reporte de Ventas",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: SalesReport4,
         layout: "/admin"
     },
     {

@@ -394,6 +394,17 @@ class UserProfile extends React.Component {
                                                         <TableRow key={key}>
                                                             {prop.map((prop, key) => {
                                                                 if (key !== 7 ) {
+                                                                    if( key===4 || key===5){
+                                                                        return (
+                                                                            <TableCell className={classes.tableCell}
+                                                                                       key={key}>
+                                                                                {prop} U.
+                                                                            </TableCell>
+                                                                        );
+                                                                    }
+                                                                }
+
+                                                                if (key !== 7 ) {
                                                                     if( key===3){
                                                                     return (
                                                                         <TableCell className={classes.tableCell}
@@ -414,6 +425,7 @@ class UserProfile extends React.Component {
                                                                     }
                                                                 }
                                                             })}
+
                                                             <TableCell className={classes.tableCell} key={key}>
                                                                 <Link href={"items?id=" + prop[0] +
                                                                 "&name=" + prop[1] +
