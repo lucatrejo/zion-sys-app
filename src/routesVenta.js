@@ -32,6 +32,7 @@ import GraphSalesForDay from "./views/StadisticGraph/GraphSalesForDay";
 import GraphPurchasesForDay from "./views/StadisticGraph/GraphPurchasesForDay";
 import GraphTopItemsSales from "./views/StadisticGraph/GraphTopItemsSales";
 import GraphSalesAndPurchasesForMonth from "./views/StadisticGraph/GraphSalesAndPurchasesForMonth";
+import GraphAccount from "./views/StadisticGraph/GraphAccount";
 import AccountsReport from "./views/Accounts/AccountsReport";
 
 
@@ -132,6 +133,14 @@ const dashboardRoutes = [
         rtlName: "ملف تعريفي للمستخدم",
         icon: LibraryBooks,
         component: GraphSalesAndPurchasesForMonth,
+        layout: "/admin"
+    },
+    {
+        path: "/reportAccount",
+        name: "Reporte de estado de cuentas",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: GraphAccount,
         layout: "/admin"
     }
 ];

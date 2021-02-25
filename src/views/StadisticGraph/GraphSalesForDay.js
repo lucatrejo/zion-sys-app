@@ -115,7 +115,7 @@ class GraphTop5ArtVent extends Component {
     render() {
         return (
             <div className="App">
-                <h3>VENTAS POR DIA</h3>
+                <h3>REPORTE DE VENTAS POR DIA</h3>
 
                 <CustomAutoSelect
                     labelText="Filtrado de meses"
