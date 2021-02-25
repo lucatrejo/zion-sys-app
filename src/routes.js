@@ -9,6 +9,10 @@ import Providers from "views/Providers/Providers.jsx";
 import Employees from "views/Employees/Employees.jsx";
 import Customers from "views/Customers/Customers.jsx";
 import Accounts from "views/Accounts/Accounts.jsx";
+import AccountsReport from "views/Accounts/AccountsReport.jsx";
+import AccountsReport1 from "views/Accounts/AccountsReport_1.jsx";
+import AccountsReport2 from "views/Accounts/AccountsReport_2.jsx";
+import AccountsReport3 from "views/Accounts/AccountsReport_3.jsx";
 
 import Purchases from "views/Purchases/Purchases.jsx";
 import PurchasesReport from "views/Purchases/PurchasesReport.jsx";
@@ -95,6 +99,14 @@ const dashboardRoutes = [
         layout: "/admin"
     },
     {
+        path: "/report_accounts",
+        name: "Reporte de Cuentas",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: AccountsReport,
+        layout: "/admin"
+    },
+    {
         path: "/add_purchase",
         name: "Compras",
         rtlName: "ملف تعريفي للمستخدم",
@@ -140,6 +152,30 @@ const dashboardRoutes = [
         rtlName: "ملف تعريفي للمستخدم",
         icon: LibraryBooks,
         component: PurchasesReport3,
+        layout: "/admin"
+    },
+    {
+        path: "/report_accounts_1",
+        name: "Reporte de Cuenta",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: AccountsReport1,
+        layout: "/admin"
+    },
+    {
+        path: "/report_accounts_2",
+        name: "Reporte de Cuenta",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: AccountsReport2,
+        layout: "/admin"
+    },
+    {
+        path: "/report_accounts_3",
+        name: "Reporte de Cuenta",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: LibraryBooks,
+        component: AccountsReport3,
         layout: "/admin"
     },
     {
